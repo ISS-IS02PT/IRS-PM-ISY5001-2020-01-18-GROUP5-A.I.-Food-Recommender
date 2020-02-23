@@ -39,7 +39,17 @@ $ ls -l ~/.ssh/ | grep kenly.ldk@gmail.com
 ```
 
 ## 2. Copy the public key to your github account
+* Go to the Settings section
+![](static/github-sshkey-1.png)
 
+* Click new SSH key
+![](static/github-sshkey-2.png)
+
+* Copy and paste the content of the .pub key generated in previous step
+![](static/github-sshkey-3.png)
+
+* The key should be saved now
+![](static/github-sshkey-4.png)
 
 
 ## 3. Setup the local and remote repo
