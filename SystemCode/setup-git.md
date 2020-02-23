@@ -38,7 +38,7 @@ $ ls -l ~/.ssh/ | grep kenly.ldk@gmail.com
 -rw-r--r--   1 kenly  primarygroup   401 23 Feb 12:32 kenly.ldk@gmail.com.pub
 ```
  
-## 2. Copy the public key to your github account from the website
+## 2. Copy the public key to your github account
 * Go to the Settings section
 ![](static/github-sshkey-1.png)
 
