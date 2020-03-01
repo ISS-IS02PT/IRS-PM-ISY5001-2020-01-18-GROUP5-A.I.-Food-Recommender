@@ -1,0 +1,28 @@
+sam_loves_all_animal
+    foreach
+	    facts.Animal($x)
+    assert
+        facts.Loves(Sam, $x)
+
+
+cat_is_animal
+    foreach
+        facts.Cat($x)
+    assert
+        facts.Animal($x)
+
+
+person_loves_animal_dont_kill_animal
+    foreach
+        facts.Loves($x,$y)
+        facts.Person($x)
+        facts.Animal($y)
+    assert
+        facts.Kills($x,$y,False)
+
+
+either_sam_or_curiosity_kills_HelloKitty
+    foreach
+        facts.Kills(Sam,HelloKitty,False)
+    assert
+        facts.Kills(Curiosity,HelloKitty,True)
