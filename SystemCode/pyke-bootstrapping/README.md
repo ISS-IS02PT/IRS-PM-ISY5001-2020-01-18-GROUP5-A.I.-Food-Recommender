@@ -16,8 +16,11 @@ $ mkdir venv
 $ python3 -m venv venv/sandbox
 
 # Activate the 'sandbox' virtual env (you will see the environment name before the prompt after execution) <-- Make sure this step is done everytime you want to activate this virtual env
-$ source venv/sandbox/bin/activate
+$ source venv/sandbox/bin/activate   
 (sandbox) $
+# For Windows, execute activate.bat in scripts folder
+>cd venv/sandbox/scripts
+>activate
 
 # Confirm the python version in this virtual env (should be the same as the original local Python version)
 (sandbox) $ python --version
