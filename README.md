@@ -20,7 +20,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 | Ken Ly | A0032571N | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| k.ly@u.nus.edu |
 | Mok | AXXXXXXXX | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| xxx@u.nus.edu |
 | Dennis | AXXXXXXXX | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| xxx@u.nus.edu |
-| Henry| AXXXXXXXX | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| xxx@u.nus.edu |
+| Harry| A0213530X | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| e0508631@u.nus.edu |
 
 ---
 
