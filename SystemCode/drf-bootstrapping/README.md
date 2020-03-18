@@ -152,3 +152,46 @@ Quit the server with CONTROL-C.
 
 ^C (sandbox) $
 ```
+
+  
+# Update 18-Mar
+## 1. Added a new API endpoint /calculateNutrientNeeds
+``` bash
+(sandbox) $ http http://127.0.0.1:8000/
+HTTP/1.1 200 OK
+Allow: OPTIONS, GET
+Content-Length: 113
+Content-Type: application/json
+Date: Wed, 18 Mar 2020 09:23:34 GMT
+Server: WSGIServer/0.2 CPython/3.8.1
+Vary: Accept, Cookie
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+
+{
+    "calculateNutrientNeeds": "http://127.0.0.1:8000/calculateNutrientNeeds/",
+    "foods": "http://127.0.0.1:8000/foods/"
+}
+```
+
+## 2. Input the required Profile parameters, and the api returns the results
+### Note: The calculation is just normal function, no PyKE for now
+``` bash
+(sandbox) $ http http://127.0.0.1:8000/calculateNutrientNeeds/ age==23 height==182 weight==12 gender==male activity==very_active
+HTTP/1.1 200 OK
+Allow: GET
+Content-Length: 64
+Content-Type: application/json
+Date: Wed, 18 Mar 2020 09:25:14 GMT
+Server: WSGIServer/0.2 CPython/3.8.1
+Vary: Accept, Cookie
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+
+{
+    "calories": 1693.09,
+    "carbs": 169.31,
+    "fat": 56.44,
+    "protein": 126.98
+}
+```
