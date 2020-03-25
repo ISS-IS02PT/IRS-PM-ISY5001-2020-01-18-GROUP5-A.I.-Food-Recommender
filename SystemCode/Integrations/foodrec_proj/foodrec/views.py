@@ -58,6 +58,7 @@ class CalculateNutrientNeedsFromProfile(APIView):
         p.weight = ps.validated_data['weight']
         p.activity = ps.validated_data['activity']
         p.diet = ps.validated_data['diet']
+        p.nutrientNeeds.diet = p.diet
 
         # Calculate the Nutrient Needs
         p.nutrientNeeds.calculate()
@@ -130,6 +131,7 @@ class FoodRecommendationFromProfile(APIView):
         p.weight = ps.validated_data['weight']
         p.activity = ps.validated_data['activity']
         p.diet = ps.validated_data['diet']
+        p.nutrientNeeds.diet = p.diet
 
         # Calculate the Nutrient Needs
         p.nutrientNeeds.calculate()

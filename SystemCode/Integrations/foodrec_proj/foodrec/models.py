@@ -1,5 +1,17 @@
 from django.db import models
 
+######################################################################
+# Initialize the data once when Django loads up
+# -- will improve in next iteration
+######################################################################
+import os
+from django.conf import settings
+from .models_ortools import readFoodData
+csv_file = open(os.path.join(settings.BASE_DIR, 'foodrec/Dataset/FoodDatabase.csv'))
+readFoodData(csv_file)
+
+
+
 class Food(models.Model):
     FOOD_GROUPS = sorted(
                     [
@@ -36,17 +48,6 @@ class Food(models.Model):
 
     class Meta:
         ordering = ['FoodName']
-
-######################################################################
-# Initialize the data once when Django loads up
-# -- will improve in next iteration
-######################################################################
-import os
-from django.conf import settings
-from .models_ortools import readFoodData
-csv_file = open(os.path.join(settings.BASE_DIR, 'foodrec/Dataset/FoodDatabase.csv'))
-readFoodData(csv_file)
-
 
 
 

@@ -14,7 +14,7 @@ DATA_TotalFatAmount_g_INDEX = -1
 
 food_data = None
 csv_file = 'Dataset/FoodDatabase.csv'
-NUM_FOOD = 30
+NUM_FOOD = 50
 
 
 def readFoodData(csv_file):
