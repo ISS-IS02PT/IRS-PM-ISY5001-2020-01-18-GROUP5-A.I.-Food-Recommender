@@ -191,7 +191,7 @@ def optimizer3(EnergyAmount_kcal,BodyWeight_kg):
 
 
 
-# Optimizer 2 for KETO optimization
+# Generic Optimizer for various nutrients requirements ( Input parameters from pyke)
 def optimizer_Dennis_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g ):
 
     # Create the mip solver with the CBC backend
