@@ -80,6 +80,116 @@ def optimizer1(EnergyAmount_kcal):
 
     return foodIndex_result
 
+def optimizer2(EnergyAmount_kcal,BodyWeight_kg):
+    # Create the mip solver with the CBC backend
+    solver = pywraplp.Solver('optimizer2',
+                             pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
+
+    # Declare the objective function
+    objective = solver.Objective()
+
+    # Declare an array to hold the variable value whether the food is selected, which is 0 or 1 for each food
+    food = [[]] * len(food_data)
+    # The coeficient for the objective function is the amount of calories for the corresponding food
+    for i in range(0, len(food_data)):
+        food[i] = solver.IntVar(0.0, 1.0, food_data[i][DATA_FoodName_INDEX])
+        objective.SetCoefficient(food[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
+
+    # Minimize the calories
+    objective.SetMinimization()
+
+    # Additional constraint0 -> within the 90% - 110% of recommended calories
+    constraint0 = solver.Constraint(EnergyAmount_kcal * 0.9, EnergyAmount_kcal * 1.1)
+    # Additional constraint1 -> protein consumption must be more than (0.8 * body weight in kg) grams
+    constraint1 = solver.Constraint(BodyWeight_kg * 0.8, solver.infinity())   
+    for i in range(0, len(food_data)):
+        constraint0.SetCoefficient(food[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
+        constraint1.SetCoefficient(food[i], food_data[i][DATA_ProteinAmount_g_INDEX])
+
+    # Solve!
+    status = solver.Solve()
+
+    foodIndex_result = []
+
+    if status == solver.OPTIMAL:
+        print('An optimal solution was found.')
+        print('Objective value =', solver.Objective().Value())
+        for i in range(0, len(food_data)):
+            if food[i].solution_value() > 0:
+                foodIndex_result.append(i)
+                # print('%s = %f' % (data[i][0], food[i].solution_value()))
+
+    else:  # No optimal solution was found.
+        if status == solver.FEASIBLE:
+            print('A potentially suboptimal solution was found.')
+        else:
+            print('The solver could not solve the problem.')
+
+    return foodIndex_result
+
+
+# Harry: This optimizer takes input parameter as 'EnergyAmount_kcal' and 'BodyWeight_kg', this is for Keto Diet
+def optimizer3(EnergyAmount_kcal,BodyWeight_kg):
+    # Create the mip solver with the CBC backend
+    solver = pywraplp.Solver('optimizer2',
+                             pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
+
+    # Declare the objective function
+    objective = solver.Objective()
+
+    # Declare an array to hold the variable value whether the food is selected, which is 0 or 1 for each food
+    food = [[]] * len(food_data)
+    # The coeficient for the objective function is the amount of calories for the corresponding food
+    for i in range(0, len(food_data)):
+        food[i] = solver.IntVar(0.0, 1.0, food_data[i][DATA_FoodName_INDEX])
+        objective.SetCoefficient(food[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
+
+    # Minimize the calories
+    objective.SetMinimization()
+
+    # Additional constraint0 -> within the 90% - 110% of recommended calories
+    constraint0 = solver.Constraint(EnergyAmount_kcal * 0.9, EnergyAmount_kcal * 1.1)
+    # Additional constraint1 -> protein consumption must be more than (0.8 * body weight in kg) grams
+    constraint1 = solver.Constraint(BodyWeight_kg * 0.8, solver.infinity())   
+    # Additional constraint2 -> carb consumption must be less than 50 grams
+    constraint2 = solver.Constraint(-solver.infinity(),50)
+    # Additional constraint3 -> calorie from fat must be about 75% of total calorie, within 90%-110% of this goal
+    constraint3 = solver.Constraint(EnergyAmount_kcal * 0.75 * 0.9 / 9, EnergyAmount_kcal * 0.75 * 1.1 / 9)
+    # Additional constraint4 -> calorie from protein must be about 20% of total calorie, within 90%-110% of this goal
+    constraint4 = solver.Constraint(EnergyAmount_kcal * 0.20 * 0.9 / 4, EnergyAmount_kcal * 0.20 * 1.1 / 4)
+    
+    
+    for i in range(0, len(food_data)):
+        constraint0.SetCoefficient(food[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
+        constraint1.SetCoefficient(food[i], food_data[i][DATA_ProteinAmount_g_INDEX])
+        constraint2.SetCoefficient(food[i], food_data[i][DATA_CarbohydrateAmount_g_INDEX])
+        constraint3.SetCoefficient(food[i], food_data[i][DATA_TotalFatAmount_g_INDEX])
+        constraint4.SetCoefficient(food[i], food_data[i][DATA_ProteinAmount_g_INDEX])
+
+    # Solve!
+    status = solver.Solve()
+
+    foodIndex_result = []
+
+    if status == solver.OPTIMAL:
+        print('An optimal solution was found.')
+        print('Objective value =', solver.Objective().Value())
+        for i in range(0, len(food_data)):
+            if food[i].solution_value() > 0:
+                foodIndex_result.append(i)
+                # print('%s = %f' % (data[i][0], food[i].solution_value()))
+
+    else:  # No optimal solution was found.
+        if status == solver.FEASIBLE:
+            print('A potentially suboptimal solution was found.')
+        else:
+            print('The solver could not solve the problem.')
+
+    return foodIndex_result
+
+
+
+
 def run_optimizer(EnergyAmount_kcal):
     return optimizer1(EnergyAmount_kcal)
 
