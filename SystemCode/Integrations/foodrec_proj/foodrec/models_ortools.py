@@ -211,14 +211,11 @@ def optimizer_Dennis_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,To
     # Minimize the calories
     objective.SetMinimization()
 
-    # Constraint0  Calories -> within the 90% - 110% of recommended 
+    # Constraints for various nutrients -> within the 90% - 110% of recommended 
     constraint0 = solver.Constraint(EnergyAmount_kcal * 0.9, EnergyAmount_kcal * 1.1)
-    # Constraint1  Carbohydrate -> within the 90% - 110% of recommended 
-    constraint1 = solver.Constraint(CarbohydrateAmount_g * 0.1 , CarbohydrateAmount_g * 1000  )
-    # Constraint2  Protein -> within the 90% - 110% of recommended 
-    constraint2 = solver.Constraint(ProteinAmount_g * 0.1 , ProteinAmount_g * 1000 )
-    # Constraint3  Fat -> within the 90% - 110% of recommended 
-    constraint3 = solver.Constraint(TotalFatAmount_g * 0.1 , TotalFatAmount_g * 1000 )
+    constraint1 = solver.Constraint(CarbohydrateAmount_g * 0.9 , CarbohydrateAmount_g * 1.1  )
+    constraint2 = solver.Constraint(ProteinAmount_g * 0.9 , ProteinAmount_g * 1.1 )
+    constraint3 = solver.Constraint(TotalFatAmount_g * 0.9 , TotalFatAmount_g * 1.1 )
     for i in range(0, len(food_data)):
         constraint0.SetCoefficient(food[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
         constraint1.SetCoefficient(food[i], food_data[i][DATA_CarbohydrateAmount_g_INDEX])
@@ -254,7 +251,7 @@ def run_optimizer(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFa
 # For quick testing without Django
 def main():
     readFoodData(csv_file)
-    foodIndex_result = run_optimizer(EnergyAmount_kcal=500, CarbohydrateAmount_g =1,ProteinAmount_g = 50 , TotalFatAmount_g = 50 )
+    foodIndex_result = run_optimizer(EnergyAmount_kcal=2000, CarbohydrateAmount_g =150,ProteinAmount_g = 150 , TotalFatAmount_g = 50 )
     for i in foodIndex_result:
         print('%s' % food_data[i][DATA_FoodName_INDEX], end ='' )
         print(' (Calories=%skcal)' % food_data[i][DATA_EnergyAmount_kcal_INDEX], end ='' )
