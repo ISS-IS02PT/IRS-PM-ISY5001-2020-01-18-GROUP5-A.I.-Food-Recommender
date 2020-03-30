@@ -131,7 +131,7 @@ def optimizer2(EnergyAmount_kcal,BodyWeight_kg):
 # Harry: This optimizer takes input parameter as 'EnergyAmount_kcal' and 'BodyWeight_kg', this is for Keto Diet
 def optimizer3(EnergyAmount_kcal,BodyWeight_kg):
     # Create the mip solver with the CBC backend
-    solver = pywraplp.Solver('optimizer2',
+    solver = pywraplp.Solver('optimizer3',
                              pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
 
     # Declare the objective function
