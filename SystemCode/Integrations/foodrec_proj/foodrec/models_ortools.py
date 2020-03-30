@@ -84,9 +84,9 @@ def optimizer1(EnergyAmount_kcal):
     return foodIndex_result
 
 # Harry: This optimizer takes input parameter as 'EnergyAmount_kcal' and 'BodyWeight_kg'
-def optimizer2(EnergyAmount_kcal,BodyWeight_kg):
+def optimizer_HC_2(EnergyAmount_kcal,BodyWeight_kg):
     # Create the mip solver with the CBC backend
-    solver = pywraplp.Solver('optimizer2',
+    solver = pywraplp.Solver('optimizer_HC_2',
                              pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
 
     # Declare the objective function
@@ -133,9 +133,9 @@ def optimizer2(EnergyAmount_kcal,BodyWeight_kg):
 
 
 # Harry: This optimizer takes input parameter as 'EnergyAmount_kcal' and 'BodyWeight_kg', this is for Keto Diet
-def optimizer3(EnergyAmount_kcal,BodyWeight_kg):
+def optimizer_HC_3(EnergyAmount_kcal,BodyWeight_kg):
     # Create the mip solver with the CBC backend
-    solver = pywraplp.Solver('optimizer3',
+    solver = pywraplp.Solver('optimizer_HC_3',
                              pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
 
     # Declare the objective function
@@ -193,23 +193,8 @@ def optimizer3(EnergyAmount_kcal,BodyWeight_kg):
 
 
 
-
-<<<<<<< HEAD
-def run_optimizer(EnergyAmount_kcal):
-    return optimizer1(EnergyAmount_kcal)
-    #return optimizer2(EnergyAmount_kcal, BodyWeight_kg)
-    #return optimizer3(EnergyAmount_kcal, BodyWeight_kg)
-
-def run_optimizer2(EnergyAmount_kcal, BodyWeight_kg):
-    return optimizer2(EnergyAmount_kcal, BodyWeight_kg)
-
-def run_optimizer3(EnergyAmount_kcal, BodyWeight_kg):
-    return optimizer3(EnergyAmount_kcal, BodyWeight_kg)
-=======
 # Generic Optimizer for various nutrients requirements ( Input parameters from pyke)
 def optimizer_Dennis_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g ):
->>>>>>> c71ae328fb0f41faf28628c7bd77414e3d05ae81
-
     # Create the mip solver with the CBC backend
     solver = pywraplp.Solver('optimizer_Dennis_1',
                              pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
@@ -259,23 +244,26 @@ def optimizer_Dennis_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,To
 
     return foodIndex_result
 
-
-def run_optimizer(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g):
+def run_optimizer_Dennis(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g):
     return optimizer_Dennis_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g )
+
+def run_optimizer(EnergyAmount_kcal):
+    return optimizer1(EnergyAmount_kcal)
+
+def run_optimizer_HC_2(EnergyAmount_kcal, BodyWeight_kg):
+    return optimizer_HC_2(EnergyAmount_kcal, BodyWeight_kg)
+
+def run_optimizer_HC_3(EnergyAmount_kcal, BodyWeight_kg):
+    return optimizer_HC_3(EnergyAmount_kcal, BodyWeight_kg)
 
 
 # For quick testing without Django
 def main():
     readFoodData(csv_file)
-<<<<<<< HEAD
-    foodIndex_result = run_optimizer(EnergyAmount_kcal=2500)
-    #foodIndex_result = run_optimizer2(EnergyAmount_kcal=2500, BodyWeight_kg=70)
-    #foodIndex_result = run_optimizer3(EnergyAmount_kcal=2500, BodyWeight_kg=70)
-
-    
-=======
-    foodIndex_result = run_optimizer(EnergyAmount_kcal=2000, CarbohydrateAmount_g =150,ProteinAmount_g = 150 , TotalFatAmount_g = 50 )
->>>>>>> c71ae328fb0f41faf28628c7bd77414e3d05ae81
+    #foodIndex_result = run_optimizer(EnergyAmount_kcal=2500)
+    #foodIndex_result = run_optimizer_HC_2(EnergyAmount_kcal=2500, BodyWeight_kg=70)
+    foodIndex_result = run_optimizer_HC_3(EnergyAmount_kcal=2500, BodyWeight_kg=70)
+    #foodIndex_result = run_optimizer_Dennis(EnergyAmount_kcal=2000, CarbohydrateAmount_g =150,ProteinAmount_g = 150 , TotalFatAmount_g = 50 )
     for i in foodIndex_result:
         print('%s' % food_data[i][DATA_FoodName_INDEX], end ='' )
         print(' (Calories=%skcal)' % food_data[i][DATA_EnergyAmount_kcal_INDEX], end ='' )
