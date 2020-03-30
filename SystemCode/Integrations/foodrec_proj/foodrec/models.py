@@ -1,11 +1,16 @@
 from django.db import models
+import os
+from django.conf import settings
+
+#### PyKE import ####
+from .models_pyke.knowledge import pyke_load_engine, pyke_calculate_bmr, pyke_calculate_EnergyAmount_kcal
+pyke_load_engine()
 
 ######################################################################
 # Initialize the data once when Django loads up
 # -- will improve in next iteration
 ######################################################################
-import os
-from django.conf import settings
+
 from .models_ortools import readFoodData
 csv_file = open(os.path.join(settings.BASE_DIR, 'foodrec/Dataset/FoodDatabase.csv'))
 readFoodData(csv_file)
@@ -95,23 +100,11 @@ class NutrientNeeds:
     # Will be replaced with PyKE in next iteration
     def calculate(self):
         # Firstly, calculate the BMR
-        bmr = None
-        if self.profile.gender == 'Male':
-            bmr = 10 * self.profile.weight + 6.25 * self.profile.height - 5 * self.profile.age + 5
-        else:
-            bmr = 10 * self.profile.weight + 6.25 * self.profile.height - 5 * self.profile.age - 161
+        bmr =float('%.2f' % (pyke_calculate_bmr(self.profile.gender, self.profile.weight, self.profile.height, self.profile.age)))
         
         # Calculate the nutrients
         # EnergyAmount_kcal
-        if self.profile.activity == 'sedentary':
-            self.EnergyAmount_kcal = bmr * 1.2
-        elif self.profile.activity == 'lightly_active':
-            self.EnergyAmount_kcal = bmr * 1.375
-        elif self.profile.activity == 'moderately_active':
-            self.EnergyAmount_kcal = bmr * 1.55
-        elif self.profile.activity == 'very_active':
-            self.EnergyAmount_kcal = bmr * 1.725
-        self.EnergyAmount_kcal = float('%.2f' % (self.EnergyAmount_kcal))
+        self.EnergyAmount_kcal = pyke_calculate_EnergyAmount_kcal(bmr, self.profile.activity)
 
         # Assuming balance ratio of Carbs:Fat:Protein = 40%:30%:30%
         # - Carbohydrates provide 4 Calories of energy per gram

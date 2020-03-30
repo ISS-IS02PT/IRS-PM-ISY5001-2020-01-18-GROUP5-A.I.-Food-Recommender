@@ -1,0 +1,63 @@
+######################
+###### BMR rule ######
+######################
+rule_calculate_bmr_male
+    use calculate_bmr($bmr, 'male', $weight, $height, $age)
+    when
+        python bmr = calculate_bmr_male($weight, $height, $age)
+        $bmr = bmr
+        
+rule_calculate_bmr_female
+    use calculate_bmr($bmr, 'female', $weight, $height, $age)
+    when
+        python bmr = calculate_bmr_female($weight, $height, $age)
+        $bmr = bmr
+
+####################################
+###### EnergyAmount_kcal rule ######
+####################################
+rule_calculate_EnergyAmount_kcal_sedentary
+    use calculate_EnergyAmount_kcal($energy, $bmr, 'sedentary')
+    when
+        python energy = calculate_EnergyAmount_kcal_sedentary($bmr)
+        $energy = energy
+
+rule_calculate_EnergyAmount_kcal_lightly_active
+    use calculate_EnergyAmount_kcal($energy, $bmr, 'lightly_active')
+    when
+        python energy = calculate_EnergyAmount_kcal_lightly_active($bmr)
+        $energy = energy
+
+rule_calculate_EnergyAmount_kcal_moderately_active
+    use calculate_EnergyAmount_kcal($energy, $bmr, 'moderately_active')
+    when
+        python energy = calculate_EnergyAmount_kcal_moderately_active($bmr)
+        $energy = energy
+
+rule_calculate_EnergyAmount_kcal_very_active
+    use calculate_EnergyAmount_kcal($energy, $bmr, 'very_active')
+    when
+        python energy = calculate_EnergyAmount_kcal_very_active($bmr)
+        $energy = energy
+
+######################################################
+###### Regular Python fuctions for calculations ######
+######################################################
+bc_extras
+    def calculate_bmr_male(weight, height, age):
+        return 10 * weight + 6.25 * height - 5 * age + 5
+
+    def calculate_bmr_female(weight, height, age):
+        return 10 * weight + 6.25 * height - 5 * age - 161
+
+    def calculate_EnergyAmount_kcal_sedentary(bmr):
+        return bmr * 1.2
+
+    def calculate_EnergyAmount_kcal_moderately_active(bmr):
+        return bmr * 1.375
+
+    def calculate_EnergyAmount_kcal_very_active(bmr):
+        return bmr * 1.55
+
+    def calculate_EnergyAmount_kcal_very_active(bmr):
+        return bmr * 1.725
