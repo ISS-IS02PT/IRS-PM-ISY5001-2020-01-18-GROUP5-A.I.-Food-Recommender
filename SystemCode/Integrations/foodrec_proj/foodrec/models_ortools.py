@@ -12,9 +12,12 @@ DATA_EnergyAmount_kcal_INDEX = -1
 DATA_ProteinAmount_g_INDEX = -1
 DATA_TotalFatAmount_g_INDEX = -1
 
+
 food_data = None
-csv_file = 'Dataset/FoodDatabase.csv'
-NUM_FOOD = 50
+#csv_file = 'Dataset/FoodDatabase.csv'
+csv_file = 'Dataset/FoodDatabase_HC.csv'
+#NUM_FOOD = 1000
+NUM_FOOD = 3701
 
 
 def readFoodData(csv_file):
@@ -193,6 +196,14 @@ def optimizer3(EnergyAmount_kcal,BodyWeight_kg):
 
 def run_optimizer(EnergyAmount_kcal):
     return optimizer1(EnergyAmount_kcal)
+    #return optimizer2(EnergyAmount_kcal, BodyWeight_kg)
+    #return optimizer3(EnergyAmount_kcal, BodyWeight_kg)
+
+def run_optimizer2(EnergyAmount_kcal, BodyWeight_kg):
+    return optimizer2(EnergyAmount_kcal, BodyWeight_kg)
+
+def run_optimizer3(EnergyAmount_kcal, BodyWeight_kg):
+    return optimizer3(EnergyAmount_kcal, BodyWeight_kg)
 
 
 
@@ -203,7 +214,11 @@ def run_optimizer(EnergyAmount_kcal):
 # For quick testing without Django
 def main():
     readFoodData(csv_file)
-    foodIndex_result = run_optimizer(EnergyAmount_kcal=60)
+    foodIndex_result = run_optimizer(EnergyAmount_kcal=2500)
+    #foodIndex_result = run_optimizer2(EnergyAmount_kcal=2500, BodyWeight_kg=70)
+    #foodIndex_result = run_optimizer3(EnergyAmount_kcal=2500, BodyWeight_kg=70)
+
+    
     for i in foodIndex_result:
         print('%s' % food_data[i][DATA_FoodName_INDEX])
 
