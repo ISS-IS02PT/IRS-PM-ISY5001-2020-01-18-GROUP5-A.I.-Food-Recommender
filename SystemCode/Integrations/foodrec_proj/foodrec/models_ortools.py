@@ -80,6 +80,7 @@ def optimizer1(EnergyAmount_kcal):
 
     return foodIndex_result
 
+# Harry: This optimizer takes input parameter as 'EnergyAmount_kcal' and 'BodyWeight_kg'
 def optimizer2(EnergyAmount_kcal,BodyWeight_kg):
     # Create the mip solver with the CBC backend
     solver = pywraplp.Solver('optimizer2',
