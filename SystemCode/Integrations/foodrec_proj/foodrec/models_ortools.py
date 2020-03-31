@@ -194,9 +194,9 @@ def optimizer_HC_3(EnergyAmount_kcal,BodyWeight_kg):
 
 
 # Generic Optimizer for various nutrients requirements ( Input parameters from pyke)
-def optimizer_Dennis_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g ):
+def optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g ):
     # Create the mip solver with the CBC backend
-    solver = pywraplp.Solver('optimizer_Dennis_1',
+    solver = pywraplp.Solver('optimizer_DC_1',
                              pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
 
     # Declare the objective function
@@ -244,8 +244,8 @@ def optimizer_Dennis_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,To
 
     return foodIndex_result
 
-def run_optimizer_Dennis(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g):
-    return optimizer_Dennis_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g )
+def run_optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g):
+    return optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g )
 
 def run_optimizer(EnergyAmount_kcal):
     return optimizer1(EnergyAmount_kcal)
@@ -262,8 +262,8 @@ def main():
     readFoodData(csv_file)
     #foodIndex_result = run_optimizer(EnergyAmount_kcal=2500)
     #foodIndex_result = run_optimizer_HC_2(EnergyAmount_kcal=2500, BodyWeight_kg=70)
-    foodIndex_result = run_optimizer_HC_3(EnergyAmount_kcal=2500, BodyWeight_kg=70)
-    #foodIndex_result = run_optimizer_Dennis(EnergyAmount_kcal=2000, CarbohydrateAmount_g =150,ProteinAmount_g = 150 , TotalFatAmount_g = 50 )
+    #foodIndex_result = run_optimizer_HC_3(EnergyAmount_kcal=2500, BodyWeight_kg=70)
+    foodIndex_result = run_optimizer_DC_1(EnergyAmount_kcal=2500, CarbohydrateAmount_g =150,ProteinAmount_g = 150 , TotalFatAmount_g = 50 )
     for i in foodIndex_result:
         print('%s' % food_data[i][DATA_FoodName_INDEX], end ='' )
         print(' (Calories=%skcal)' % food_data[i][DATA_EnergyAmount_kcal_INDEX], end ='' )
