@@ -1,0 +1,6 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-f', 'Dockerfile.develop', '-t', 'asia.gcr.io/my-spark-gke-test-272407/develop:0.1', '.']
+
+images:
+- 'asia.gcr.io/my-spark-gke-test-272407/develop:0.1'
