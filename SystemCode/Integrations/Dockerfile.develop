@@ -1,19 +1,26 @@
 FROM python:3.8-slim-buster
 
-# Create a group and user to run our app
-ARG APP_USER=appuser
-RUN groupadd -r ${APP_USER} && useradd --no-log-init -r -g ${APP_USER} ${APP_USER}
+# Install packages needed to run your application (not build deps):
+RUN set -ex \
+    && RUN_DEPS=" \
+    nginx \
+    supervisor \
+    " \
+    && apt-get update && apt-get install -y --no-install-recommends $RUN_DEPS \
+    && rm -rf /var/lib/apt/lists/*
 
 # Our codebase folder
 ENV BASEDIR=/code
+
+# Setting WORKDIR for subsequent Docker commands
 WORKDIR ${BASEDIR}
 
-# Virtual Environment
+# Virtual Environment for Python
 ENV VIRTUAL_ENV=${BASEDIR}/venv/sandbox
 RUN python3 -m venv ${VIRTUAL_ENV}
 ENV PATH="${VIRTUAL_ENV}/bin:$PATH"
 
-# Copy in pyke3-1.1.1.zip file and the rest of the Python wheel package requirement
+# Copy in pyke3-1.1.1.zip file and the rest of the Python wheel package requirements
 ADD requirements/pyke3-1.1.1.zip requirements/pyke3-1.1.1.zip
 ADD requirements/requirements.txt requirements/requirements.txt
 
@@ -24,27 +31,35 @@ RUN set -ex \
     " \
     && apt-get update && apt-get install -y --no-install-recommends $BUILD_DEPS \
     \
+    # Install pyke3
     && pip install --no-cache-dir requirements/pyke3-1.1.1.zip \
     \
+    # Install the rest of the requirements
     && pip install --no-cache-dir -r requirements/requirements.txt \
     \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $BUILD_DEPS \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy application code to the container (make sure you create a .dockerignore file if any large files or directories should be excluded)
-ADD foodrec_proj foodrec_proj
+# Add the conf file for supervisord
+ADD supervisord.conf .
 
 # Add the conf files for uwsgi
 ADD uwsgi.ini .
 
 # Add the conf files for nginx
-ADD nginx.conf .
+RUN rm /etc/nginx/sites-enabled/default
+ADD nginx.conf /etc/nginx/sites-enabled/
 ADD uwsgi_params .
 
-# Change to a non-root user
-USER ${APP_USER}:${APP_USER}
+# Copy application code
+ADD foodrec_proj foodrec_proj
 
-# Start uWSGI
-CMD ["uwsgi", "uwsgi.ini"]
+# Secret key for Django Production
+ARG DYNAMIC_DJANGO_SECRET_KEY
+ENV DJANGO_SECRET_KEY=${DYNAMIC_DJANGO_SECRET_KEY}
 
+# Start supervisord
+CMD ["/usr/bin/supervisord"]
+
+# Default program to keep container alive for troubleshooting
 # CMD tail -f /dev/null

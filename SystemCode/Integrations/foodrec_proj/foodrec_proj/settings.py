@@ -18,14 +18,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '_nyk@rswjr#@*jt($!fwdxa7-sn7utu^l2*4migwac#*4gwj25'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+# SECRET_KEY = '_nyk@rswjr#@*jt($!fwdxa7-sn7utu^l2*4migwac#*4gwj25'
+DEBUG = False
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -121,4 +117,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Static files are automatically served by the development server. In production, you must define a STATIC_ROOT directory where collectstatic will copy them.
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
