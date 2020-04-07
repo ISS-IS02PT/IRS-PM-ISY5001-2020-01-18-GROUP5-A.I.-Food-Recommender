@@ -17,7 +17,7 @@ food_data = None
 #csv_file = 'Dataset/FoodDatabase.csv'
 csv_file = 'Dataset/FoodDatabase_HC.csv'
 #NUM_FOOD = 1000
-NUM_FOOD = 3701
+NUM_FOOD = 3920
 
 
 def readFoodData(csv_file):
@@ -244,8 +244,8 @@ def optimizer_Dennis_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,To
 
     return foodIndex_result
 
-def run_optimizer_Dennis(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g):
-    return optimizer_Dennis_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g )
+#def run_optimizer_Dennis(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g):
+#    return optimizer_Dennis_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g )
 
 def run_optimizer(EnergyAmount_kcal):
     return optimizer1(EnergyAmount_kcal)
@@ -262,7 +262,7 @@ def main():
     readFoodData(csv_file)
     #foodIndex_result = run_optimizer(EnergyAmount_kcal=2500)
     #foodIndex_result = run_optimizer_HC_2(EnergyAmount_kcal=2500, BodyWeight_kg=70)
-    foodIndex_result = run_optimizer_HC_3(EnergyAmount_kcal=2500, BodyWeight_kg=70)
+    foodIndex_result = run_optimizer_HC_3(EnergyAmount_kcal=1200, BodyWeight_kg=70)
     #foodIndex_result = run_optimizer_Dennis(EnergyAmount_kcal=2000, CarbohydrateAmount_g =150,ProteinAmount_g = 150 , TotalFatAmount_g = 50 )
     for i in foodIndex_result:
         print('%s' % food_data[i][DATA_FoodName_INDEX], end ='' )
