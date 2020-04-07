@@ -194,9 +194,9 @@ def optimizer_HC_3(EnergyAmount_kcal,BodyWeight_kg):
 
 
 # Generic Optimizer for various nutrients requirements ( Input parameters from pyke)
-def optimizer_Dennis_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g ):
+def optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g ):
     # Create the mip solver with the CBC backend
-    solver = pywraplp.Solver('optimizer_Dennis_1',
+    solver = pywraplp.Solver('optimizer_DC_1',
                              pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
 
     # Declare the objective function

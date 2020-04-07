@@ -1,0 +1,22 @@
+################################
+#### Cloud Building using docker
+################################
+# steps:
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: [ 'build', '-f', 'Dockerfile.develop', '-t', 'asia.gcr.io/my-spark-gke-test-272407/develop:0.1', '.']
+# 
+# images:
+# - 'asia.gcr.io/my-spark-gke-test-272407/develop:0.1'
+
+
+################################
+#### Cloud Building using kaniko
+################################
+steps:
+- name: 'gcr.io/kaniko-project/executor:latest'
+  args:
+    - --dockerfile=Dockerfile.develop
+    - --context=.
+    - --destination=asia.gcr.io/my-spark-gke-test-272407/develop:0.1
+    - --cache=true
+    - --build-arg=DYNAMIC_DJANGO_SECRET_KEY=_nyk@rswjr#@*jt($!fwdxa7-sn7utu^l2*4migwac#*4gwj1988

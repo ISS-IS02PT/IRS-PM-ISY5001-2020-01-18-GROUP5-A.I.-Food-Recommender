@@ -1,0 +1,65 @@
+FROM python:3.8-slim-buster
+
+# Install packages needed to run your application (not build deps):
+RUN set -ex \
+    && RUN_DEPS=" \
+    nginx \
+    supervisor \
+    " \
+    && apt-get update && apt-get install -y --no-install-recommends $RUN_DEPS \
+    && rm -rf /var/lib/apt/lists/*
+
+# Our codebase folder
+ENV BASEDIR=/code
+
+# Setting WORKDIR for subsequent Docker commands
+WORKDIR ${BASEDIR}
+
+# Virtual Environment for Python
+ENV VIRTUAL_ENV=${BASEDIR}/venv/sandbox
+RUN python3 -m venv ${VIRTUAL_ENV}
+ENV PATH="${VIRTUAL_ENV}/bin:$PATH"
+
+# Copy in pyke3-1.1.1.zip file and the rest of the Python wheel package requirements
+ADD requirements/pyke3-1.1.1.zip requirements/pyke3-1.1.1.zip
+ADD requirements/requirements.txt requirements/requirements.txt
+
+# Install build deps, then run `pip install`, then remove unneeded build deps all in a single step.
+RUN set -ex \
+    && BUILD_DEPS=" \
+    build-essential \
+    " \
+    && apt-get update && apt-get install -y --no-install-recommends $BUILD_DEPS \
+    \
+    # Install pyke3
+    && pip install --no-cache-dir requirements/pyke3-1.1.1.zip \
+    \
+    # Install the rest of the requirements
+    && pip install --no-cache-dir -r requirements/requirements.txt \
+    \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $BUILD_DEPS \
+    && rm -rf /var/lib/apt/lists/*
+
+# Add the conf file for supervisord
+ADD supervisord.conf .
+
+# Add the conf files for uwsgi
+ADD uwsgi.ini .
+
+# Add the conf files for nginx
+RUN rm /etc/nginx/sites-enabled/default
+ADD nginx.conf /etc/nginx/sites-enabled/
+ADD uwsgi_params .
+
+# Copy application code
+ADD foodrec_proj foodrec_proj
+
+# Secret key for Django Production
+ARG DYNAMIC_DJANGO_SECRET_KEY
+ENV DJANGO_SECRET_KEY=${DYNAMIC_DJANGO_SECRET_KEY}
+
+# Start supervisord
+CMD ["/usr/bin/supervisord"]
+
+# Default program to keep container alive for troubleshooting
+# CMD tail -f /dev/null
