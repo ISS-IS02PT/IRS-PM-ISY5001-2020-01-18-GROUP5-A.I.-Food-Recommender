@@ -15,7 +15,7 @@ DATA_TotalFatAmount_g_INDEX = -1
 
 food_data = None
 #csv_file = 'Dataset/FoodDatabase.csv'
-csv_file = 'Dataset/FoodDatabase_HC.csv'
+csv_file = 'Dataset/FoodDatabase_HC1.csv'
 #NUM_FOOD = 1000
 NUM_FOOD = 3920
 
