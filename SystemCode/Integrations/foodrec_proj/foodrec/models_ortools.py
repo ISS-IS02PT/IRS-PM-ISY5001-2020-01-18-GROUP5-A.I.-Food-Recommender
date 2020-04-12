@@ -11,28 +11,32 @@ DATA_CarbohydrateAmount_g_INDEX = -1
 DATA_EnergyAmount_kcal_INDEX = -1
 DATA_ProteinAmount_g_INDEX = -1
 DATA_TotalFatAmount_g_INDEX = -1
-
+DATA_IsMainDish_INDEX = -1
+DATA_IsBreakfast_INDEX = -1
 
 food_data = None
 #csv_file = 'Dataset/FoodDatabase.csv'
-csv_file = 'Dataset/FoodDatabase_HC1.csv'
+csv_file = 'Dataset/FoodDatabase_DC1.csv'
 #NUM_FOOD = 1000
 NUM_FOOD = 3920
 
 
 def readFoodData(csv_file):
     # Reading only the 1st 'NUM_FOOD' rows for now, for the selected columns
-    df = pd.read_csv(csv_file)[['FoodName','FoodGroup','CarbohydrateAmount_g','EnergyAmount_kcal','ProteinAmount_g','TotalFatAmount_g']]
+    df = pd.read_csv(csv_file)[['FoodName','FoodGroup','CarbohydrateAmount_g','EnergyAmount_kcal','ProteinAmount_g','TotalFatAmount_g' ,'IsMainDish', 'IsBreakfast']]
     
     # Update the index here for the data arrays to point to different nutrients
     global DATA_FoodName_INDEX, DATA_FoodGroup_INDEX, DATA_CarbohydrateAmount_g_INDEX, \
-        DATA_EnergyAmount_kcal_INDEX, DATA_ProteinAmount_g_INDEX, DATA_TotalFatAmount_g_INDEX
+        DATA_EnergyAmount_kcal_INDEX, DATA_ProteinAmount_g_INDEX, DATA_TotalFatAmount_g_INDEX, DATA_IsMainDish_INDEX, DATA_IsBreakfast_INDEX
     DATA_FoodName_INDEX = 0
     DATA_FoodGroup_INDEX = 1
     DATA_CarbohydrateAmount_g_INDEX = 2
     DATA_EnergyAmount_kcal_INDEX = 3
     DATA_ProteinAmount_g_INDEX = 4
     DATA_TotalFatAmount_g_INDEX = 5
+    DATA_IsMainDish_INDEX = 6
+    DATA_IsBreakfast_INDEX = 7
+
 
     global food_data
     food_data = df.head(NUM_FOOD).to_numpy()
@@ -194,7 +198,7 @@ def optimizer_HC_3(EnergyAmount_kcal,BodyWeight_kg):
 
 
 # Generic Optimizer for various nutrients requirements ( Input parameters from pyke)
-def optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g ):
+def optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g, IsMainDish, IsBreakfast ):
     # Create the mip solver with the CBC backend
     solver = pywraplp.Solver('optimizer_DC_1',
                              pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
@@ -217,11 +221,15 @@ def optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalF
     constraint1 = solver.Constraint(CarbohydrateAmount_g * 0.9 , CarbohydrateAmount_g * 1.1  )
     constraint2 = solver.Constraint(ProteinAmount_g * 0.9 , ProteinAmount_g * 1.1 )
     constraint3 = solver.Constraint(TotalFatAmount_g * 0.9 , TotalFatAmount_g * 1.1 )
+    constraint4 = solver.Constraint(IsMainDish *1 ,IsMainDish *1  )
+    constraint5 = solver.Constraint(IsBreakfast *1 , IsBreakfast *1 )
     for i in range(0, len(food_data)):
         constraint0.SetCoefficient(food[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
         constraint1.SetCoefficient(food[i], food_data[i][DATA_CarbohydrateAmount_g_INDEX])
         constraint2.SetCoefficient(food[i], food_data[i][DATA_ProteinAmount_g_INDEX])
         constraint3.SetCoefficient(food[i], food_data[i][DATA_TotalFatAmount_g_INDEX])
+        constraint4.SetCoefficient(food[i], food_data[i][DATA_IsMainDish_INDEX])
+        constraint5.SetCoefficient(food[i], food_data[i][DATA_IsBreakfast_INDEX])
 
     # Solve!
     status = solver.Solve()
@@ -244,8 +252,8 @@ def optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalF
 
     return foodIndex_result
 
-#def run_optimizer_Dennis(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g):
-#    return optimizer_Dennis_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g )
+def run_optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g, IsMainDish, IsBreakfast):
+    return optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g, IsMainDish, IsBreakfast )
 
 def run_optimizer(EnergyAmount_kcal):
     return optimizer1(EnergyAmount_kcal)
@@ -262,14 +270,16 @@ def main():
     readFoodData(csv_file)
     #foodIndex_result = run_optimizer(EnergyAmount_kcal=2500)
     #foodIndex_result = run_optimizer_HC_2(EnergyAmount_kcal=2500, BodyWeight_kg=70)
-    foodIndex_result = run_optimizer_HC_3(EnergyAmount_kcal=1200, BodyWeight_kg=70)
-    #foodIndex_result = run_optimizer_Dennis(EnergyAmount_kcal=2000, CarbohydrateAmount_g =150,ProteinAmount_g = 150 , TotalFatAmount_g = 50 )
+    #foodIndex_result = run_optimizer_HC_3(EnergyAmount_kcal=1200, BodyWeight_kg=70)
+    foodIndex_result = run_optimizer_DC_1(EnergyAmount_kcal=2500, CarbohydrateAmount_g =150,ProteinAmount_g = 150 , TotalFatAmount_g = 50 ,IsMainDish = 1, IsBreakfast = 1 )
     for i in foodIndex_result:
         print('%s' % food_data[i][DATA_FoodName_INDEX], end ='' )
         print(' (Calories=%skcal)' % food_data[i][DATA_EnergyAmount_kcal_INDEX], end ='' )
         print(' (Carbo=%sg)' % food_data[i][DATA_CarbohydrateAmount_g_INDEX],end ='')
         print(' (Protein=%sg)' % food_data[i][DATA_ProteinAmount_g_INDEX],end ='')
-        print(' (Fat=%sg)' % food_data[i][DATA_TotalFatAmount_g_INDEX])
+        print(' (Fat=%sg)' % food_data[i][DATA_TotalFatAmount_g_INDEX],end ='')
+        print(' (IsMainDish=%s)' % food_data[i][DATA_IsMainDish_INDEX],end ='')
+        print(' (IsBreakfast=%s)' % food_data[i][DATA_IsBreakfast_INDEX])
 
 if __name__ == '__main__':
     main()

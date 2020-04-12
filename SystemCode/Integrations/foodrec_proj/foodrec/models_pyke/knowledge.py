@@ -33,5 +33,5 @@ def pyke_calculate_EnergyAmount_kcal(bmr, activity):
 
 if __name__ == "__main__":
     pyke_load_engine()
-    print(pyke_calculate_bmr('male',72,182,32))
+    print(pyke_calculate_bmr('male',85,182,32))
     
