@@ -207,7 +207,7 @@ def optimizer_HC_3(EnergyAmount_kcal,BodyWeight_kg):
 
 
 # Generic Optimizer for various nutrients requirements ( Input parameters from pyke)
-def optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g,IsMainDish,IsFastFood,IsBreakfast,IsOthers ):
+def optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g,IsMainDish,IsFastFood,IsBreakfast,IsBeverages,IsOthers ):
     # Create the mip solver with the CBC backend
     solver = pywraplp.Solver('optimizer_DC_1',
                              pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
@@ -233,7 +233,7 @@ def optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalF
     constraint4 = solver.Constraint(IsMainDish *1 ,IsMainDish *1  )
     constraint5 = solver.Constraint(IsFastFood *1 ,IsFastFood *1  )
     constraint6 = solver.Constraint(IsBreakfast *1 , IsBreakfast *1 )
-    constraint7 = solver.Constraint(IsBeverages *1 , IsBeverages *1 )
+    constraint7 = solver.Constraint(IsBeverages*1 , IsBeverages *1 )
     constraint8 = solver.Constraint(IsOthers *1 , IsOthers *1 )
  
     for i in range(0, len(food_data)):
@@ -287,7 +287,7 @@ def main():
     #foodIndex_result = run_optimizer(EnergyAmount_kcal=2500)
     #foodIndex_result = run_optimizer_HC_2(EnergyAmount_kcal=2500, BodyWeight_kg=70)
     #foodIndex_result = run_optimizer_HC_3(EnergyAmount_kcal=1200, BodyWeight_kg=70)
-    foodIndex_result = run_optimizer_DC_1(EnergyAmount_kcal = 2500,CarbohydrateAmount_g = 50,ProteinAmount_g =50,TotalFatAmount_g =50,IsMainDish =2,IsFastFood =2, IsBreakfast =1,IsBeverages =0, IsOthers =0)
+    foodIndex_result = run_optimizer_DC_1(EnergyAmount_kcal = 2500,CarbohydrateAmount_g = 50,ProteinAmount_g =50,TotalFatAmount_g =50,IsMainDish =2,IsFastFood =2, IsBreakfast =1,IsBeverages =1, IsOthers =0)
     for i in foodIndex_result:
         print('%s' % food_data[i][DATA_FoodName_INDEX], end ='' )
         print(' (Calories=%skcal)' % food_data[i][DATA_EnergyAmount_kcal_INDEX], end ='' )
