@@ -139,7 +139,7 @@ def run_optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,To
 def main():
     readFoodData(csv_file)
     foodIndex_result = run_optimizer_DC_1(EnergyAmount_kcal = 2500,CarbohydrateAmount_g = 50,ProteinAmount_g =50,TotalFatAmount_g =50,\
-        IsMainDish =3,IsFastFood =0, IsBreakfast =1,IsBeverages =0, IsOthers =0, Vegan =0, Vegetarian=0, Halal=1,ContainsBeef=0, Alcohol=0)
+        IsMainDish =3,IsFastFood =0, IsBreakfast =1,IsBeverages =3, IsOthers =0, Vegan =1, Vegetarian=1, Halal=1,ContainsBeef=0, Alcohol=0)
     for i in foodIndex_result:
         print('%s' % food_data[i][DATA_FoodName_INDEX], end ='' )
         print(' (Calories=%skcal)' % food_data[i][DATA_EnergyAmount_kcal_INDEX], end ='' )
