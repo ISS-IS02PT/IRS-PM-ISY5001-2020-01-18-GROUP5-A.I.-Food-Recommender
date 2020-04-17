@@ -79,9 +79,9 @@ def optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalF
 
     # Constraints for various nutrients -> within the 90% - 110% of recommended 
     constraint0 = solver.Constraint(EnergyAmount_kcal * 0.9, EnergyAmount_kcal * 1.1)
-    constraint1 = solver.Constraint(CarbohydrateAmount_g * 1 , CarbohydrateAmount_g * 1000  )
-    constraint2 = solver.Constraint(ProteinAmount_g * 1 , ProteinAmount_g * 1000 )
-    constraint3 = solver.Constraint(TotalFatAmount_g * 1 , TotalFatAmount_g * 1000 )
+    constraint1 = solver.Constraint(CarbohydrateAmount_g * 0.9, CarbohydrateAmount_g * 100.1)
+    constraint2 = solver.Constraint(ProteinAmount_g * 0.9, ProteinAmount_g * 100.1 )
+    constraint3 = solver.Constraint(TotalFatAmount_g * 0.9, TotalFatAmount_g * 100.1 )
     # Constraints to choose how many dishes per category for the day ( Main Dish , Breakfast , Fast Food and Beverages)
     constraint4 = solver.Constraint(IsMainDish *1 ,IsMainDish *1  )
     constraint5 = solver.Constraint(IsFastFood *1 ,IsFastFood *1  )
@@ -139,9 +139,24 @@ def run_optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,To
 
 # For quick testing without Django
 def main():
+
+    CaloriesIntake = 2500
+    Cabohydrate = 50
+    Protein = 50
+    Fat = 50
+    Breakfast = 1
+    Main_Dish = 2
+    Fast_Food = 0
+    Beverages = 0
+    Vegan = 1
+    Vegetarian = 1
+    Halal = 1
+    Beef = 0
+    Alcohol = 0
+
     readFoodData(csv_file)
-    foodIndex_result = run_optimizer_DC_1(EnergyAmount_kcal = 2500,CarbohydrateAmount_g = 50,ProteinAmount_g =50,TotalFatAmount_g =50,\
-        IsMainDish =5,IsFastFood =0, IsBreakfast =1,IsBeverages =10, IsOthers =0, Vegan =1, Vegetarian=1, Halal=1,ContainsBeef=0, Alcohol=0)
+    foodIndex_result = run_optimizer_DC_1(EnergyAmount_kcal = CaloriesIntake ,CarbohydrateAmount_g = Cabohydrate, ProteinAmount_g =Protein,TotalFatAmount_g =Fat,\
+        IsMainDish =Main_Dish,IsFastFood =Fast_Food, IsBreakfast =Breakfast,IsBeverages =Beverages, IsOthers =0, Vegan =Vegan, Vegetarian=Vegetarian, Halal=Halal,ContainsBeef=Beef, Alcohol=Alcohol)
     for i in foodIndex_result:
         print('%s' % food_data[i][DATA_FoodName_INDEX], end ='' )
         print(' (Calories=%skcal)' % food_data[i][DATA_EnergyAmount_kcal_INDEX], end ='' )
