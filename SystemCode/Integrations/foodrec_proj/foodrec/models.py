@@ -12,7 +12,7 @@ pyke_load_engine()
 ######################################################################
 
 from .models_ortools import readFoodData
-csv_file = open(os.path.join(settings.BASE_DIR, 'foodrec/Dataset/FoodDatabase.csv'))
+csv_file = open(os.path.join(settings.BASE_DIR, 'foodrec/Dataset/foodDataBase_PleaseUseThis_DC2.csv'))
 readFoodData(csv_file)
 
 
@@ -106,6 +106,7 @@ class NutrientNeeds:
         # EnergyAmount_kcal
         self.EnergyAmount_kcal = pyke_calculate_EnergyAmount_kcal(bmr, self.profile.activity)
 
+        # (TODO) Relook the standard diet
         # Assuming balance ratio of Carbs:Fat:Protein = 40%:30%:30%
         # - Carbohydrates provide 4 Calories of energy per gram
         # - Fats provide 9 Calories of energy per gram
@@ -113,3 +114,5 @@ class NutrientNeeds:
         self.CarbohydrateAmount_g = float('%.2f' % (self.EnergyAmount_kcal * 0.4 / 4))
         self.TotalFatAmount_g = float('%.2f' % (self.EnergyAmount_kcal * 0.3 / 9))
         self.ProteinAmount_g = float('%.2f' % (self.EnergyAmount_kcal * 0.3 / 4))
+
+        # (TODO) More rules for Keto

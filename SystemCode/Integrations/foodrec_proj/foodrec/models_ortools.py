@@ -18,7 +18,7 @@ DATA_IsOthers_INDEX = -1
 
 food_data = None
 #csv_file = 'Dataset/FoodDatabase.csv'
-csv_file = 'Dataset/FoodDatabase_DC1.csv'
+csv_file = 'Dataset/foodDataBase_PleaseUseThis_DC2.csv'
 #NUM_FOOD = 1000
 NUM_FOOD = 3920
 
