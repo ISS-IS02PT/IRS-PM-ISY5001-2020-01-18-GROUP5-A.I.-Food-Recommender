@@ -1,0 +1,16 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Food Recommendation";
+}
+
+    <div class="text-center">
+        <h1 class="display-4">Food Recommendation</h1>
+        <p><a asp-page="./CalcNutrients"
+              asp-route-link="@Model.ApiRoot.CalcNutrientsLink">Calculate nutrients from user profile</a></p>
+        <p><a asp-page="./FoodRecommend2"
+              asp-route-link="@Model.ApiRoot.NutrientsToFoodRecLink">Recommend food from nutrients</a></p>
+        <p><a asp-page="./FoodRecommend"
+              asp-route-link="@Model.ApiRoot.UserToFoodRecLink"
+              asp-route-linkNutrients="@Model.ApiRoot.CalcNutrientsLink">Recommend food from user profile</a></p>
+    </div>

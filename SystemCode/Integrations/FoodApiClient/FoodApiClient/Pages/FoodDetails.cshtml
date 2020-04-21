@@ -1,0 +1,49 @@
+﻿@page
+@model FoodApiClient.Pages.FoodDetailsModel
+@{
+    ViewData["Title"] = "FoodDetails";
+}
+
+<h1>Food Details</h1>
+<div>
+    <h4>Movie</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Food.ID)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Food.ID)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Food.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Food.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Food.Group)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Food.Group)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Food.Proteins)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Food.Proteins)
+            @Html.DisplayFor(model => model.Food.ProteinUnit)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Food.Sugar)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Food.Sugar)
+            @Html.DisplayFor(model => model.Food.SugarUnit)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./FoodList">Back to List</a>
+</div>
+

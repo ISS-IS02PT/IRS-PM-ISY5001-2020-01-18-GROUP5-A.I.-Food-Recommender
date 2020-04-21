@@ -1,0 +1,99 @@
+﻿@page
+@model FoodApiClient.Pages.CalcNutrientsModel
+@{
+    ViewData["Title"] = "Calculate Nutrients";
+}
+
+<h1>@ViewData["Title"]</h1>
+<br>
+
+<div class="row">
+    <div class="col-md-4">
+        <h3>User Profile</h3>
+        <hr />
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Age" class="control-label"></label>
+                <input asp-for="UserProfile.Age" class="form-control" />
+                <span asp-validation-for="UserProfile.Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Height" class="control-label"></label>
+                <input asp-for="UserProfile.Height" class="form-control" />
+                <span asp-validation-for="UserProfile.Height" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Weight" class="control-label"></label>
+                <input asp-for="UserProfile.Weight" class="form-control" />
+                <span asp-validation-for="UserProfile.Weight" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Gender" class="control-label"></label>
+                <input asp-for="UserProfile.Gender" class="form-control" />
+                <span asp-validation-for="UserProfile.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Activity" class="control-label"></label>
+                <input asp-for="UserProfile.Activity" class="form-control" />
+                <span asp-validation-for="UserProfile.Activity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Diet" class="control-label"></label>
+                <input asp-for="UserProfile.Diet" class="form-control" />
+                <span asp-validation-for="UserProfile.Diet" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-4" style="@(Model.ShowNutrients ? "display:block" : "display:none")">
+        <h3>Nutrients</h3>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Nutrients.Carbs)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Nutrients.Carbs)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Nutrients.Energy)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Nutrients.Energy)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Nutrients.Proteins)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Nutrients.Proteins)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Nutrients.Fats)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Nutrients.Fats)
+            </dd>
+            <dt class="col-sm-5">
+                @Html.DisplayNameFor(model => model.Nutrients.Diet)
+            </dt>
+            <dd class="col-sm-7">
+                @Html.DisplayFor(model => model.Nutrients.Diet)
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Home</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

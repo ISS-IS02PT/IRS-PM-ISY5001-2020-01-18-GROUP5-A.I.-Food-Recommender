@@ -1,0 +1,35 @@
+﻿@page
+@model FoodApiClient.Pages.FoodListModel
+@{
+    ViewData["Title"] = "FoodList";
+}
+
+<h1>FoodList</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.FoodNames)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    <a asp-page="./FoodDetails" asp-route-link="@item.Link">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-page="./Index">Home</a>
+</div>
