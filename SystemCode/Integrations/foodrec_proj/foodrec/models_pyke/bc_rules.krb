@@ -40,6 +40,26 @@ rule_calculate_EnergyAmount_kcal_very_active
         python energy = calculate_EnergyAmount_kcal_very_active($bmr)
         $energy = energy
 
+####################################
+######### Nutrients rule ###########
+####################################
+rule_calculate_Nutrients_standard
+    use calculate_Nutrients($carbo_g, $fat_g, $protein_g, $energy, 'standard')
+    when
+        python carbo_g, fat_g, protein_g = calculate_Nutrients_standard($energy)
+        $carbo_g = carbo_g
+        $fat_g = fat_g
+        $protein_g = protein_g
+
+rule_calculate_Nutrients_ketogenic
+    use calculate_Nutrients($carbo_g, $fat_g, $protein_g, $energy, 'ketogenic')
+    when
+        python carbo_g, fat_g, protein_g = calculate_Nutrients_ketogenic($energy)
+        $carbo_g = carbo_g
+        $fat_g = fat_g
+        $protein_g = protein_g
+
+
 ######################################################
 ###### Regular Python fuctions for calculations ######
 ######################################################
@@ -61,3 +81,22 @@ bc_extras
 
     def calculate_EnergyAmount_kcal_very_active(bmr):
         return bmr * 1.725
+
+
+    # - Carbohydrates provide 4 Calories of energy per gram
+    # - Fats provide 9 Calories of energy per gram
+    # - Protein provide 4 Calories of energy per gram
+
+    # Standard diet = balance ratio of Carbs:Fat:Protein = 40%:30%:30%
+    def calculate_Nutrients_standard(energy):
+        carbo_g = float('%.2f' % (energy * 0.4 / 4))
+        fat_g = float('%.2f' % (energy * 0.3 / 9))
+        protein_g = float('%.2f' % (energy * 0.3 / 4))
+        return carbo_g, fat_g, protein_g
+
+    # Keto diet = 75% Fat, 20% Protein, 5% Carb or Carb<50grams
+    def calculate_Nutrients_ketogenic(energy):
+        carbo_g = float('%.2f' % (energy * 0.05 / 4))
+        fat_g = float('%.2f' % (energy * 0.75 / 9))
+        protein_g = float('%.2f' % (energy * 0.2 / 4))
+        return carbo_g, fat_g, protein_g

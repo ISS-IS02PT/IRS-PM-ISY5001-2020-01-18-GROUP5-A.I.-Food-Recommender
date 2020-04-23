@@ -31,7 +31,21 @@ def pyke_calculate_EnergyAmount_kcal(bmr, activity):
     except knowledge_engine.CanNotProve:
         return None
 
+def pyke_calculate_Nutrients(energy, diet_type):
+    global engine
+
+    engine.reset()
+    engine.activate('bc_rules')
+
+    try:
+        vals, plans = engine.prove_1_goal('bc_rules.calculate_Nutrients($carbo_g, $fat_g, $protein_g, $energy, $diet_type)', energy=energy, diet_type=diet_type)
+        return vals['carbo_g'], vals['fat_g'], vals['protein_g']
+    except knowledge_engine.CanNotProve:
+        return None   
+
 if __name__ == "__main__":
     pyke_load_engine()
-    print(pyke_calculate_bmr('male',85,182,32))
+    # print(pyke_calculate_bmr('male',85,182,32))
+    a,b,c = pyke_calculate_Nutrients(1832.5, 'standard')
+    print(a)
     

@@ -3,7 +3,7 @@ import os
 from django.conf import settings
 
 #### PyKE import ####
-from .models_pyke.knowledge import pyke_load_engine, pyke_calculate_bmr, pyke_calculate_EnergyAmount_kcal
+from .models_pyke.knowledge import pyke_load_engine, pyke_calculate_bmr, pyke_calculate_EnergyAmount_kcal, pyke_calculate_Nutrients
 pyke_load_engine()
 
 ######################################################################
@@ -74,7 +74,7 @@ class Profile:
     )
 
     DIET = (
-        ('anything', 'Anything'),
+        ('standard', 'Standard'),
         ('ketogenic', 'Ketogenic'),
     )
 
@@ -97,22 +97,18 @@ class NutrientNeeds:
         self.profile = profile
 
     # Calculate the Nutrient Needs
-    # Will be replaced with PyKE in next iteration
     def calculate(self):
         # Firstly, calculate the BMR
         bmr =float('%.2f' % (pyke_calculate_bmr(self.profile.gender, self.profile.weight, self.profile.height, self.profile.age)))
         
-        # Calculate the nutrients
+        # Calculate the Energy
         # EnergyAmount_kcal
         self.EnergyAmount_kcal = pyke_calculate_EnergyAmount_kcal(bmr, self.profile.activity)
+        
+        # Calculate the nutrients
+        # CarbohydrateAmount_g, TotalFatAmount_g, ProteinAmount_g
+        # Standard diet = balance ratio of Carbs:Fat:Protein = 40%:30%:30%
+        # Keto diet = 75% Fat, 20% Protein, 5% Carb or <50grams
+        self.CarbohydrateAmount_g, self.TotalFatAmount_g, self.ProteinAmount_g = pyke_calculate_Nutrients(self.EnergyAmount_kcal, self.diet)
 
-        # (TODO) Relook the standard diet
-        # Assuming balance ratio of Carbs:Fat:Protein = 40%:30%:30%
-        # - Carbohydrates provide 4 Calories of energy per gram
-        # - Fats provide 9 Calories of energy per gram
-        # - Protein provide 4 Calories of energy per gram
-        self.CarbohydrateAmount_g = float('%.2f' % (self.EnergyAmount_kcal * 0.4 / 4))
-        self.TotalFatAmount_g = float('%.2f' % (self.EnergyAmount_kcal * 0.3 / 9))
-        self.ProteinAmount_g = float('%.2f' % (self.EnergyAmount_kcal * 0.3 / 4))
-
-        # (TODO) More rules for Keto
+        
