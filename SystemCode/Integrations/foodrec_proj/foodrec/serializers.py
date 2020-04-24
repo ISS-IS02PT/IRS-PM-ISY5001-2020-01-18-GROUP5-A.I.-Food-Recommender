@@ -21,6 +21,9 @@ class FoodSerializer(serializers.Serializer):
     EnergyAmount_kcal = serializers.FloatField(required=True)
     ProteinAmount_g = serializers.FloatField(required=True)
     TotalFatAmount_g = serializers.FloatField(required=True)
+    FoodIndex = serializers.IntegerField(required=True)
+    FoodMealRanking = serializers.ChoiceField(Food.FOOD_GROUPS, required=True)
+
 class ProfileSerializer(serializers.Serializer):
     gender = serializers.ChoiceField(Profile.GENDER, required=True)
     age = serializers.IntegerField(required=True)

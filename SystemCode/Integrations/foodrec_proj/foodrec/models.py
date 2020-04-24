@@ -11,7 +11,7 @@ pyke_load_engine()
 # -- will improve in next iteration
 ######################################################################
 
-from .models_ortools import readFoodData
+from .models_ortools_Ken import readFoodData
 csv_file = open(os.path.join(settings.BASE_DIR, 'foodrec/Dataset/foodDataBase_PleaseUseThis_DC2.csv'))
 readFoodData(csv_file)
 
@@ -38,12 +38,20 @@ class Food(models.Model):
                         ("VEGETABLE AND VEGETABLE PRODUCTS", "VEGETABLE AND VEGETABLE PRODUCTS"),
                     ])
 
+    MEALS = [
+                ("BREAKFAST", "BREAKFAST"),
+                ("LUNCH", "LUNCH"),
+                ("DINNER", "DINNER"),
+            ]
+
     FoodName = models.CharField(max_length=100, blank=False)
     FoodGroup = models.CharField(max_length=100, choices=FOOD_GROUPS, default='MISCELLANEOUS')
     CarbohydrateAmount_g = models.FloatField()
     EnergyAmount_kcal = models.FloatField()
     ProteinAmount_g = models.FloatField()
     TotalFatAmount_g = models.FloatField()
+    FoodIndex = models.IntegerField()
+    FoodMealRanking = models.CharField(max_length=100, choices=MEALS)
 
     def __repr__(self):
         return self.FoodName
@@ -107,8 +115,8 @@ class NutrientNeeds:
         
         # Calculate the nutrients
         # CarbohydrateAmount_g, TotalFatAmount_g, ProteinAmount_g
-        # Standard diet = balance ratio of Carbs:Fat:Protein = 40%:30%:30%
-        # Keto diet = 75% Fat, 20% Protein, 5% Carb or <50grams
+        # * Standard diet = balance ratio of Carbs:Fat:Protein = 40%:30%:30%
+        # * Keto diet = 75% Fat, 20% Protein, 5% Carb or <50grams
         self.CarbohydrateAmount_g, self.TotalFatAmount_g, self.ProteinAmount_g = pyke_calculate_Nutrients(self.EnergyAmount_kcal, self.diet)
 
         
