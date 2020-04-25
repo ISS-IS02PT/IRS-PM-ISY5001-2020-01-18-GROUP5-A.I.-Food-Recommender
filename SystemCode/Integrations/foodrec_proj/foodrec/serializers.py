@@ -15,13 +15,20 @@ from foodrec.models import Food, Profile
 
 
 class FoodSerializer(serializers.Serializer):
+    FoodIndex = serializers.IntegerField(required=True)
     FoodName = serializers.CharField(required=True)
     FoodGroup = serializers.ChoiceField(Food.FOOD_GROUPS, required=True)
     CarbohydrateAmount_g = serializers.FloatField(required=True)
     EnergyAmount_kcal = serializers.FloatField(required=True)
     ProteinAmount_g = serializers.FloatField(required=True)
     TotalFatAmount_g = serializers.FloatField(required=True)
-    FoodIndex = serializers.IntegerField(required=True)
+
+    IsVegan = serializers.BooleanField(required=True)
+    IsVegetarian = serializers.BooleanField(required=True)
+    IsHalal = serializers.BooleanField(required=True)
+    ContainsBeef = serializers.BooleanField(required=True)
+    IsAlcohol = serializers.BooleanField(required=True)
+
     FoodMealRanking = serializers.ChoiceField(Food.FOOD_GROUPS, required=True)
 
 class ProfileSerializer(serializers.Serializer):

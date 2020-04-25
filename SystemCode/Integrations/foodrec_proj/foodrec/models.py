@@ -44,13 +44,20 @@ class Food(models.Model):
                 ("DINNER", "DINNER"),
             ]
 
+    FoodIndex = models.IntegerField()
     FoodName = models.CharField(max_length=100, blank=False)
     FoodGroup = models.CharField(max_length=100, choices=FOOD_GROUPS, default='MISCELLANEOUS')
     CarbohydrateAmount_g = models.FloatField()
     EnergyAmount_kcal = models.FloatField()
     ProteinAmount_g = models.FloatField()
     TotalFatAmount_g = models.FloatField()
-    FoodIndex = models.IntegerField()
+    
+    IsVegan = models.BooleanField()
+    IsVegetarian = models.BooleanField()
+    IsHalal = models.BooleanField()
+    ContainsBeef = models.BooleanField()
+    IsAlcohol = models.BooleanField()
+    
     FoodMealRanking = models.CharField(max_length=100, choices=MEALS)
 
     def __repr__(self):

@@ -19,25 +19,42 @@ DATA_IsMainDish_INDEX = -1
 DATA_IsFastFood_INDEX = -1
 DATA_IsBreakfast_INDEX = -1
 # DATA_IsOthers_INDEX = -1
+DATA_Vegan_INDEX = -1
+DATA_Vegetarian_INDEX = -1
+DATA_Halal_INDEX = -1
+DATA_ContainsBeef_INDEX = -1
+DATA_Alcohol_INDEX = -1
+
 
 
 food_data = None
 #csv_file = 'Dataset/FoodDatabase.csv'
 csv_file = 'Dataset/foodDataBase_PleaseUseThis_DC2.csv'
-#NUM_FOOD = 1000
-NUM_FOOD = 3920
+NUM_FOOD = 100
+# NUM_FOOD = 3920
 
 
 def readFoodData(csv_file):
-    df = pd.read_csv(csv_file)[['FoodName','FoodGroup','CarbohydrateAmount_g','EnergyAmount_kcal','ProteinAmount_g','TotalFatAmount_g' ,'IsMainDish', 'IsFastFood', 'IsBreakfast']]
-
-    # Filter food with Energy > 100kcal
-    df = df.loc[df['EnergyAmount_kcal'] > 100]
+    df = pd.read_csv(csv_file)[['FoodName',
+                                'FoodGroup',
+                                'CarbohydrateAmount_g',
+                                'EnergyAmount_kcal',
+                                'ProteinAmount_g',
+                                'TotalFatAmount_g',
+                                'IsMainDish',
+                                'IsFastFood',
+                                'IsBreakfast',
+                                'Vegan',
+                                'Vegetarian',
+                                'Halal',
+                                'ContainsBeef',
+                                'Alcohol']]
     
     # Update the index here for the data arrays to point to different nutrients
     global DATA_FoodName_INDEX, DATA_FoodGroup_INDEX, DATA_CarbohydrateAmount_g_INDEX, \
         DATA_EnergyAmount_kcal_INDEX, DATA_ProteinAmount_g_INDEX, DATA_TotalFatAmount_g_INDEX, \
-        DATA_IsMainDish_INDEX, DATA_IsFastFood_INDEX, DATA_IsBreakfast_INDEX
+        DATA_IsMainDish_INDEX, DATA_IsFastFood_INDEX, DATA_IsBreakfast_INDEX, DATA_Vegan_INDEX, \
+        DATA_Vegetarian_INDEX, DATA_Halal_INDEX, DATA_ContainsBeef_INDEX, DATA_Alcohol_INDEX
       
     DATA_FoodName_INDEX = 0
     DATA_FoodGroup_INDEX = 1
@@ -48,12 +65,20 @@ def readFoodData(csv_file):
     DATA_IsMainDish_INDEX = 6
     DATA_IsFastFood_INDEX = 7
     DATA_IsBreakfast_INDEX = 8
+    DATA_Vegan_INDEX = 9
+    DATA_Vegetarian_INDEX = 10
+    DATA_Halal_INDEX = 11
+    DATA_ContainsBeef_INDEX = 12
+    DATA_Alcohol_INDEX = 13
+
+    # Filter food with Energy > 100kcal
+    df = df.loc[df['EnergyAmount_kcal'] > 100]
 
     global food_data
     # food_data = df.head(NUM_FOOD).to_numpy()
     food_data = df.to_numpy()
 
-def optimizer1(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFatAmount_g, num_meals, food_keep_index, food_change_index):
+def optimizer1(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFatAmount_g, food_keep_index, food_change_index, num_meals, isVegan, isVegetarian, isHalal, containsBeef, isAlcohol):
     # Create the mip solver with the CBC backend
     solver = pywraplp.Solver('optimizer_refresh1',
                              pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
@@ -63,18 +88,66 @@ def optimizer1(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFa
     # Declare an array to hold the variable value whether the food is selected, which is 0 or 1 for each food
     foodVar = [[]] * len(food_data)
 
+    def returnBoundValue(bool):
+        if bool:
+            return 1.0
+        else:
+            return 0.0
+
+    def determineLowerBound(index, food_keep_index):
+        if index in food_keep_index:
+            return 1.0
+        else:
+            return 0.0
+
+    def determineUpperBound(index, food_change_index, isVegan, isVegetarian, isHalal, containsBeef, isAlcohol):
+        upperBound = 1.0
+
+        if index in food_change_index:
+            upperBound = 0.0
+
+        if isVegan and not food_data[index][DATA_Vegan_INDEX]:
+            upperBound = 0.0
+        if isVegetarian and not food_data[index][DATA_Vegetarian_INDEX]:
+            upperBound = 0.0
+        if isHalal and not food_data[index][DATA_Halal_INDEX]:
+            upperBound = 0.0
+        if containsBeef and not food_data[index][DATA_ContainsBeef_INDEX]:
+            upperBound = 0.0
+        if isAlcohol and not food_data[index][DATA_Alcohol_INDEX]:
+            upperBound = 0.0
+
+        return upperBound
+
+
     #### Objective ####
     # Declare the objective function
     objective = solver.Objective()
-    
-    # The coeficient for the objective function is the amount of calories for the corresponding food
     for i in range(0, len(food_data)):
-        if i in food_keep_index:
-            foodVar[i] = solver.IntVar(1.0, 1.0, food_data[i][DATA_FoodName_INDEX])
-        elif i in food_change_index:
-            foodVar[i] = solver.IntVar(0.0, 0.0, food_data[i][DATA_FoodName_INDEX])
-        else:
-            foodVar[i] = solver.IntVar(0.0, 1.0, food_data[i][DATA_FoodName_INDEX])
+        # print("{} {}", determineLowerBound(i, food_keep_index), determineUpperBound(i, food_change_index, isVegan, isVegetarian, isHalal, containsBeef, isAlcohol))
+        foodVar[i] = solver.IntVar(determineLowerBound(i, food_keep_index), determineUpperBound(i, food_change_index, isVegan, isVegetarian, isHalal, containsBeef, isAlcohol), food_data[i][DATA_FoodName_INDEX])
+
+        # # Food Refresh
+        # if i in food_keep_index:
+        #     foodVar[i] = solver.IntVar(1.0, 1.0, food_data[i][DATA_FoodName_INDEX])
+        # elif i in food_change_index:
+        #     foodVar[i] = solver.IntVar(0.0, 0.0, food_data[i][DATA_FoodName_INDEX])
+        # else:
+        #     foodVar[i] = solver.IntVar(0.0, 1.0, food_data[i][DATA_FoodName_INDEX])
+
+        # # Restriction
+        # if isVegan:
+        #     foodVar[i] = solver.IntVar(0.0, food_data[i][DATA_Vegan_INDEX], food_data[i][DATA_FoodName_INDEX])
+        # if isVegetarian:
+        #     foodVar[i] = solver.IntVar(0.0, food_data[i][DATA_Vegetarian_INDEX], food_data[i][DATA_FoodName_INDEX])
+        # if isHalal:
+        #     foodVar[i] = solver.IntVar(0.0, food_data[i][DATA_Halal_INDEX], food_data[i][DATA_FoodName_INDEX])
+        # if containsBeef:
+        #     foodVar[i] = solver.IntVar(0.0, food_data[i][DATA_ContainsBeef_INDEX], food_data[i][DATA_FoodName_INDEX])
+        # if isAlcohol:
+        #     foodVar[i] = solver.IntVar(0.0, food_data[i][DATA_Alcohol_INDEX], food_data[i][DATA_FoodName_INDEX])
+
+        # The coeficient for the objective function is the amount of calories for the corresponding food
         objective.SetCoefficient(foodVar[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
 
     # Minimize the calories
@@ -141,6 +214,8 @@ def optimizer1(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFa
     # for i in range(0, len(food_data)):
     #     constraint_breakfast_energy.SetCoefficient(foodVar[i], food_data[i][DATA_EnergyAmount_kcal_INDEX] * food_data[i][DATA_IsBreakfast_INDEX])
 
+    # Restrictions
+
 
     # Solve!
     status = solver.Solve()
@@ -163,13 +238,13 @@ def optimizer1(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFa
 
     return foodIndex_result
 
-def run_optimizer(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFatAmount_g, num_meals, food_keep_index=[], food_change_index=[]):
-    return optimizer1(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFatAmount_g, num_meals, food_keep_index, food_change_index)
+def run_optimizer(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFatAmount_g, food_keep_index=[], food_change_index=[], num_meals=3, isVegan=False, isVegetarian=False, isHalal=False, containsBeef=False, isAlcohol=False):
+    return optimizer1(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFatAmount_g, food_keep_index, food_change_index, num_meals, isVegan, isVegetarian, isHalal, containsBeef, isAlcohol)
 
 # For quick testing without Django
 def main():
     readFoodData(csv_file)
-    foodIndex_result = run_optimizer(EnergyAmount_kcal=2936.8125, CarbohydrateAmount_g=293.68, ProteinAmount_g=220.26, TotalFatAmount_g=97.89, num_meals=3, food_keep_index=[], food_change_index=[])
+    foodIndex_result = run_optimizer(EnergyAmount_kcal=2000, CarbohydrateAmount_g=293.68, ProteinAmount_g=220.26, TotalFatAmount_g=97.89, food_keep_index=[2339,274], food_change_index=[2279,2252,1340,1206], num_meals=3, isHalal=True, isVegan=True)
 
     total_calories = 0
     total_carbo = 0
@@ -188,9 +263,14 @@ def main():
         print(' (Carbo=%sg)' % food_data[i][DATA_CarbohydrateAmount_g_INDEX],end ='')
         print(' (Protein=%sg)' % food_data[i][DATA_ProteinAmount_g_INDEX],end ='')
         print(' (Fat=%sg)' % food_data[i][DATA_TotalFatAmount_g_INDEX],end ='')
+        print(' (IsBreakfast=%s)' % food_data[i][DATA_IsBreakfast_INDEX], end='')
         print(' (IsMainDish=%s)' % food_data[i][DATA_IsMainDish_INDEX],end ='')
         print(' (IsFastFood=%s)' % food_data[i][DATA_IsFastFood_INDEX],end ='')
-        print(' (IsBreakfast=%s)' % food_data[i][DATA_IsBreakfast_INDEX])
+        print(' (IsVegan=%s)' % food_data[i][DATA_Vegan_INDEX],end ='')
+        print(' (IsVegetarian=%s)' % food_data[i][DATA_Vegetarian_INDEX],end ='')
+        print(' (IsHalal=%s)' % food_data[i][DATA_Halal_INDEX],end ='')
+        print(' (ContainsBeef=%s)' % food_data[i][DATA_ContainsBeef_INDEX],end ='')
+        print(' (IsAlcohol=%s)' % food_data[i][DATA_Alcohol_INDEX])
         
     if len(foodIndex_result) > 0:
         # Displaying food according to meals

@@ -17,9 +17,14 @@ from .models_ortools_Ken import run_optimizer, \
                                 DATA_EnergyAmount_kcal_INDEX, \
                                 DATA_ProteinAmount_g_INDEX, \
                                 DATA_TotalFatAmount_g_INDEX, \
+                                DATA_IsBreakfast_INDEX, \
                                 DATA_IsMainDish_INDEX, \
                                 DATA_IsFastFood_INDEX, \
-                                DATA_IsBreakfast_INDEX
+                                DATA_Vegan_INDEX, \
+                                DATA_Vegetarian_INDEX, \
+                                DATA_Halal_INDEX, \
+                                DATA_ContainsBeef_INDEX, \
+                                DATA_Alcohol_INDEX
 
 # class FoodList(generics.ListCreateAPIView):
 #     queryset = Food.objects.all()
@@ -79,8 +84,16 @@ class FoodRecommendationFromNutrientNeeds(APIView):
         nn_keys = ['CarbohydrateAmount_g', 'EnergyAmount_kcal', 'ProteinAmount_g', 'TotalFatAmount_g', 'diet']
         nns = NutrientNeedsSerializer(data={key:request.query_params[key] for key in nn_keys})
         
+        # Food change - use to keep sessions
         food_keep_index = convert_string_to_array(request.query_params['food_keep_index'])
         food_change_index = convert_string_to_array(request.query_params['food_change_index'])
+
+        # Restrictions
+        isVegan = convert_string_to_bool(request.query_params['isVegan'])
+        isVegetarian = convert_string_to_bool(request.query_params['isVegetarian'])
+        isHalal = convert_string_to_bool(request.query_params['isHalal'])
+        containsBeef = convert_string_to_bool(request.query_params['containsBeef'])
+        isAlcohol = convert_string_to_bool(request.query_params['isAlcohol'])
 
         if not nns.is_valid():
             return Response(
@@ -96,52 +109,53 @@ class FoodRecommendationFromNutrientNeeds(APIView):
         nn.diet = nns.validated_data['diet']
 
         # Run the optimizer
-        foodIndex_result = run_optimizer(EnergyAmount_kcal=nn.EnergyAmount_kcal, CarbohydrateAmount_g=nn.CarbohydrateAmount_g, ProteinAmount_g=nn.ProteinAmount_g, TotalFatAmount_g=nn.TotalFatAmount_g, num_meals=3, food_keep_index=food_keep_index, food_change_index=food_change_index)
+        foodIndex_result = run_optimizer(EnergyAmount_kcal=nn.EnergyAmount_kcal, CarbohydrateAmount_g=nn.CarbohydrateAmount_g, ProteinAmount_g=nn.ProteinAmount_g, TotalFatAmount_g=nn.TotalFatAmount_g, food_keep_index=food_keep_index, food_change_index=food_change_index, num_meals=3, isVegan=isVegan, isVegetarian=isVegetarian, isHalal=isHalal, containsBeef=containsBeef, isAlcohol=isAlcohol)
 
         # Return the result to the API call
         food_result = prepare_food_response(foodIndex_result)
         
         data = FoodSerializer(food_result, many=True).data
         data.append({'food_keep_index': convert_array_to_string(food_keep_index), 'food_change_index': convert_array_to_string(food_change_index)})
+
         return Response(data, status=status.HTTP_200_OK)
 
 
-
-class FoodRecommendationFromProfile(APIView):
-    # Allow only 'get' method
-    http_method_names = ['get']
+# # Deprecated
+# class FoodRecommendationFromProfile(APIView):
+#     # Allow only 'get' method
+#     http_method_names = ['get']
         
-    def get(self, request, format=None):
-        # Validate the input data and create the Profile object
-        ps = ProfileSerializer(data=request.query_params)
-        if not ps.is_valid():
-            return Response(
-                data=ps.errors,
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        # return Response(ps.validated_data, status=status.HTTP_200_OK)
+#     def get(self, request, format=None):
+#         # Validate the input data and create the Profile object
+#         ps = ProfileSerializer(data=request.query_params)
+#         if not ps.is_valid():
+#             return Response(
+#                 data=ps.errors,
+#                 status=status.HTTP_400_BAD_REQUEST
+#             )
+#         # return Response(ps.validated_data, status=status.HTTP_200_OK)
 
-        p = Profile()
-        p.gender = ps.validated_data['gender']
-        p.age = ps.validated_data['age']
-        p.height = ps.validated_data['height']
-        p.weight = ps.validated_data['weight']
-        p.activity = ps.validated_data['activity']
-        p.diet = ps.validated_data['diet']
-        p.nutrientNeeds.diet = p.diet
+#         p = Profile()
+#         p.gender = ps.validated_data['gender']
+#         p.age = ps.validated_data['age']
+#         p.height = ps.validated_data['height']
+#         p.weight = ps.validated_data['weight']
+#         p.activity = ps.validated_data['activity']
+#         p.diet = ps.validated_data['diet']
+#         p.nutrientNeeds.diet = p.diet
 
-        # Calculate the Nutrient Needs
-        p.nutrientNeeds.calculate()
-        nn = p.nutrientNeeds
+#         # Calculate the Nutrient Needs
+#         p.nutrientNeeds.calculate()
+#         nn = p.nutrientNeeds
 
-        # Run the optimizer
-        foodIndex_result = run_optimizer(EnergyAmount_kcal=nn.EnergyAmount_kcal, CarbohydrateAmount_g=nn.CarbohydrateAmount_g, ProteinAmount_g=nn.ProteinAmount_g, TotalFatAmount_g=nn.TotalFatAmount_g, num_meals=3)
+#         # Run the optimizer
+#         foodIndex_result = run_optimizer(EnergyAmount_kcal=nn.EnergyAmount_kcal, CarbohydrateAmount_g=nn.CarbohydrateAmount_g, ProteinAmount_g=nn.ProteinAmount_g, TotalFatAmount_g=nn.TotalFatAmount_g, num_meals=3)
 
-        # Return the result to the API call
-        food_result = prepare_food_response(foodIndex_result)
+#         # Return the result to the API call
+#         food_result = prepare_food_response(foodIndex_result)
     
-        data = FoodSerializer(food_result, many=True).data
-        return Response(data, status=status.HTTP_200_OK)
+#         data = FoodSerializer(food_result, many=True).data
+#         return Response(data, status=status.HTTP_200_OK)
 
 ##############################
 ###### Helper functions ######
@@ -154,6 +168,7 @@ def prepare_food_response(foodIndex_result):
 
     for i in foodIndex_result:
         food = Food()
+        
         food.FoodIndex = i
         food.FoodName = food_data[i][DATA_FoodName_INDEX]
         food.FoodGroup = food_data[i][DATA_FoodGroup_INDEX]
@@ -161,6 +176,13 @@ def prepare_food_response(foodIndex_result):
         food.EnergyAmount_kcal = food_data[i][DATA_EnergyAmount_kcal_INDEX]
         food.ProteinAmount_g = food_data[i][DATA_ProteinAmount_g_INDEX]
         food.TotalFatAmount_g = food_data[i][DATA_TotalFatAmount_g_INDEX]
+
+        food.IsVegan = food_data[i][DATA_Vegan_INDEX]
+        food.IsVegetarian = food_data[i][DATA_Vegetarian_INDEX]
+        food.IsHalal = food_data[i][DATA_Halal_INDEX]
+        food.ContainsBeef = food_data[i][DATA_ContainsBeef_INDEX]
+        food.IsAlcohol = food_data[i][DATA_Alcohol_INDEX]
+
         food.FoodMealRanking = -1
 
         if food_data[i][DATA_IsBreakfast_INDEX]:
@@ -190,3 +212,9 @@ def convert_string_to_array(str):
 
 def convert_array_to_string(arr):
     return ','.join(str(e) for e in arr)
+
+def convert_string_to_bool(str):
+    if str.lower() == "true":
+        return True
+    else:
+        return False
