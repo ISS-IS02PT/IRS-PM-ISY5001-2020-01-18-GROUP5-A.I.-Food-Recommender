@@ -249,8 +249,8 @@ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount
 
 # * Run 4 *
 # Only Vegetarian food
-# - set 'isHalal' to True
-# Setting more restrictive flags is possible, but we may not have big enough database
+# - set 'isVegetarian' to True
+# Setting multiple restrictive flags is possible, but we may not have big enough database to solve
 #
 # Let's refresh the history
 # - Just pass in empty string for parameter {food_keep_index} and parameter {food_change_index}
@@ -310,11 +310,12 @@ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount
 ]
 
 # * Run 5 *
+# Same as Run 4
 # Only Vegetarian food
-# - set 'isHalal' to True
-# Setting more restrictive flags is possible, but we may not have big enough database
+# - set 'isVegetarian' to True
+# Setting multiple restrictive flags is possible, but we may not have big enough database to solve
 #
-# Let's change all 3 foods this time
+# But let's refresh the result of all 3 foods this time
 # - food_keep_index=
 # - food_change_index=597,733,2361
 
