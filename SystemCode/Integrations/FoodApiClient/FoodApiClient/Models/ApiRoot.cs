@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FoodApiClient.Models
 {
-    public class ApiRoot
+    internal class ApiRoot
     {
         [JsonPropertyName("calculate-nutrient-needs-from-profile")]
         [Display(Name = "Calculate Nutrients From User Profle")]
@@ -17,8 +17,31 @@ namespace FoodApiClient.Models
         [Display(Name = "Food Recommendation From Nutrients")]
         public Uri NutrientsToFoodRecLink { get; set; }
 
-        [JsonPropertyName("food-recommendation-from-profile")]
+        /*[JsonPropertyName("food-recommendation-from-profile")]
         [Display(Name = "Food Recommendation From User Profile")]
-        public Uri UserToFoodRecLink { get; set; }
+        public Uri UserToFoodRecLink { get; set; }*/
+
+        public ApiRoot() { }
+
+        public ApiRoot(ApiRoot apiRoot)
+        {
+            if (apiRoot != null)
+            {
+                if (apiRoot.CalcNutrientsLink != null)
+                {
+                    CalcNutrientsLink = new Uri(apiRoot.CalcNutrientsLink.OriginalString);
+                }
+
+                if (apiRoot.NutrientsToFoodRecLink != null)
+                {
+                    NutrientsToFoodRecLink = new Uri(apiRoot.NutrientsToFoodRecLink.OriginalString);
+                }
+
+                /*if (apiRoot.UserToFoodRecLink != null)
+                {
+                    UserToFoodRecLink = new Uri(apiRoot.UserToFoodRecLink.OriginalString);
+                }*/
+            }
+        }
     }
 }

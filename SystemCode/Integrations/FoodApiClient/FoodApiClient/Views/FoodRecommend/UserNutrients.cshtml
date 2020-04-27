@@ -1,0 +1,105 @@
+﻿@model FoodApiClient.Models.UserNutrientsViewModel
+@{
+    ViewData["Title"] = "User Profile >> Nutrients";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Calculate Nutrients From User Profile</h1>
+<br />
+
+<div class="row">
+    <div class="col-md-4">
+        <h4>User Profile</h4>
+        <hr />
+        <form asp-action="UserNutrients">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Age" class="control-label"></label>
+                <input asp-for="UserProfile.Age" class="form-control" />
+                <span asp-validation-for="UserProfile.Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Height" class="control-label"></label>
+                <input asp-for="UserProfile.Height" class="form-control" />
+                <span asp-validation-for="UserProfile.Height" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Weight" class="control-label"></label>
+                <input asp-for="UserProfile.Weight" class="form-control" />
+                <span asp-validation-for="UserProfile.Weight" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Gender" class="control-label"></label>
+                <select asp-for="UserProfile.Gender" class="form-control" asp-items="Html.GetEnumSelectList<FoodApiClient.CustomTypes.Gender>()">
+                    <option value=""></option>
+                </select>
+                <span asp-validation-for="UserProfile.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Activity" class="control-label"></label>
+                <select asp-for="UserProfile.Activity" class="form-control" asp-items="Html.GetEnumSelectList<FoodApiClient.CustomTypes.Activity>()">
+                    <option value=""></option>
+                </select>
+                <span asp-validation-for="UserProfile.Activity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Diet" class="control-label"></label>
+                <select asp-for="UserProfile.Diet" class="form-control" asp-items="Html.GetEnumSelectList<FoodApiClient.CustomTypes.Diet>()">
+                    <option value=""></option>
+                </select>
+                <span asp-validation-for="UserProfile.Diet" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-4">
+        <h4>Nutrients</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Nutrients.Carbohydrates)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Nutrients.Carbohydrates)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Nutrients.Energy)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Nutrients.Energy)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Nutrients.Proteins)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Nutrients.Proteins)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Nutrients.TotalFats)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Nutrients.TotalFats)
+            </dd>
+            <dt class="col-sm-6">
+                @Html.DisplayNameFor(model => model.Nutrients.Diet)
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.Nutrients.Diet)
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Home" asp-action="Index">Home</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

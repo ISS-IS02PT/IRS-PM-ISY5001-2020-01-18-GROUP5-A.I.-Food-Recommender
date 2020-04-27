@@ -10,26 +10,24 @@ namespace FoodApiClient.Models
     public class Nutrients
     {
         [JsonPropertyName("EnergyAmount_kcal")]
-        [Display(Name = "Energy (kcal)"), Required]
+        [Display(Name = "Energy (kcal)"), Required, Range(0.0, double.MaxValue)]
         public double Energy { get; set; }
 
         [JsonPropertyName("ProteinAmount_g")]
-        [Display(Name = "Proteins (g)"), Required]
+        [Display(Name = "Proteins (g)"), Required, Range(0.0, double.MaxValue)]
         public double Proteins { get; set; }
 
         [JsonPropertyName("CarbohydrateAmount_g")]
-        [Display(Name = "Carbohydrates (g)"), Required]
-        public double Carbs { get; set; }
+        [Display(Name = "Carbohydrates (g)"), Required, Range(0.0, double.MaxValue)]
+        public double Carbohydrates { get; set; }
 
         [JsonPropertyName("TotalFatAmount_g")]
-        [Display(Name = "Fats (g)"), Required]
-        public double Fats { get; set; }
+        [Display(Name = "Total Fats (g)"), Required, Range(0.0, double.MaxValue)]
+        public double TotalFats { get; set; }
 
         [JsonPropertyName("diet")]
-        [Display(Name = "Diet Type"), Required]
-        [RegularExpression(@"\b[nN][oO][nN][eE]\b|\b[nN][oO][rR][mM]\b|\b[nN][oO][rR][mM][aA][lL]\b|" +
-                           @"\b[aA][nN][yY]\b|\b[aA][nN][yY][tT][hH][iI][nN][gG]\b|" +
-                           @"\b[kK][eE][tT][oO]\b|\b[kK][eE][tT][oO][gG][eE][nN][iI][cC]\b")]
-        public string Diet { get; set; }
+        [JsonConverter(typeof(Converters.DietConverter))]
+        [Display(Name = "Diet"), Required]
+        public CustomTypes.Diet Diet { get; set; }
     }
 }

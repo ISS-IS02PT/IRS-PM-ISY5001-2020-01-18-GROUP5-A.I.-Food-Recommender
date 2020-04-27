@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj": {}
+    "D:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj": {}
   },
   "projects": {
-    "d:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj": {
+    "D:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj",
+        "projectUniqueName": "D:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj",
         "projectName": "FoodApiClient",
-        "projectPath": "d:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj",
+        "projectPath": "D:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj",
         "packagesPath": "C:\\Users\\mokky\\.nuget\\packages\\",
-        "outputPath": "d:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\obj\\",
+        "outputPath": "D:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Microsoft\\Xamarin\\NuGet\\",
@@ -66,7 +66,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300-preview-015048\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
         }
       }
     }
