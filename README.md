@@ -9,7 +9,14 @@
 
 ## SECTION 2 : EXECUTIVE SUMMARY / PAPER ABSTRACT
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+In developed countries, obesity level has been increasing rapidly and people look for ways to effectively lose weight. People are increasingly aware that Diet plays the major part of people’s health and especially in their effort to maintain healthy body weight. Many publications estimate that the impact of diet is about 75% to 80% as compared to exercise which accounts for 20% to 25% when it come to weight loss.
+
+We need to acknowledge that each individual is unique, people want to have options in choosing diet style that is most suitable for them (lifestyle, type of food, belief, etc). Each diet style has its own rule which can be confusing. Therefore people need easy guidance and idea on the selection of food based on their diet style and their food preference based on their belief/values (i.e. religion, vegetarian, vegan, etc)
+
+The above is the background why our team chose this area as our project. Simply saying, food is very dear to our daily life. At the same time we saw that we could apply what we have learned in this semester:
+- Machine Reasoning: applying rule-based for each variety of diet style
+- Optimisation technique to ensure our search results in the most optimum food choice based on the selected diet style
+- Knowledge Discovery with Data Mining: classify food based on keywords to ensure food selection for various type of diets is proper
 
 ---
 
