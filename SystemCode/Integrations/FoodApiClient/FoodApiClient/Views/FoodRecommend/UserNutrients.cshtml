@@ -7,11 +7,11 @@
 <h1>Calculate Nutrients From User Profile</h1>
 <br />
 
-<div class="row">
-    <div class="col-md-4">
-        <h4>User Profile</h4>
-        <hr />
-        <form asp-action="UserNutrients">
+<form asp-action="UserNutrients">
+    <div class="row">
+        <div class="col-md-4">
+            <h4>User Profile</h4>
+            <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserProfile.Age" class="control-label"></label>
@@ -52,49 +52,49 @@
             <div class="form-group">
                 <input type="submit" value="Submit" class="btn btn-primary" />
             </div>
-        </form>
-    </div>
+        </div>
 
-    <div class="col-md-1">
-    </div>
+        <div class="col-md-1">
+        </div>
 
-    <div class="col-md-4">
-        <h4>Nutrients</h4>
-        <hr />
-        <dl class="row">
-            <dt class="col-sm-6">
-                @Html.DisplayNameFor(model => model.Nutrients.Carbohydrates)
-            </dt>
-            <dd class="col-sm-6">
-                @Html.DisplayFor(model => model.Nutrients.Carbohydrates)
-            </dd>
-            <dt class="col-sm-6">
-                @Html.DisplayNameFor(model => model.Nutrients.Energy)
-            </dt>
-            <dd class="col-sm-6">
-                @Html.DisplayFor(model => model.Nutrients.Energy)
-            </dd>
-            <dt class="col-sm-6">
-                @Html.DisplayNameFor(model => model.Nutrients.Proteins)
-            </dt>
-            <dd class="col-sm-6">
-                @Html.DisplayFor(model => model.Nutrients.Proteins)
-            </dd>
-            <dt class="col-sm-6">
-                @Html.DisplayNameFor(model => model.Nutrients.TotalFats)
-            </dt>
-            <dd class="col-sm-6">
-                @Html.DisplayFor(model => model.Nutrients.TotalFats)
-            </dd>
-            <dt class="col-sm-6">
-                @Html.DisplayNameFor(model => model.Nutrients.Diet)
-            </dt>
-            <dd class="col-sm-6">
-                @Html.DisplayFor(model => model.Nutrients.Diet)
-            </dd>
-        </dl>
+        <div class="col-md-4">
+            <h4>Nutrients</h4>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Nutrients.Carbohydrates)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Nutrients.Carbohydrates)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Nutrients.Energy)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Nutrients.Energy)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Nutrients.Proteins)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Nutrients.Proteins)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Nutrients.TotalFats)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Nutrients.TotalFats)
+                </dd>
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Nutrients.Diet)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Nutrients.Diet)
+                </dd>
+            </dl>
+        </div>
     </div>
-</div>
+</form>
 
 <div>
     <a asp-controller="Home" asp-action="Index">Home</a>

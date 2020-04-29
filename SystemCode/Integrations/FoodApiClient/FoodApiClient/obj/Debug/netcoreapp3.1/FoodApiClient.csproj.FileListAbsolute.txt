@@ -109,5 +109,5 @@ D:\Documents\source\repos\FoodApiClient\FoodApiClient\obj\Debug\netcoreapp3.1\Fo
 D:\Documents\source\repos\FoodApiClient\FoodApiClient\obj\Debug\netcoreapp3.1\FoodApiClient.pdb
 D:\Documents\source\repos\FoodApiClient\FoodApiClient\obj\Debug\netcoreapp3.1\FoodApiClient.genruntimeconfig.cache
 D:\Documents\source\repos\FoodApiClient\FoodApiClient\obj\Debug\netcoreapp3.1\Razor\Views\FoodRecommend\NutrientsFood.cshtml.g.cs
-D:\Documents\source\repos\FoodApiClient\FoodApiClient\obj\Debug\netcoreapp3.1\Razor\Views\FoodRecommend\UserFood.cshtml.g.cs
 D:\Documents\source\repos\FoodApiClient\FoodApiClient\obj\Debug\netcoreapp3.1\Razor\Views\FoodRecommend\UserNutrients.cshtml.g.cs
+D:\Documents\source\repos\FoodApiClient\FoodApiClient\obj\Debug\netcoreapp3.1\Razor\Views\FoodRecommend\UserNutrientsFood.cshtml.g.cs

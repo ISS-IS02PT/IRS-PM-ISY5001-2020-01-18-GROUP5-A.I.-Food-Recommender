@@ -1,0 +1,231 @@
+﻿@model FoodApiClient.Models.UserNutrientsFoodViewModel
+@{
+    ViewData["Title"] = "User Profile >> Food Recommendation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Food Recommendation From User Profile</h1>
+<br />
+
+<!--<form asp-action="UserNutrientsFood">-->
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UserNutrientsFood">
+            <h4>User Profile</h4>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Age" class="control-label"></label>
+                <input asp-for="UserProfile.Age" class="form-control" />
+                <span asp-validation-for="UserProfile.Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Height" class="control-label"></label>
+                <input asp-for="UserProfile.Height" class="form-control" />
+                <span asp-validation-for="UserProfile.Height" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Weight" class="control-label"></label>
+                <input asp-for="UserProfile.Weight" class="form-control" />
+                <span asp-validation-for="UserProfile.Weight" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Gender" class="control-label"></label>
+                <select asp-for="UserProfile.Gender" class="form-control" asp-items="Html.GetEnumSelectList<FoodApiClient.CustomTypes.Gender>()">
+                    <option value=""></option>
+                </select>
+                <span asp-validation-for="UserProfile.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Activity" class="control-label"></label>
+                <select asp-for="UserProfile.Activity" class="form-control" asp-items="Html.GetEnumSelectList<FoodApiClient.CustomTypes.Activity>()">
+                    <option value=""></option>
+                </select>
+                <span asp-validation-for="UserProfile.Activity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserProfile.Diet" class="control-label"></label>
+                <select asp-for="UserProfile.Diet" class="form-control" asp-items="Html.GetEnumSelectList<FoodApiClient.CustomTypes.Diet>()">
+                    <option value=""></option>
+                </select>
+                <span asp-validation-for="UserProfile.Diet" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Calculate Nutrients" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-1">
+    </div>
+
+    @if ((Model != null) && (Model.Nutrients != null))
+    {
+        <div class="col-md-7">
+            <form asp-action="UserNutrientsFood">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Nutrients</h4>
+                        <hr />
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Nutrients.Carbohydrates" class="control-label"></label>
+                            <input asp-for="Nutrients.Carbohydrates" class="form-control" />
+                            <span asp-validation-for="Nutrients.Carbohydrates" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Nutrients.Energy" class="control-label"></label>
+                            <input asp-for="Nutrients.Energy" class="form-control" />
+                            <span asp-validation-for="Nutrients.Energy" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Nutrients.Proteins" class="control-label"></label>
+                            <input asp-for="Nutrients.Proteins" class="form-control" />
+                            <span asp-validation-for="Nutrients.Proteins" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Nutrients.TotalFats" class="control-label"></label>
+                            <input asp-for="Nutrients.TotalFats" class="form-control" />
+                            <span asp-validation-for="Nutrients.TotalFats" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Nutrients.Diet" class="control-label"></label>
+                            <select asp-for="Nutrients.Diet" class="form-control" asp-items="Html.GetEnumSelectList<FoodApiClient.CustomTypes.Diet>()">
+                                <option value=""></option>
+                            </select>
+                            <span asp-validation-for="Nutrients.Diet" class="text-danger"></span>
+                        </div>
+                        <!--<div class="form-group">
+                            <input type="checkbox" asp-for="UseCalcNutrients" checked="checked">
+                            <label asp-for="UseCalcNutrients" class="control-label"></label>
+                        </div>-->
+                        <div class="form-group">
+                            <input type="submit" value="Get Food Recommendation" class="btn btn-primary" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <h4>Food Options</h4>
+                        <hr />
+                        <div class="form-group">
+                            <input type="checkbox" asp-for=@Model.Options.IsVegan />
+                            <label asp-for=@Model.Options.IsVegan class="control-label"></label>
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" asp-for=@Model.Options.IsVegetarian />
+                            <label asp-for=@Model.Options.IsVegetarian class="control-label"></label>
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" asp-for=@Model.Options.IsHalal />
+                            <label asp-for=@Model.Options.IsHalal class="control-label"></label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    }
+</div>
+    <!--</form>-->
+
+    @if ((Model != null) && (Model.FoodList != null) && (Model.FoodList.Count > 0))
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FoodList[0].Index)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FoodList[0].Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FoodList[0].Group)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FoodList[0].Carbohydrates)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FoodList[0].Energy)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FoodList[0].Proteins)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FoodList[0].TotalFats)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FoodList[0].IsVegan)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FoodList[0].IsVegetarian)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FoodList[0].IsHalal)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FoodList[0].ContainsBeef)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FoodList[0].IsAlcohol)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FoodList[0].MealType)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.FoodList)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Index)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Group)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Carbohydrates)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Energy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Proteins)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalFats)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsVegan)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsVegetarian)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsHalal)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ContainsBeef)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsAlcohol)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MealType)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <div>
+        <a asp-controller="Home" asp-action="Index">Home</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

@@ -10,9 +10,10 @@ namespace FoodApiClient.Models
     {
         public UserProfile UserProfile { get; set; }
         public Nutrients Nutrients { get; set; }
+        public FoodOptions Options { get; set; }
         public List<Food> FoodList { get; set; }
 
-        [Display(Name = "Diet"), Required]
-        public bool UseCalcNutrients { get; set; } = true;
+        [Display(Name = "Use Calculated Nutrients")]
+        public bool? UseCalcNutrients { get; set; }
     }
 }

@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FoodApiClient.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodApiClient.Controllers
 {
     public class FoodRecommendController : Controller
     {
-        public async Task<IActionResult> UserNutrients(Models.UserNutrientsViewModel model)
+        private static readonly UserNutrientsFoodViewModel _model = new UserNutrientsFoodViewModel();
+
+        public async Task<IActionResult> UserNutrients(UserNutrientsViewModel model)
         {
             if (model.UserProfile != null)
             {
@@ -21,7 +24,7 @@ namespace FoodApiClient.Controllers
             }
         }
 
-        public async Task<IActionResult> NutrientsFood(Models.NutrientsFoodViewModel model)
+        public async Task<IActionResult> NutrientsFood(NutrientsFoodViewModel model)
         {
             if (model.Nutrients != null)
             {
@@ -34,25 +37,26 @@ namespace FoodApiClient.Controllers
             }
         }
 
-        public async Task<IActionResult> UserFood(Models.UserNutrientsFoodViewModel model)
+        public async Task<IActionResult> UserNutrientsFood(UserNutrientsFoodViewModel model)
         {
-            return View();
-        }
+            if (model.UserProfile != null)
+                _model.UserProfile = model.UserProfile;
+            if (model.Nutrients != null)
+                _model.Nutrients = model.Nutrients;
+            if (model.Options != null)
+                _model.Options = model.Options;
+            if (model.UseCalcNutrients.HasValue)
+                _model.UseCalcNutrients = model.UseCalcNutrients;
+            if (!_model.UseCalcNutrients.HasValue)
+                _model.UseCalcNutrients = true;
 
-        public async Task<IActionResult> CalcNutrients(Models.UserProfile userProfile)
-        {
-            if (userProfile != null)
-            {
-                return View(new Models.UserNutrientsViewModel()
-                {
-                    UserProfile = userProfile,
-                    Nutrients = await FoodApi.ApiInterface.CalcNutrients(userProfile)
-                });
-            }
-            else
-            {
-                return View();
-            }
+            if (model.UserProfile != null)
+                _model.Nutrients = await FoodApi.ApiInterface.CalcNutrients(_model.UserProfile);
+            else if (model.Nutrients != null)
+                _model.FoodList = await FoodApi.ApiInterface.FoodRecommend(_model.Nutrients, _model.Options);
+
+            ViewData.Model = _model;
+            return View();
         }
     }
 }
