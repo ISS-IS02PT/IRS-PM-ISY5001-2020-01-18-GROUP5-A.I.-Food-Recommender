@@ -25,5 +25,19 @@ namespace FoodApiClient.Models
 
         [Display(Name = "Diet"), Required]
         public CustomTypes.Diet Diet { get; set; }
+
+        public UserProfile() { }
+        public UserProfile(UserProfile userProfile)
+        {
+            if (userProfile != null)
+            {
+                Age = userProfile.Age;
+                Height = userProfile.Height;
+                Weight = userProfile.Weight;
+                Gender = userProfile.Gender;
+                Activity = userProfile.Activity;
+                Diet = userProfile.Diet;
+            }
+        }
     }
 }

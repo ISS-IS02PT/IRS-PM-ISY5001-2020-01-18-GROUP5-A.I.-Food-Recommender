@@ -29,5 +29,18 @@ namespace FoodApiClient.Models
         [JsonConverter(typeof(Converters.DietConverter))]
         [Display(Name = "Diet"), Required]
         public CustomTypes.Diet Diet { get; set; }
+
+        public Nutrients() { }
+        public Nutrients(Nutrients nutrients)
+        {
+            if (nutrients != null)
+            {
+                Energy = nutrients.Energy;
+                Proteins = nutrients.Proteins;
+                Carbohydrates = nutrients.Carbohydrates;
+                TotalFats = nutrients.TotalFats;
+                Diet = nutrients.Diet;
+            }
+        }
     }
 }

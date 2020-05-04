@@ -3,8 +3,13 @@
     ViewData["Title"] = "User Profile >> Food Recommendation";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+    <style>
+        tfoot {
+            color: red;
+        }
+    </style>
 
-<h1>Food Recommendation From User Profile</h1>
+<h1>Food Recommendation and Nutrients Calculation</h1>
 <br />
 
 <!--<form asp-action="UserNutrientsFood">-->
@@ -64,7 +69,7 @@
         <div class="col-md-7">
             <form asp-action="UserNutrientsFood">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <h4>Nutrients</h4>
                         <hr />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -174,6 +179,9 @@
                 </tr>
             </thead>
             <tbody>
+                @{
+                    double TotalCarbs = 0.0, TotalEnergy = 0.0, TotalProteins = 0.0, TotalFats = 0.0;
+                }
                 @foreach (var item in Model.FoodList)
                 {
                     <tr>
@@ -217,14 +225,56 @@
                             @Html.DisplayFor(modelItem => item.MealType)
                         </td>
                     </tr>
+
+                    TotalCarbs += item.Carbohydrates;
+                    TotalEnergy += item.Energy;
+                    TotalProteins += item.Proteins;
+                    TotalFats += item.TotalFats;
                 }
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">
+                        Total Nutrients
+                    </td>
+                    <td>
+                        @Math.Round(TotalCarbs, 3)
+                    </td>
+                    <td>
+                        @Math.Round(TotalEnergy, 3)
+                    </td>
+                    <td>
+                        @Math.Round(TotalProteins, 3)
+                    </td>
+                    <td>
+                        @Math.Round(TotalFats, 3)
+                    </td>
+                    <td>
+                        <!--IsVegan-->
+                    </td>
+                    <td>
+                        <!--IsVegetarian-->
+                    </td>
+                    <td>
+                        <!--IsHalal-->
+                    </td>
+                    <td>
+                        <!--ContainsBeef-->
+                    </td>
+                    <td>
+                        <!--IsAlcohol-->
+                    </td>
+                    <td>
+                        <!--MealType-->
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     }
 
-    <div>
-        <a asp-controller="Home" asp-action="Index">Home</a>
-    </div>
+<div>
+    <!--<a asp-controller="Home" asp-action="Index">Home</a>-->
+</div>
 
     @section Scripts {
         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

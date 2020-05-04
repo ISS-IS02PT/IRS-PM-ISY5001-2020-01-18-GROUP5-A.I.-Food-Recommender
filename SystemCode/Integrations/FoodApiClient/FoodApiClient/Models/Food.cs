@@ -66,5 +66,28 @@ namespace FoodApiClient.Models
 
         [JsonPropertyName("food_change_index")]
         public string Change { get; set; }
+
+        public Food() { }
+        public Food(Food food)
+        {
+            if (food != null)
+            {
+                Index = food.Index;
+                Name = food.Name;
+                Group = food.Group;
+                Carbohydrates = food.Carbohydrates;
+                Energy = food.Energy;
+                Proteins = food.Proteins;
+                TotalFats = food.TotalFats;
+                IsVegan = food.IsVegan;
+                IsVegetarian = food.IsVegetarian;
+                IsHalal = food.IsHalal;
+                ContainsBeef = food.ContainsBeef;
+                IsAlcohol = food.IsAlcohol;
+                MealType = food.MealType;
+                Keep = food.Keep;
+                Change = food.Change;
+            }
+        }
     }
 }

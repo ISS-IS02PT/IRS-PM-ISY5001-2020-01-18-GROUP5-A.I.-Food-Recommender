@@ -22,5 +22,18 @@ namespace FoodApiClient.Models
 
         [Display(Name = "Contains Alcohol")]
         public bool IsAlcohol { get; set; } = false;
+
+        public FoodOptions() { }
+        public FoodOptions(FoodOptions options)
+        {
+            if (options != null)
+            {
+                IsVegan = options.IsVegan;
+                IsVegetarian = options.IsVegetarian;
+                IsHalal = options.IsHalal;
+                ContainsBeef = options.ContainsBeef;
+                IsAlcohol = options.IsAlcohol;
+            }
+        }
     }
 }

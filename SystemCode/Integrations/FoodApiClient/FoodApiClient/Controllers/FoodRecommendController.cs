@@ -9,53 +9,109 @@ namespace FoodApiClient.Controllers
 {
     public class FoodRecommendController : Controller
     {
-        private static readonly UserNutrientsFoodViewModel _model = new UserNutrientsFoodViewModel();
+        private static readonly UserNutrientsViewModel _modelUserNutrients = new UserNutrientsViewModel();
+        private static readonly NutrientsFoodViewModel _modelNutrientsFood = new NutrientsFoodViewModel();
+        private static readonly UserNutrientsFoodViewModel _modelUserNutrientsFood = new UserNutrientsFoodViewModel();
 
         public async Task<IActionResult> UserNutrients(UserNutrientsViewModel model)
         {
             if (model.UserProfile != null)
             {
-                model.Nutrients = await FoodApi.ApiInterface.CalcNutrients(model.UserProfile);
-                return View(model);
+                _modelUserNutrients.UserProfile = model.UserProfile;
+
+                _modelUserNutrientsFood.UserProfile =
+                    new UserProfile(_modelUserNutrients.UserProfile);
             }
-            else
+
+            if (_modelUserNutrients.UserProfile != null)
             {
-                return View();
+                _modelUserNutrients.Nutrients =
+                    await FoodApi.ApiInterface.CalcNutrients(_modelUserNutrients.UserProfile);
+
+                _modelNutrientsFood.Nutrients = new Nutrients(_modelUserNutrients.Nutrients);
+
+                _modelUserNutrientsFood.Nutrients = new Nutrients(_modelUserNutrients.Nutrients);
             }
+
+            ViewData.Model = _modelUserNutrients;
+            return View();
         }
 
         public async Task<IActionResult> NutrientsFood(NutrientsFoodViewModel model)
         {
             if (model.Nutrients != null)
             {
-                model.FoodList = await FoodApi.ApiInterface.FoodRecommend(model.Nutrients, model.Options);
-                return View(model);
+                _modelNutrientsFood.Nutrients = model.Nutrients;
+
+                _modelUserNutrientsFood.Nutrients = new Nutrients(_modelNutrientsFood.Nutrients);
             }
-            else
+
+            if (model.Options != null)
             {
-                return View();
+                _modelNutrientsFood.Options = model.Options;
+
+                _modelUserNutrientsFood.Options = new FoodOptions(_modelNutrientsFood.Options);
             }
+
+            if (_modelNutrientsFood.Nutrients != null)
+            {
+                _modelNutrientsFood.FoodList =
+                    await FoodApi.ApiInterface.FoodRecommend(_modelNutrientsFood.Nutrients,
+                    _modelNutrientsFood.Options);
+
+                _modelUserNutrientsFood.FoodList =
+                    _modelNutrientsFood.FoodList.Select(x => new Food(x)).ToList();
+            }
+
+            ViewData.Model = _modelNutrientsFood;
+            return View();
         }
 
         public async Task<IActionResult> UserNutrientsFood(UserNutrientsFoodViewModel model)
         {
             if (model.UserProfile != null)
-                _model.UserProfile = model.UserProfile;
+            {
+                _modelUserNutrientsFood.UserProfile = model.UserProfile;
+
+                _modelUserNutrients.UserProfile = new UserProfile(_modelUserNutrientsFood.UserProfile);
+            }
+
             if (model.Nutrients != null)
-                _model.Nutrients = model.Nutrients;
+            {
+                _modelUserNutrientsFood.Nutrients = model.Nutrients;
+
+                _modelNutrientsFood.Nutrients = new Nutrients(_modelUserNutrientsFood.Nutrients);
+            }
+
             if (model.Options != null)
-                _model.Options = model.Options;
-            if (model.UseCalcNutrients.HasValue)
-                _model.UseCalcNutrients = model.UseCalcNutrients;
-            if (!_model.UseCalcNutrients.HasValue)
-                _model.UseCalcNutrients = true;
+            {
+                _modelUserNutrientsFood.Options = model.Options;
 
-            if (model.UserProfile != null)
-                _model.Nutrients = await FoodApi.ApiInterface.CalcNutrients(_model.UserProfile);
-            else if (model.Nutrients != null)
-                _model.FoodList = await FoodApi.ApiInterface.FoodRecommend(_model.Nutrients, _model.Options);
+                _modelNutrientsFood.Options = new FoodOptions(_modelUserNutrientsFood.Options);
+            }
+            /*if (model.UseCalcNutrients.HasValue)
+               _modelUserNutrientsFood.UseCalcNutrients = model.UseCalcNutrients;
+            if (!_modelUserNutrientsFood.UseCalcNutrients.HasValue)
+               _modelUserNutrientsFood.UseCalcNutrients = true;*/
 
-            ViewData.Model = _model;
+            if ((model.UserProfile != null) && (_modelUserNutrientsFood.UserProfile != null))
+            {
+                _modelUserNutrientsFood.Nutrients =
+                    await FoodApi.ApiInterface.CalcNutrients(_modelUserNutrientsFood.UserProfile);
+
+                _modelNutrientsFood.Nutrients = new Nutrients(_modelUserNutrientsFood.Nutrients);
+            }
+            else if ((model.Nutrients != null) && (_modelUserNutrientsFood.Nutrients != null))
+            {
+                _modelUserNutrientsFood.FoodList =
+                    await FoodApi.ApiInterface.FoodRecommend(_modelUserNutrientsFood.Nutrients,
+                    _modelUserNutrientsFood.Options);
+
+                _modelNutrientsFood.FoodList =
+                    _modelUserNutrientsFood.FoodList.Select(x => new Food(x)).ToList();
+            }
+
+            ViewData.Model = _modelUserNutrientsFood;
             return View();
         }
     }

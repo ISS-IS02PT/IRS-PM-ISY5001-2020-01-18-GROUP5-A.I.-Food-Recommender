@@ -13,7 +13,20 @@ namespace FoodApiClient.Models
         public FoodOptions Options { get; set; }
         public List<Food> FoodList { get; set; }
 
-        [Display(Name = "Use Calculated Nutrients")]
-        public bool? UseCalcNutrients { get; set; }
+        /*[Display(Name = "Use Calculated Nutrients")]
+        public bool? UseCalcNutrients { get; set; }*/
+
+        public UserNutrientsFoodViewModel() { }
+        public UserNutrientsFoodViewModel(UserNutrientsFoodViewModel model)
+        {
+            if (model != null)
+            {
+                UserProfile = new UserProfile(model.UserProfile);
+                Nutrients = new Nutrients(model.Nutrients);
+                Options = new FoodOptions(model.Options);
+                FoodList = model.FoodList.Select(x => new Food(x)).ToList();
+                //UseCalcNutrients = model.UseCalcNutrients;
+            }
+        }
     }
 }

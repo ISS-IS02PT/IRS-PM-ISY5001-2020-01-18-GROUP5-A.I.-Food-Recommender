@@ -290,15 +290,15 @@ namespace FoodApiClient.FoodApi
                 {
                     strTemp = "Sedentary";
                 }
-                else if ((strTemp == "light") || (strTemp == "lightly active"))
+                else if ((strTemp == "light") || (strTemp == "lightly") || (strTemp == "lightly active"))
                 {
                     strTemp = "Lightly Active";
                 }
-                else if ((strTemp == "moderate") || (strTemp == "moderately active"))
+                else if ((strTemp == "moderate") || (strTemp == "moderately") || (strTemp == "moderately active"))
                 {
                     strTemp = "Moderately Active";
                 }
-                else if ((strTemp == "high") || (strTemp == "highly active") ||
+                else if ((strTemp == "high") || (strTemp == "highly") || (strTemp == "highly active") ||
                     (strTemp == "very") || (strTemp == "very active"))
                 {
                     strTemp = "Very Active";

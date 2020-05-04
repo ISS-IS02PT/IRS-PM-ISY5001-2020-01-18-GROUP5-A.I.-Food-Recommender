@@ -10,5 +10,15 @@ namespace FoodApiClient.Models
     {
         public Models.UserProfile UserProfile { get; set; }
         public Models.Nutrients Nutrients { get; set; }
+
+        public UserNutrientsViewModel() { }
+        public UserNutrientsViewModel(UserNutrientsViewModel model)
+        {
+            if (model != null)
+            {
+                UserProfile = new UserProfile(model.UserProfile);
+                Nutrients = new Nutrients(model.Nutrients);
+            }
+        }
     }
 }
