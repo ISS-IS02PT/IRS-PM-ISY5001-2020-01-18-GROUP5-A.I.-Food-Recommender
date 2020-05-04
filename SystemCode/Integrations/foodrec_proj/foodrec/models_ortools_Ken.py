@@ -157,6 +157,7 @@ def optimizer1(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFa
     # Energy, Carbohydrate, Protein, Fat
     min = 0
     max = 0.03
+    # 100-103% <= Energy <= 110%
     constraint_total_energy = solver.Constraint(EnergyAmount_kcal * (1 + (min + (random() * (max - min)))), EnergyAmount_kcal * 1.1)
     # constraint_total_carbohydrate = solver.Constraint(CarbohydrateAmount_g * 0.95, CarbohydrateAmount_g * 1.05)
     # constraint_total_protein = solver.Constraint(ProteinAmount_g * 0.9, ProteinAmount_g * 1.1)
@@ -178,7 +179,7 @@ def optimizer1(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFa
     #     constraint_random_available_foods.SetCoefficient(foodVar[i], random_arr[i])
     # print("Total food remaining for selection after randomness: {}".format(len(food_data) - count_ones))
 
-    # numer of meals
+    # number of meals
     constraint_count_meals = solver.Constraint(num_meals, num_meals)
     for i in range(0, len(food_data)):
         constraint_count_meals.SetCoefficient(foodVar[i], 1)
@@ -214,8 +215,6 @@ def optimizer1(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFa
     # for i in range(0, len(food_data)):
     #     constraint_breakfast_energy.SetCoefficient(foodVar[i], food_data[i][DATA_EnergyAmount_kcal_INDEX] * food_data[i][DATA_IsBreakfast_INDEX])
 
-    # Restrictions
-
 
     # Solve!
     status = solver.Solve()
@@ -244,7 +243,7 @@ def run_optimizer(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, Tota
 # For quick testing without Django
 def main():
     readFoodData(csv_file)
-    foodIndex_result = run_optimizer(EnergyAmount_kcal=2000, CarbohydrateAmount_g=293.68, ProteinAmount_g=220.26, TotalFatAmount_g=97.89, food_keep_index=[2339,274], food_change_index=[2279,2252,1340,1206], num_meals=3, isHalal=True, isVegan=True)
+    foodIndex_result = run_optimizer(EnergyAmount_kcal=2000, CarbohydrateAmount_g=293.68, ProteinAmount_g=220.26, TotalFatAmount_g=97.89, food_keep_index=[], food_change_index=[], num_meals=3, isHalal=False, isVegan=False)
 
     total_calories = 0
     total_carbo = 0

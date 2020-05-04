@@ -73,10 +73,10 @@ bc_extras
     def calculate_EnergyAmount_kcal_sedentary(bmr):
         return bmr * 1.2
 
-    def calculate_EnergyAmount_kcal_moderately_active(bmr):
+    def calculate_EnergyAmount_kcal_lightly_active(bmr):
         return bmr * 1.375
 
-    def calculate_EnergyAmount_kcal_very_active(bmr):
+    def calculate_EnergyAmount_kcal_moderately_active(bmr):
         return bmr * 1.55
 
     def calculate_EnergyAmount_kcal_very_active(bmr):
