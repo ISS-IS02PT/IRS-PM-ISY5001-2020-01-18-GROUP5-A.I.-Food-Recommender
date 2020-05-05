@@ -74,14 +74,14 @@
                         <hr />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group">
-                            <label asp-for="Nutrients.Carbohydrates" class="control-label"></label>
-                            <input asp-for="Nutrients.Carbohydrates" class="form-control" />
-                            <span asp-validation-for="Nutrients.Carbohydrates" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
                             <label asp-for="Nutrients.Energy" class="control-label"></label>
                             <input asp-for="Nutrients.Energy" class="form-control" />
                             <span asp-validation-for="Nutrients.Energy" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Nutrients.Carbohydrates" class="control-label"></label>
+                            <input asp-for="Nutrients.Carbohydrates" class="form-control" />
+                            <span asp-validation-for="Nutrients.Carbohydrates" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="Nutrients.Proteins" class="control-label"></label>
@@ -101,9 +101,9 @@
                             <span asp-validation-for="Nutrients.Diet" class="text-danger"></span>
                         </div>
                         <!--<div class="form-group">
-                            <input type="checkbox" asp-for="UseCalcNutrients" checked="checked">
-                            <label asp-for="UseCalcNutrients" class="control-label"></label>
-                        </div>-->
+        <input type="checkbox" asp-for="UseCalcNutrients" checked="checked">
+        <label asp-for="UseCalcNutrients" class="control-label"></label>
+    </div>-->
                         <div class="form-group">
                             <input type="submit" value="Get Food Recommendation" class="btn btn-primary" />
                         </div>
@@ -147,10 +147,10 @@
                         @Html.DisplayNameFor(model => model.FoodList[0].Group)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.FoodList[0].Carbohydrates)
+                        @Html.DisplayNameFor(model => model.FoodList[0].Energy)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.FoodList[0].Energy)
+                        @Html.DisplayNameFor(model => model.FoodList[0].Carbohydrates)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.FoodList[0].Proteins)
@@ -181,6 +181,13 @@
             <tbody>
                 @{
                     double TotalCarbs = 0.0, TotalEnergy = 0.0, TotalProteins = 0.0, TotalFats = 0.0;
+                    @foreach (var item in Model.FoodList)
+                    {
+                        TotalCarbs += item.Carbohydrates;
+                        TotalEnergy += item.Energy;
+                        TotalProteins += item.Proteins;
+                        TotalFats += item.TotalFats;
+                    }
                 }
                 @foreach (var item in Model.FoodList)
                 {
@@ -195,16 +202,20 @@
                             @Html.DisplayFor(modelItem => item.Group)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Carbohydrates)
+                            @Html.DisplayFor(modelItem => item.Energy)<br>
+                            [@Math.Round(item.Energy / TotalEnergy * 100, 2).ToString()%]
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Energy)
+                            @Html.DisplayFor(modelItem => item.Carbohydrates)<br>
+                            [@Math.Round(item.Carbohydrates / TotalCarbs * 100, 2).ToString()%]
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Proteins)
+                            @Html.DisplayFor(modelItem => item.Proteins)<br>
+                            [@Math.Round(item.Proteins / TotalProteins * 100, 2).ToString()%]
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.TotalFats)
+                            @Html.DisplayFor(modelItem => item.TotalFats)<br>
+                            [@Math.Round(item.TotalFats / TotalFats * 100, 2).ToString()%]
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.IsVegan)
@@ -225,11 +236,6 @@
                             @Html.DisplayFor(modelItem => item.MealType)
                         </td>
                     </tr>
-
-                    TotalCarbs += item.Carbohydrates;
-                    TotalEnergy += item.Energy;
-                    TotalProteins += item.Proteins;
-                    TotalFats += item.TotalFats;
                 }
             </tbody>
             <tfoot>
@@ -238,10 +244,10 @@
                         Total Nutrients
                     </td>
                     <td>
-                        @Math.Round(TotalCarbs, 3)
+                        @Math.Round(TotalEnergy, 3)
                     </td>
                     <td>
-                        @Math.Round(TotalEnergy, 3)
+                        @Math.Round(TotalCarbs, 3)
                     </td>
                     <td>
                         @Math.Round(TotalProteins, 3)

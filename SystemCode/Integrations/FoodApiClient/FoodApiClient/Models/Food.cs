@@ -21,13 +21,13 @@ namespace FoodApiClient.Models
         [Display(Name = "Group")]
         public string Group { get; set; }
 
-        [JsonPropertyName("CarbohydrateAmount_g")]
-        [Display(Name = "Carbohydrates (g)")]
-        public double Carbohydrates { get; set; }
-
         [JsonPropertyName("EnergyAmount_kcal")]
         [Display(Name = "Energy (kcal)")]
         public double Energy { get; set; }
+
+        [JsonPropertyName("CarbohydrateAmount_g")]
+        [Display(Name = "Carbohydrates (g)")]
+        public double Carbohydrates { get; set; }
 
         [JsonPropertyName("ProteinAmount_g")]
         [Display(Name = "Proteins (g)")]
@@ -88,6 +88,6 @@ namespace FoodApiClient.Models
                 Keep = food.Keep;
                 Change = food.Change;
             }
-        }
+}
     }
 }
