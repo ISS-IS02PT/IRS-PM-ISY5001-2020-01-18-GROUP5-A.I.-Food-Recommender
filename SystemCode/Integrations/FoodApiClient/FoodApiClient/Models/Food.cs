@@ -67,6 +67,9 @@ namespace FoodApiClient.Models
         [JsonPropertyName("food_change_index")]
         public string Change { get; set; }
 
+        [Display(Name = "Keep")]
+        public bool CheckKeep { get; set; }
+
         public Food() { }
         public Food(Food food)
         {
@@ -87,6 +90,7 @@ namespace FoodApiClient.Models
                 MealType = food.MealType;
                 Keep = food.Keep;
                 Change = food.Change;
+                CheckKeep = food.CheckKeep;
             }
 }
     }

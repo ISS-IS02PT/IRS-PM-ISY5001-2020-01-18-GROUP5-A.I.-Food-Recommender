@@ -144,7 +144,7 @@ namespace FoodApiClient.FoodApi
         }*/
 
         public static async Task<List<Food>> FoodRecommend(Nutrients nutrients, FoodOptions options,
-            Uri uriFoodRecommend = null)
+            List<int> listKeep = null, List<int> listChange = null, Uri uriFoodRecommend = null)
         {
             if (uriFoodRecommend == null)
             {
@@ -164,7 +164,7 @@ namespace FoodApiClient.FoodApi
                 return null;
             }
 
-            string strUriRelative = GenerateRelativeUri(nutrients, options);
+            string strUriRelative = GenerateRelativeUri(nutrients, options, listKeep, listChange);
             if (strUriRelative == null)
             {
                 return null;
@@ -409,7 +409,8 @@ namespace FoodApiClient.FoodApi
                 + $"&activity={strActivity}" + $"&diet={strDiet}";
         }
 
-        private static string GenerateRelativeUri(Nutrients nutrients, FoodOptions options)
+        private static string GenerateRelativeUri(Nutrients nutrients, FoodOptions options,
+            List<int> listKeep = null, List<int> listChange = null)
         {
             if (nutrients == null)
             {
@@ -465,6 +466,15 @@ namespace FoodApiClient.FoodApi
                 strDiet = strDiet.Replace(' ', '_').ToLower();
             }
 
+            string strKeep = "", strChange = "";
+            if (listKeep != null)
+            {
+                strKeep = string.Join(",", listKeep.ToArray());
+            }
+            if (listChange != null)
+            {
+                strChange = string.Join(",", listChange.ToArray());
+            }
             return $"?CarbohydrateAmount_g={carbs}"
                 + $"&EnergyAmount_kcal={energy}"
                 + $"&ProteinAmount_g={proteins}"
@@ -475,8 +485,8 @@ namespace FoodApiClient.FoodApi
                 + $"&isHalal={options.IsHalal}"
                 + $"&containsBeef={options.ContainsBeef}"
                 + $"&isAlcohol={options.IsAlcohol}"
-                + $"&food_keep_index="
-                + $"&food_change_index={string.Join(",", _listFoodHistory.ToArray())}";
+                + $"&food_keep_index={strKeep}"
+                + $"&food_change_index={strChange}";
         }
         #endregion
 

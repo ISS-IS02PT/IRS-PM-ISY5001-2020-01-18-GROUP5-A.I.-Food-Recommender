@@ -3,19 +3,19 @@
     ViewData["Title"] = "User Profile >> Food Recommendation";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-    <style>
-        tfoot {
-            color: red;
-        }
-    </style>
+<style>
+    tfoot {
+        color: red;
+    }
+</style>
 
 <h1>Food Recommendation and Nutrients Calculation</h1>
 <br />
 
-<!--<form asp-action="UserNutrientsFood">-->
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="UserNutrientsFood">
+<form asp-action="UserNutrientsFood">
+    <div class="row">
+        <div class="col-md-4">
+            <!--<form asp-action="UserNutrientsFood">-->
             <h4>User Profile</h4>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -56,18 +56,18 @@
                 <span asp-validation-for="UserProfile.Diet" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Calculate Nutrients" class="btn btn-primary" />
+                <input type="submit" value="Calculate Nutrients" class="btn btn-primary" asp-route-function="Calculate Nutrients" />
             </div>
-        </form>
-    </div>
+            <!--</form>-->
+        </div>
 
-    <div class="col-md-1">
-    </div>
+        <div class="col-md-1">
+        </div>
 
-    @if ((Model != null) && (Model.Nutrients != null))
-    {
-        <div class="col-md-7">
-            <form asp-action="UserNutrientsFood">
+        <!--<form asp-action="UserNutrientsFood">-->
+        @if ((Model != null) && (Model.Nutrients != null))
+        {
+            <div class="col-md-7">
                 <div class="row">
                     <div class="col-md-7">
                         <h4>Nutrients</h4>
@@ -101,11 +101,11 @@
                             <span asp-validation-for="Nutrients.Diet" class="text-danger"></span>
                         </div>
                         <!--<div class="form-group">
-        <input type="checkbox" asp-for="UseCalcNutrients" checked="checked">
-        <label asp-for="UseCalcNutrients" class="control-label"></label>
-    </div>-->
+                            <input type="checkbox" asp-for="UseCalcNutrients" checked="checked">
+                            <label asp-for="UseCalcNutrients" class="control-label"></label>
+                        </div>-->
                         <div class="form-group">
-                            <input type="submit" value="Get Food Recommendation" class="btn btn-primary" />
+                            <input type="submit" value="Get Food Recommendation" class="btn btn-primary" asp-route-function="Get Food Recommendation" />
                         </div>
                     </div>
 
@@ -126,17 +126,19 @@
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
-    }
-</div>
+            </div>
+        }
+    </div>
     <!--</form>-->
 
-    @if ((Model != null) && (Model.FoodList != null) && (Model.FoodList.Count > 0))
+    @if ((Model != null) && (Model.FoodList != null))
     {
-        <table class="table">
+        <table class="table" asp-action="UserNutrientsFood">
             <thead>
                 <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FoodList[0].CheckKeep)
+                    </th>
                     <th>
                         @Html.DisplayNameFor(model => model.FoodList[0].Index)
                     </th>
@@ -189,99 +191,142 @@
                         TotalFats += item.TotalFats;
                     }
                 }
-                @foreach (var item in Model.FoodList)
+                @for (int i = 0; i < Model.FoodList.Count; i++)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Index)
+                            @Html.CheckBoxFor(modelItem => Model.FoodList[i].CheckKeep)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Name)
+                            @Html.DisplayFor(modelItem => Model.FoodList[i].Index)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Group)
+                            @Html.DisplayFor(modelItem => Model.FoodList[i].Name)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Energy)<br>
-                            [@Math.Round(item.Energy / TotalEnergy * 100, 2).ToString()%]
+                            @Html.DisplayFor(modelItem => Model.FoodList[i].Group)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Carbohydrates)<br>
-                            [@Math.Round(item.Carbohydrates / TotalCarbs * 100, 2).ToString()%]
+                            @Html.DisplayFor(modelItem => Model.FoodList[i].Energy)<br>
+                            <!--[@Math.Round(Model.FoodList[i].Energy / TotalEnergy * 100, 2).ToString()%]-->
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Proteins)<br>
-                            [@Math.Round(item.Proteins / TotalProteins * 100, 2).ToString()%]
+                            @Html.DisplayFor(modelItem => Model.FoodList[i].Carbohydrates)<br>
+                            <!--[@Math.Round(Model.FoodList[i].Carbohydrates / TotalCarbs * 100, 2).ToString()%]-->
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.TotalFats)<br>
-                            [@Math.Round(item.TotalFats / TotalFats * 100, 2).ToString()%]
+                            @Html.DisplayFor(modelItem => Model.FoodList[i].Proteins)<br>
+                            <!--[@Math.Round(Model.FoodList[i].Proteins / TotalProteins * 100, 2).ToString()%]-->
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.IsVegan)
+                            @Html.DisplayFor(modelItem => Model.FoodList[i].TotalFats)<br>
+                            <!--[@Math.Round(Model.FoodList[i].TotalFats / TotalFats * 100, 2).ToString()%]-->
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.IsVegetarian)
+                            @Html.DisplayFor(modelItem => Model.FoodList[i].IsVegan)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.IsHalal)
+                            @Html.DisplayFor(modelItem => Model.FoodList[i].IsVegetarian)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.ContainsBeef)
+                            @Html.DisplayFor(modelItem => Model.FoodList[i].IsHalal)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.IsAlcohol)
+                            @Html.DisplayFor(modelItem => Model.FoodList[i].ContainsBeef)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.MealType)
+                            @Html.DisplayFor(modelItem => Model.FoodList[i].IsAlcohol)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Model.FoodList[i].MealType)
                         </td>
                     </tr>
                 }
             </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3">
-                        Total Nutrients
-                    </td>
-                    <td>
-                        @Math.Round(TotalEnergy, 3)
-                    </td>
-                    <td>
-                        @Math.Round(TotalCarbs, 3)
-                    </td>
-                    <td>
-                        @Math.Round(TotalProteins, 3)
-                    </td>
-                    <td>
-                        @Math.Round(TotalFats, 3)
-                    </td>
-                    <td>
-                        <!--IsVegan-->
-                    </td>
-                    <td>
-                        <!--IsVegetarian-->
-                    </td>
-                    <td>
-                        <!--IsHalal-->
-                    </td>
-                    <td>
-                        <!--ContainsBeef-->
-                    </td>
-                    <td>
-                        <!--IsAlcohol-->
-                    </td>
-                    <td>
-                        <!--MealType-->
-                    </td>
-                </tr>
-            </tfoot>
+            @if (Model.FoodList.Count > 0)
+            {
+                <tfoot>
+                    <tr>
+                        <td>
+                        </td>
+                        <td colspan="3">
+                            Total Nutrients
+                        </td>
+                        <td>
+                            @Math.Round(TotalEnergy, 2)
+                        </td>
+                        <td>
+                            @Math.Round(TotalCarbs, 2)
+                        </td>
+                        <td>
+                            @Math.Round(TotalProteins, 2)
+                        </td>
+                        <td>
+                            @Math.Round(TotalFats, 2)
+                        </td>
+                        <td>
+                            <!--IsVegan-->
+                        </td>
+                        <td>
+                            <!--IsVegetarian-->
+                        </td>
+                        <td>
+                            <!--IsHalal-->
+                        </td>
+                        <td>
+                            <!--ContainsBeef-->
+                        </td>
+                        <td>
+                            <!--IsAlcohol-->
+                        </td>
+                        <td>
+                            <!--MealType-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td colspan="3">
+                            Nutrients vs Energy Ratio
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            @Math.Round(TotalCarbs * 4 / TotalEnergy * 100, 2)%
+                        </td>
+                        <td>
+                            @Math.Round(TotalProteins * 4 / TotalEnergy * 100, 2)%
+                        </td>
+                        <td>
+                            @Math.Round(TotalFats * 4 / TotalEnergy * 100, 2)%
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                </tfoot>
+            }
         </table>
+        <div class="form-group">
+            <input type="submit" value="Refresh" class="btn btn-primary" asp-route-function="Refresh" />
+        </div>
+        <script>window.scrollTo(0, document.body.scrollHeight);</script>
     }
+</form>
 
 <div>
     <!--<a asp-controller="Home" asp-action="Index">Home</a>-->
 </div>
 
-    @section Scripts {
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    }
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
