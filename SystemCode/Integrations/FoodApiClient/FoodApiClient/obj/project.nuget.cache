@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0c2h/vaeyv1qeUG1/dPk9qTzgLfovbCZBFNJmTadvQ2qIoeen131EXAsbqgfE454/1O8ePLQ6T+Sy9xbI7NmoQ==",
+  "dgSpecHash": "93hqy0+MfVgbt1H+CSHjZOJ0eVdddQos4W9dfVV/fpHcVx4QxiwN7gMkEXureMMCNuPXjG90uh3j0nyQSDRNCg==",
   "success": true,
-  "projectFilePath": "D:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj",
+  "projectFilePath": "D:\\Documents\\GitHub\\ISR-MR-2020-01-18-IS02PT-GROUP5-FoodRec\\SystemCode\\Integrations\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mokky\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\mokky\\.nuget\\packages\\microsoft.aspnetcore.razor\\2.2.0\\microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",
