@@ -25,8 +25,15 @@ namespace FoodApiClient.Controllers
 
             if (_modelUserNutrients.UserProfile != null)
             {
-                _modelUserNutrients.Nutrients =
-                    await FoodApi.ApiInterface.CalcNutrients(_modelUserNutrients.UserProfile);
+                try
+                {
+                    _modelUserNutrients.Nutrients =
+                        await FoodApi.ApiInterface.CalcNutrients(_modelUserNutrients.UserProfile);
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(nameof(_modelUserNutrients.UserProfile), ex.Message);
+                }
 
                 _modelNutrientsFood.Nutrients = new Nutrients(_modelUserNutrients.Nutrients);
 
@@ -55,9 +62,16 @@ namespace FoodApiClient.Controllers
 
             if (_modelNutrientsFood.Nutrients != null)
             {
-                _modelNutrientsFood.FoodList =
-                    await FoodApi.ApiInterface.FoodRecommend(_modelNutrientsFood.Nutrients,
-                    _modelNutrientsFood.Options);
+                try
+                {
+                    _modelNutrientsFood.FoodList =
+                        await FoodApi.ApiInterface.FoodRecommend(_modelNutrientsFood.Nutrients,
+                        _modelNutrientsFood.Options);
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(nameof(_modelNutrientsFood.Nutrients), ex.Message);
+                }
 
                 _modelUserNutrientsFood.FoodList =
                     _modelNutrientsFood.FoodList.Select(x => new Food(x)).ToList();
@@ -67,7 +81,8 @@ namespace FoodApiClient.Controllers
             return View();
         }
 
-        public async Task<IActionResult> UserNutrientsFood(UserNutrientsFoodViewModel model, string function)
+        public async Task<IActionResult> UserNutrientsFood(UserNutrientsFoodViewModel model,
+            string function)
         {
             if (model.UserProfile != null)
             {
@@ -106,8 +121,15 @@ namespace FoodApiClient.Controllers
                 if (function.ToLower().Contains("calculate nutrients") &&
                     (_modelUserNutrientsFood.UserProfile != null))
                 {
-                    _modelUserNutrientsFood.Nutrients =
-                        await FoodApi.ApiInterface.CalcNutrients(_modelUserNutrientsFood.UserProfile);
+                    try
+                    {
+                        _modelUserNutrientsFood.Nutrients =
+                            await FoodApi.ApiInterface.CalcNutrients(_modelUserNutrientsFood.UserProfile);
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError(nameof(_modelUserNutrientsFood.UserProfile), ex.Message);
+                    }
 
                     _modelNutrientsFood.Nutrients = new Nutrients(_modelUserNutrientsFood.Nutrients);
                 }
@@ -115,10 +137,16 @@ namespace FoodApiClient.Controllers
                     function.ToLower().Contains("refresh")) &&
                     (_modelUserNutrientsFood.Nutrients != null))
                 {
+                    string strName = nameof(_modelUserNutrientsFood.Nutrients);
+                    if (function.ToLower().Contains("refresh"))
+                    {
+                        strName = nameof(_modelUserNutrientsFood.FoodList);
+                    }
+
                     List<int> listKeep = new List<int>(), listChange = new List<int>();
                     if (model.FoodList != null)
                     {
-                        for (int i=0;i< model.FoodList.Count;i++)
+                        for (int i = 0; i < model.FoodList.Count; i++)
                         {
                             if (i < _modelUserNutrientsFood.FoodList.Count)
                             {
@@ -140,15 +168,32 @@ namespace FoodApiClient.Controllers
                             }
                         }
                     }
-                    var foodList =
-                        await FoodApi.ApiInterface.FoodRecommend(_modelUserNutrientsFood.Nutrients,
-                        _modelUserNutrientsFood.Options, listKeep, listChange);
 
-                    if ((foodList == null) || (foodList.Count <= 0))
+                    List<Food> foodList = null;
+                    try
                     {
                         foodList =
                             await FoodApi.ApiInterface.FoodRecommend(_modelUserNutrientsFood.Nutrients,
-                            _modelUserNutrientsFood.Options, listKeep);
+                            _modelUserNutrientsFood.Options, listKeep, listChange);
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError(strName, ex.Message);
+                    }
+
+                    if ((foodList == null) || (foodList.Count <= 0))
+                    {
+                        try
+                        {
+                            foodList =
+                                await FoodApi.ApiInterface.FoodRecommend(_modelUserNutrientsFood.Nutrients,
+                                _modelUserNutrientsFood.Options, listKeep);
+                        }
+                        catch (Exception ex)
+                        {
+
+                            ModelState.AddModelError(strName, ex.Message);
+                        }
                     }
 
                     if (foodList != null)
@@ -157,11 +202,19 @@ namespace FoodApiClient.Controllers
                     }
                     else
                     {
-                        _modelUserNutrientsFood.FoodList.Clear();
+                        if (_modelUserNutrientsFood.FoodList != null)
+                        {
+                            _modelUserNutrientsFood.FoodList.Clear();
+                        }
+
+                        ModelState.AddModelError(strName, "No food found");
                     }
 
-                    _modelNutrientsFood.FoodList =
+                    if (_modelUserNutrientsFood.FoodList != null)
+                    {
+                        _modelNutrientsFood.FoodList =
                         _modelUserNutrientsFood.FoodList.Select(x => new Food(x)).ToList();
+                    }
                 }
             }
 

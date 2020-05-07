@@ -1,4 +1,4 @@
-﻿//#define SHOW_DEBUG
+﻿#define SHOW_DEBUG
 
 using FoodApiClient.Converters;
 using FoodApiClient.Models;
@@ -39,9 +39,12 @@ namespace FoodApiClient.FoodApi
             }
             catch (Exception ex)
             {
+#if SHOW_DEBUG
                 Console.WriteLine("\nException Caught!");
                 Console.WriteLine("Message :{0} ", ex.Message);
-                return null;
+#endif
+                //return null;
+                throw ex;
             }
         }
 
@@ -62,12 +65,25 @@ namespace FoodApiClient.FoodApi
 
             if (uriCalcNutrients == null)
             {
-                return null;
+                //return null;
+                throw new ArgumentException("Unable to get link from API", nameof(uriCalcNutrients));
             }
 
-            string strUriRelative = GenerateRelativeUri(userProfile);
-            if (strUriRelative == null)
-                return null;
+            string strUriRelative = "";
+            try
+            {
+                strUriRelative = GenerateRelativeUri(userProfile);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message, ex.Source);
+            }
+
+            if (string.IsNullOrEmpty(strUriRelative))
+            {
+                //return null;
+                throw new ArgumentException("Null relative uri generated", nameof(strUriRelative));
+            }
 
             try
             {
@@ -81,17 +97,20 @@ namespace FoodApiClient.FoodApi
 #if SHOW_DEBUG
                 Console.WriteLine($"Energy = \t{nutrients.Energy}");
                 Console.WriteLine($"Proteins = \t{nutrients.Proteins}");
-                Console.WriteLine($"Carbohydrates = \t{nutrients.Carbs}");
-                Console.WriteLine($"Fats = \t{nutrients.Fats}");
+                Console.WriteLine($"Carbohydrates = \t{nutrients.Carbohydrates}");
+                Console.WriteLine($"Fats = \t{nutrients.TotalFats}");
 #endif
 
                 return nutrients;
             }
             catch (Exception ex)
             {
+#if SHOW_DEBUG
                 Console.WriteLine("\nException Caught!");
                 Console.WriteLine("Message :{0} ", ex.Message);
-                return null;
+#endif
+                //return null;
+                throw ex;
             }
         }
 
@@ -161,13 +180,24 @@ namespace FoodApiClient.FoodApi
 
             if (uriFoodRecommend == null)
             {
-                return null;
+                //return null;
+                throw new ArgumentException("Unable to get link from API", nameof(uriFoodRecommend));
             }
 
-            string strUriRelative = GenerateRelativeUri(nutrients, options, listKeep, listChange);
+            string strUriRelative = "";
+            try
+            {
+                strUriRelative = GenerateRelativeUri(nutrients, options, listKeep, listChange);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+
             if (strUriRelative == null)
             {
-                return null;
+                //return null;
+                throw new ArgumentException("Null relative uri generated", nameof(strUriRelative));
             }
 
             try
@@ -186,77 +216,86 @@ namespace FoodApiClient.FoodApi
                 var streamTask = _client.GetStreamAsync(new Uri(uriFoodRecommend + strUriRelative));
                 var foodList = await JsonSerializer.DeserializeAsync<List<Food>>(await streamTask);
                 _keepChangeIndex = new KeepChangeIndex();
-                if (foodList.Last().Keep != null)
+                if (foodList != null)
                 {
-                    string[] strKeepIndex = foodList.Last().Keep.Split(',');
-                    if (strKeepIndex != null)
+                    if (foodList.Last().Keep != null)
                     {
-                        foreach (string strIndex in strKeepIndex)
+                        string[] strKeepIndex = foodList.Last().Keep.Split(',');
+                        if (strKeepIndex != null)
                         {
-                            if (int.TryParse(strIndex, out int nIndex))
+                            foreach (string strIndex in strKeepIndex)
                             {
-                                if (_keepChangeIndex.Keep == null)
+                                if (int.TryParse(strIndex, out int nIndex))
                                 {
-                                    _keepChangeIndex.Keep = new List<int>();
-                                }
+                                    if (_keepChangeIndex.Keep == null)
+                                    {
+                                        _keepChangeIndex.Keep = new List<int>();
+                                    }
 
-                                if (!_keepChangeIndex.Keep.Contains(nIndex))
-                                {
-                                    _keepChangeIndex.Keep.Add(nIndex);
+                                    if (!_keepChangeIndex.Keep.Contains(nIndex))
+                                    {
+                                        _keepChangeIndex.Keep.Add(nIndex);
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                if (foodList.Last().Change != null)
-                {
-                    string[] strChangeIndex = foodList.Last().Change.Split(',');
-                    if (strChangeIndex != null)
-                    {
-                        foreach (string strIndex in strChangeIndex)
-                        {
-                            if (int.TryParse(strIndex, out int nIndex))
-                            {
-                                if (_keepChangeIndex.Change == null)
-                                {
-                                    _keepChangeIndex.Change = new List<int>();
-                                }
 
-                                if (!_keepChangeIndex.Change.Contains(nIndex))
+                    if (foodList.Last().Change != null)
+                    {
+                        string[] strChangeIndex = foodList.Last().Change.Split(',');
+                        if (strChangeIndex != null)
+                        {
+                            foreach (string strIndex in strChangeIndex)
+                            {
+                                if (int.TryParse(strIndex, out int nIndex))
                                 {
-                                    _keepChangeIndex.Change.Add(nIndex);
+                                    if (_keepChangeIndex.Change == null)
+                                    {
+                                        _keepChangeIndex.Change = new List<int>();
+                                    }
+
+                                    if (!_keepChangeIndex.Change.Contains(nIndex))
+                                    {
+                                        _keepChangeIndex.Change.Add(nIndex);
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                foodList.RemoveAt(foodList.Count - 1);
-                foodList.Sort(delegate (Food x, Food y)
-                {
-                    if (x.MealType.ToLower() == y.MealType.ToLower()) return 0;
-                    else if ((x.MealType.ToLower() == "breakfast") || (y.MealType.ToLower() == "dinner")) return -1;
-                    else if ((x.MealType.ToLower() == "dinner") || (y.MealType.ToLower() == "breakfast")) return 1;
-                    else return 0;
-                });
 
-                foreach (Food food in foodList)
-                {
-                    if (!_listFoodHistory.Contains(food.Index))
+                    foodList.RemoveAt(foodList.Count - 1);
+                    foodList.Sort(delegate (Food x, Food y)
                     {
-                        _listFoodHistory.Add(food.Index);
+                        if (x.MealType.ToLower() == y.MealType.ToLower()) return 0;
+                        else if ((x.MealType.ToLower() == "breakfast") || (y.MealType.ToLower() == "dinner")) return -1;
+                        else if ((x.MealType.ToLower() == "dinner") || (y.MealType.ToLower() == "breakfast")) return 1;
+                        else return 0;
+                    });
+
+                    foreach (Food food in foodList)
+                    {
+                        if (!_listFoodHistory.Contains(food.Index))
+                        {
+                            _listFoodHistory.Add(food.Index);
+                        }
                     }
                 }
+
                 return foodList;
             }
             catch (Exception ex)
             {
+#if SHOW_DEBUG
                 Console.WriteLine("\nException Caught!");
                 Console.WriteLine("Message :{0} ", ex.Message);
-                return null;
+#endif
+                //return null;
+                throw ex;
             }
         }
 
-        public static bool CheckGenderString(ref string strGender)
+        public static void CheckGenderString(ref string strGender)
         {
             string strTemp = strGender.Replace('_', ' ').ToLower();
             if ((strTemp == "m") || (strTemp == "male"))
@@ -269,15 +308,18 @@ namespace FoodApiClient.FoodApi
             }
             else
             {
+#if SHOW_DEBUG
                 Console.WriteLine($"Invalid gender, {strGender}");
-                return false;
+#endif
+                //return false;
+                throw new ArgumentException($"Invalid gender, {strGender}", nameof(strGender));
             }
 
             strGender = strTemp;
-            return true;
+            //return true;
         }
 
-        public static bool CheckActivityString(ref string strActivity)
+        public static void CheckActivityString(ref string strActivity)
         {
             if (string.IsNullOrEmpty(strActivity))
             {
@@ -305,17 +347,20 @@ namespace FoodApiClient.FoodApi
                 }
                 else
                 {
+#if SHOW_DEBUG
                     Console.WriteLine($"Invalid activity, {strActivity}");
-                    return false;
+#endif
+                    //return false;
+                    throw new ArgumentException($"Invalid activity, {strActivity}", nameof(strActivity));
                 }
 
                 strActivity = strTemp;
             }
 
-            return true;
+            //return true;
         }
 
-        public static bool CheckDietString(ref string strDiet)
+        public static void CheckDietString(ref string strDiet)
         {
             string strTemp = strDiet.Replace('_', ' ').ToLower();
 
@@ -332,12 +377,15 @@ namespace FoodApiClient.FoodApi
             }
             else
             {
+#if SHOW_DEBUG
                 Console.WriteLine($"Invalid diet, {strDiet}");
-                return false;
+#endif
+                //return false;
+                throw new ArgumentException($"Invalid diet, {strDiet}", nameof(strDiet));
             }
 
             strDiet = strTemp;
-            return true;
+            //return true;
         }
         #endregion
 
@@ -345,68 +393,82 @@ namespace FoodApiClient.FoodApi
         private static string GenerateRelativeUri(UserProfile userProfile)
         {
             if (userProfile == null)
-                return null;
-
-            double age = userProfile.Age;
-            double height = userProfile.Height;
-            double weight = userProfile.Weight;
-            string gender = userProfile.Gender.ToString();
-            string activity = userProfile.Activity.ToString();
-            string diet = userProfile.Diet.ToString();
-
-            if (double.IsNaN(age) || (age <= 0))
             {
-                Console.WriteLine($"Invalid age, {age}");
-                return null;
+                //return null;
+                throw new ArgumentException("Null user profile", nameof(userProfile));
             }
-            int nAge = (int)Math.Round(age);
 
-            if (double.IsNaN(height) || (height <= 0))
+            if (double.IsNaN(userProfile.Age) || (userProfile.Age <= 0))
             {
-                Console.WriteLine($"Invalid height, {height}");
-                return null;
+#if SHOW_DEBUG
+                Console.WriteLine($"Invalid age, {userProfile.Age}");
+#endif
+                //return null;
+                throw new ArgumentException($"Invalid age, {userProfile.Age}",
+                    nameof(userProfile.Age));
             }
-            int nHeight = (int)Math.Round(height);
+            int nAge = (int)Math.Round(userProfile.Age);
 
-            if (double.IsNaN(weight) || (weight <= 0))
+            if (double.IsNaN(userProfile.Height) || (userProfile.Height <= 0))
             {
-                Console.WriteLine($"Invalid weight, {weight}");
-                return null;
+#if SHOW_DEBUG
+                Console.WriteLine($"Invalid height, {userProfile.Height}");
+#endif
+                //return null;
+                throw new ArgumentException($"Invalid height, {userProfile.Height}",
+                    nameof(userProfile.Height));
             }
-            int nWeight = (int)Math.Round(weight);
+            int nHeight = (int)Math.Round(userProfile.Height);
 
-            string strGender = new string(gender);
-            if (!CheckGenderString(ref strGender))
+            if (double.IsNaN(userProfile.Weight) || (userProfile.Weight <= 0))
             {
-                return null;
+#if SHOW_DEBUG
+                Console.WriteLine($"Invalid weight, {userProfile.Weight}");
+#endif
+                //return null;
+                throw new ArgumentException($"Invalid weight, {userProfile.Weight}", nameof(userProfile.Weight));
             }
-            else
+            int nWeight = (int)Math.Round(userProfile.Weight);
+
+            string strGender = userProfile.Gender.ToString();
+            try
             {
+                CheckGenderString(ref strGender);
                 strGender = strGender.Replace(' ', '_').ToLower();
             }
-
-            string strActivity = new string(activity);
-            if (!CheckActivityString(ref strActivity))
+            catch(Exception ex)
             {
-                return null;
+                throw ex;
             }
-            else
+
+            string strActivity = userProfile.Activity.ToString();
+            try
             {
+                CheckActivityString(ref strActivity);
                 strActivity = strActivity.Replace(' ', '_').ToLower();
             }
-
-            string strDiet = new string(diet);
-            if (!CheckDietString(ref strDiet))
+            catch(Exception ex)
             {
-                return null;
+                throw ex;
             }
-            else
+
+            string strDiet = userProfile.Diet.ToString();
+            try
             {
+                CheckDietString(ref strDiet);
                 strDiet = strDiet.Replace(' ', '_').ToLower();
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
-            return $"?age={nAge}" + $"&height={nHeight}" + $"&weight={nWeight}" + $"&gender={strGender}"
-                + $"&activity={strActivity}" + $"&diet={strDiet}";
+            return $"?age={nAge}" +
+                $"&height={nHeight}" +
+                $"&weight={nWeight}" +
+                $"&gender={strGender}" +
+                $"&activity={strActivity}" +
+                $"&diet={strDiet}";
         }
 
         private static string GenerateRelativeUri(Nutrients nutrients, FoodOptions options,
@@ -414,7 +476,8 @@ namespace FoodApiClient.FoodApi
         {
             if (nutrients == null)
             {
-                return null;
+                //return null;
+                throw new ArgumentException("Null nutrients", nameof(nutrients));
             }
 
             if (options == null)
@@ -422,48 +485,58 @@ namespace FoodApiClient.FoodApi
                 options = new FoodOptions();
             }
 
-            double energy = nutrients.Energy;
-            double proteins = nutrients.Proteins;
-            double carbs = nutrients.Carbohydrates;
-            double fats = nutrients.TotalFats;
-            string diet = nutrients.Diet.ToString();
-
-            if (double.IsNaN(energy) || (energy < 0))
+            if (double.IsNaN(nutrients.Energy) || (nutrients.Energy < 0))
             {
-                Console.WriteLine($"Invalid energy, {energy}");
-                return null;
+#if SHOW_DEBUG
+                Console.WriteLine($"Invalid energy, {nutrients.Energy}");
+#endif
+                //return null;
+                throw new ArgumentException($"Invalid energy, {nutrients.Energy}",
+                    nameof(nutrients.Energy));
             }
-            energy = Math.Round(energy, 2);
+            double dbEnergy = Math.Round(nutrients.Energy, 2);
 
-            if (double.IsNaN(proteins) || (proteins <= 0))
+            if (double.IsNaN(nutrients.Proteins) || (nutrients.Proteins <= 0))
             {
-                Console.WriteLine($"Invalid proteins, {proteins}");
-                return null;
+#if SHOW_DEBUG
+                Console.WriteLine($"Invalid proteins, {nutrients.Proteins}");
+#endif
+                //return null;
+                throw new ArgumentException($"Invalid proteins, {nutrients.Proteins}",
+                    nameof(nutrients.Proteins));
             }
-            proteins = Math.Round(proteins, 2);
+            double dbProteins = Math.Round(nutrients.Proteins, 2);
 
-            if (double.IsNaN(carbs) || (carbs <= 0))
+            if (double.IsNaN(nutrients.Carbohydrates) || (nutrients.Carbohydrates <= 0))
             {
-                Console.WriteLine($"Invalid carbohydrates, {carbs}");
-                return null;
+#if SHOW_DEBUG
+                Console.WriteLine($"Invalid carbohydrates, {nutrients.Carbohydrates}");
+#endif
+                //return null;
+                throw new ArgumentException($"Invalid carbohydrates, {nutrients.Carbohydrates}",
+                    nameof(nutrients.Carbohydrates));
             }
-            carbs = Math.Round(carbs, 2);
+            double dbCarbohydrates = Math.Round(nutrients.Carbohydrates, 2);
 
-            if (double.IsNaN(fats) || (fats <= 0))
+            if (double.IsNaN(nutrients.TotalFats) || (nutrients.TotalFats <= 0))
             {
-                Console.WriteLine($"Invalid fats, {fats}");
-                return null;
+#if SHOW_DEBUG
+                Console.WriteLine($"Invalid fats, {nutrients.TotalFats}");
+#endif
+                //return null;
+                throw new ArgumentException($"Invalid fats, {nutrients.TotalFats}",
+                    nameof(nutrients.TotalFats));
             }
-            fats = Math.Round(fats, 2);
+            double dbTotalFats = Math.Round(nutrients.TotalFats, 2);
 
-            string strDiet = new string(diet);
-            if (!CheckDietString(ref strDiet))
-            {
-                return null;
-            }
-            else
-            {
+            string strDiet = nutrients.Diet.ToString();
+            try {
+                CheckDietString(ref strDiet);
                 strDiet = strDiet.Replace(' ', '_').ToLower();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
             }
 
             string strKeep = "", strChange = "";
@@ -475,10 +548,10 @@ namespace FoodApiClient.FoodApi
             {
                 strChange = string.Join(",", listChange.ToArray());
             }
-            return $"?CarbohydrateAmount_g={carbs}"
-                + $"&EnergyAmount_kcal={energy}"
-                + $"&ProteinAmount_g={proteins}"
-                + $"&TotalFatAmount_g={fats}"
+            return $"?CarbohydrateAmount_g={dbCarbohydrates}"
+                + $"&EnergyAmount_kcal={dbEnergy}"
+                + $"&ProteinAmount_g={dbProteins}"
+                + $"&TotalFatAmount_g={dbTotalFats}"
                 + $"&diet={strDiet}"
                 + $"&isVegan={options.IsVegan}"
                 + $"&isVegetarian={options.IsVegetarian}"

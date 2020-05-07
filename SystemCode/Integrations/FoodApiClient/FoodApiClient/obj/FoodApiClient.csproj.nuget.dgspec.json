@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Documents\\GitHub\\ISR-MR-2020-01-18-IS02PT-GROUP5-FoodRec\\SystemCode\\Integrations\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj": {}
+    "D:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj": {}
   },
   "projects": {
-    "D:\\Documents\\GitHub\\ISR-MR-2020-01-18-IS02PT-GROUP5-FoodRec\\SystemCode\\Integrations\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj": {
+    "D:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Documents\\GitHub\\ISR-MR-2020-01-18-IS02PT-GROUP5-FoodRec\\SystemCode\\Integrations\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj",
+        "projectUniqueName": "D:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj",
         "projectName": "FoodApiClient",
-        "projectPath": "D:\\Documents\\GitHub\\ISR-MR-2020-01-18-IS02PT-GROUP5-FoodRec\\SystemCode\\Integrations\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj",
+        "projectPath": "D:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj",
         "packagesPath": "C:\\Users\\mokky\\.nuget\\packages\\",
-        "outputPath": "D:\\Documents\\GitHub\\ISR-MR-2020-01-18-IS02PT-GROUP5-FoodRec\\SystemCode\\Integrations\\FoodApiClient\\FoodApiClient\\obj\\",
+        "outputPath": "D:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Microsoft\\Xamarin\\NuGet\\",
