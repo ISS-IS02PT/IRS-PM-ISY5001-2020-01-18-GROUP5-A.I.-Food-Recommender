@@ -12,7 +12,7 @@ pyke_load_engine()
 ######################################################################
 
 from .models_ortools_Ken import readFoodData
-csv_file = open(os.path.join(settings.BASE_DIR, 'foodrec/Dataset/foodDataBase_PleaseUseThis_DC2.csv'))
+csv_file = open(os.path.join(settings.BASE_DIR, 'foodrec/Dataset/foodDataBase_Final.csv'))
 readFoodData(csv_file)
 
 
