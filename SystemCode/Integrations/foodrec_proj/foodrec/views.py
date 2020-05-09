@@ -9,7 +9,7 @@ from .serializers import FoodSerializer, ProfileSerializer, NutrientNeedsSeriali
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 
-from .models_ortools_Ken import run_optimizer, \
+from .models_ortools import run_optimizer, \
                                 food_data, \
                                 DATA_FoodName_INDEX, \
                                 DATA_FoodGroup_INDEX, \
