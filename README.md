@@ -4,7 +4,6 @@
 <img src="SystemCode/static/food-image.jpg"
      style="float: left; margin-right: 0px;" />
 
-
 ---  
 
 ## SECTION 2 : EXECUTIVE SUMMARY / PAPER ABSTRACT
@@ -24,77 +23,38 @@ The above is the background why our team chose this area as our project. Simply 
 
 | Official Full Name  | Student ID (MTech Applicable)  | Work Items (Who Did What) | Email (Optional) |
 | :------------ |:---------------:| :-----| :-----|
-| Ken Ly | A0032571N | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| k.ly@u.nus.edu |
 | Mok Kay Yong | A0214617J | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| e0529481@u.nus.edu |
 | Chong Keng Han | A0213547H | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| e0508648@u.nus.edu |
+| Ly Duy Khang (Ken) | A0032571N | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| k.ly@u.nus.edu |
 | Harry| A0213530X | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| e0508631@u.nus.edu |
 
 ---
 
 ## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
+Video can be downloaded from the following URL:
 
-Video Link here: https://xxx.yyy/ada
+`<Video Link here>` : <https://xxx.yyy/ada>
 
 ---
 
 ## SECTION 5 : USER GUIDE
+`Please refer to user guide at Github Folder: UserGuide`
+- System Requirements and Dependencies
+- Steps on Backend and Frontend deployment
+- Steps on running of the system demo
 
-`Refer to appendix <Installation & User Guide> in project report at Github Folder: ProjectReport`
-
-### [ 1 ] To run the system using iss-vm
-
-> download pre-built virtual machine from http://bit.ly/iss-vm
-
-> start iss-vm
-
-> open terminal in iss-vm
-
-> $ git clone https://github.com/ISS-IS02PT/ISR-MR-2020-01-18-IS02PT-GROUP5-FoodRec.git
-
-> $ source activate iss-env-xxx
-
-> (iss-env-xxx) $ xxx
-
-> **Go to URL using web browser** http://0.0.0.0:5000 or http://127.0.0.1:5000
-
-### [ 2 ] To run the system in other/local machine:
-### Install additional necessary libraries. 
-
-> $ sudo apt-get install python-clips clips build-essential libssl-dev libffi-dev python-dev python-pip
-
-> $ pip install pyclips flask flask-socketio eventlet simplejson pandas
-
-> $ xxx
+`<Github File Link>` : <https://github.com/ISS-IS02PT/ISR-MR-2020-01-18-IS02PT-GROUP5-FoodRec/UserGuide>
 
 ---
 ## SECTION 6 : PROJECT REPORT / PAPER
+`Please refer to project report at Github Folder: ProjectReport`
 
-`Refer to project report at Github Folder: ProjectReport`
-
-**Recommended Sections for Project Report / Paper:**
-- Executive Summary / Paper Abstract
-- Sponsor Company Introduction (if applicable)
-- Business Problem Background
-- Market Research
-- Project Objectives & Success Measurements
-- Project Solution (To detail domain modelling & system design.)
-- Project Implementation (To detail system development & testing approach.)
-- Project Performance & Validation (To prove project objectives are met.)
-- Project Conclusions: Findings & Recommendation
-- Appendix of report: Project Proposal
-- Appendix of report: Mapped System Functionalities against knowledge, techniques and skills of modular courses: MR, RS, CGS
-- Appendix of report: Installation and User Guide
-- Appendix of report: 1-2 pages individual project report per project member, including: Individual reflection of project journey: (1) personal contribution to group project (2) what learnt is most useful for you (3) how you can apply the knowledge and skills in other situations or your workplaces
-- Appendix of report: List of Abbreviations (if applicable)
-- Appendix of report: References (if applicable)
+`<Github File Link>` : <https://github.com/ISS-IS02PT/ISR-MR-2020-01-18-IS02PT-GROUP5-FoodRec/ProjectReport>
 
 ---
 ## SECTION 7 : MISCELLANEOUS
-
-`Refer to Github Folder: Miscellaneous`
-
-### xxx_SURVEY.xlsx
-* Results of survey
-* Insights derived, which were subsequently used in our system
+`Please refer to the Jupyter Notebook for data analysis at Github Folder: DataAnalysis`
 
 ---
+
+**The [Machine Reasoning (MR)](https://www.iss.nus.edu.sg/executive-education/course/detail/machine-reasoning "Machine Reasoning"), [Reasoning Systems (RS)](https://www.iss.nus.edu.sg/executive-education/course/detail/reasoning-systems "Reasoning Systems") and [Cognitive Systems (CGS)](https://www.iss.nus.edu.sg/executive-education/course/detail/cognitive-systems-sf "Cognitive Systems") courses are part of the [Master of Technology in Intelligent Systems](https://www.iss.nus.edu.sg/stackable-certificate-programmes/intelligent-systems "Intelligent Reasoning Systems") offered by [NUS-ISS](https://www.iss.nus.edu.sg "Institute of Systems Science, National University of Singapore").**
