@@ -26,8 +26,6 @@ class FoodSerializer(serializers.Serializer):
     IsVegan = serializers.BooleanField(required=True)
     IsVegetarian = serializers.BooleanField(required=True)
     IsHalal = serializers.BooleanField(required=True)
-    ContainsBeef = serializers.BooleanField(required=True)
-    IsAlcohol = serializers.BooleanField(required=True)
 
     FoodMealRanking = serializers.ChoiceField(Food.FOOD_GROUPS, required=True)
 

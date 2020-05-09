@@ -22,9 +22,7 @@ from .models_ortools_Ken import run_optimizer, \
                                 DATA_IsFastFood_INDEX, \
                                 DATA_Vegan_INDEX, \
                                 DATA_Vegetarian_INDEX, \
-                                DATA_Halal_INDEX, \
-                                DATA_ContainsBeef_INDEX, \
-                                DATA_Alcohol_INDEX
+                                DATA_Halal_INDEX
 
 # class FoodList(generics.ListCreateAPIView):
 #     queryset = Food.objects.all()
@@ -115,7 +113,7 @@ class FoodRecommendationFromNutrientNeeds(APIView):
         nn.diet = nns.validated_data['diet']
 
         # Run the optimizer
-        foodIndex_result = run_optimizer(EnergyAmount_kcal=nn.EnergyAmount_kcal, CarbohydrateAmount_g=nn.CarbohydrateAmount_g, ProteinAmount_g=nn.ProteinAmount_g, TotalFatAmount_g=nn.TotalFatAmount_g, food_keep_index=food_keep_index, food_change_index=food_change_index, num_meals=3, isVegan=isVegan, isVegetarian=isVegetarian, isHalal=isHalal, containsBeef=containsBeef, isAlcohol=isAlcohol)
+        foodIndex_result = run_optimizer(EnergyAmount_kcal=nn.EnergyAmount_kcal, CarbohydrateAmount_g=nn.CarbohydrateAmount_g, ProteinAmount_g=nn.ProteinAmount_g, TotalFatAmount_g=nn.TotalFatAmount_g, food_keep_index=food_keep_index, food_change_index=food_change_index, num_meals=3, isVegan=isVegan, isVegetarian=isVegetarian, isHalal=isHalal)
 
         # Return the result to the API call
         food_result = prepare_food_response(foodIndex_result)
@@ -186,8 +184,6 @@ def prepare_food_response(foodIndex_result):
         food.IsVegan = food_data[i][DATA_Vegan_INDEX]
         food.IsVegetarian = food_data[i][DATA_Vegetarian_INDEX]
         food.IsHalal = food_data[i][DATA_Halal_INDEX]
-        food.ContainsBeef = food_data[i][DATA_ContainsBeef_INDEX]
-        food.IsAlcohol = food_data[i][DATA_Alcohol_INDEX]
 
         food.FoodMealRanking = -1
 
