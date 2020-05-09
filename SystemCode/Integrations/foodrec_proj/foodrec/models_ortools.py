@@ -157,9 +157,9 @@ def optimizer1(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFa
     #     constraint_main.SetCoefficient(foodVar[i], food_data[i][DATA_IsMainDish_INDEX])
     
     # Main should be having more calories compared to Breakfast
-    constraint_main_energy_1 = solver.Constraint(0, solver.infinity())
-    for i in range(0, len(food_data)):
-        constraint_main_energy_1.SetCoefficient(foodVar[i], food_data[i][DATA_EnergyAmount_kcal_INDEX] * (food_data[i][DATA_IsMainDish_INDEX] - food_data[i][DATA_IsBreakfast_INDEX]))
+    # constraint_main_energy_1 = solver.Constraint(0, solver.infinity())
+    # for i in range(0, len(food_data)):
+    #     constraint_main_energy_1.SetCoefficient(foodVar[i], food_data[i][DATA_EnergyAmount_kcal_INDEX] * (food_data[i][DATA_IsMainDish_INDEX] - food_data[i][DATA_IsBreakfast_INDEX]))
                                                 
     # # Main should be having more calories compared to FastFood
     # constraint_main_energy_2 = solver.Constraint(0, solver.infinity())
@@ -200,7 +200,18 @@ def run_optimizer(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, Tota
 # For quick testing without Django
 def main():
     readFoodData(csv_file)
-    foodIndex_result = run_optimizer(EnergyAmount_kcal=2000, CarbohydrateAmount_g=293.68, ProteinAmount_g=220.26, TotalFatAmount_g=97.89, food_keep_index=[], food_change_index=[], num_meals=3, isHalal=False, isVegan=False)
+    
+    # Run 1
+    # foodIndex_result = run_optimizer(EnergyAmount_kcal=2516.25, CarbohydrateAmount_g=251.62, ProteinAmount_g=188.72, TotalFatAmount_g=83.88, food_keep_index=[], food_change_index=[], num_meals=3, isVegan=False, isVegetarian=False, isHalal=False)
+
+    # Run 2
+    foodIndex_result = run_optimizer(EnergyAmount_kcal=2524.97, CarbohydrateAmount_g=31.56, ProteinAmount_g=126.25, TotalFatAmount_g=210.41, food_keep_index=[], food_change_index=[], num_meals=3, isVegan=True, isVegetarian=False, isHalal=False)
+
+    # Run 3
+    # foodIndex_result = run_optimizer(EnergyAmount_kcal=1939.09, CarbohydrateAmount_g=24.24, ProteinAmount_g=96.95, TotalFatAmount_g=161.59, food_keep_index=[], food_change_index=[], num_meals=3, isVegan=False, isVegetarian=True, isHalal=False)
+
+    # Run 4
+    # foodIndex_result = run_optimizer(EnergyAmount_kcal=1218.3, CarbohydrateAmount_g=121.83, ProteinAmount_g=91.37, TotalFatAmount_g=40.61, food_keep_index=[], food_change_index=[], num_meals=3, isVegan=False, isVegetarian=False, isHalal=True)
 
     total_calories = 0
     total_carbo = 0
@@ -224,7 +235,7 @@ def main():
         print(' (IsFastFood=%s)' % food_data[i][DATA_IsFastFood_INDEX],end ='')
         print(' (IsVegan=%s)' % food_data[i][DATA_Vegan_INDEX],end ='')
         print(' (IsVegetarian=%s)' % food_data[i][DATA_Vegetarian_INDEX],end ='')
-        print(' (IsHalal=%s)' % food_data[i][DATA_Halal_INDEX],end ='')
+        print(' (IsHalal=%s)' % food_data[i][DATA_Halal_INDEX],end ='\n')
         
     if len(foodIndex_result) > 0:
         # Final sum and ratio of nutrients
