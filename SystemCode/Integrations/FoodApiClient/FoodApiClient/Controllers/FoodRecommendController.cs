@@ -84,6 +84,7 @@ namespace FoodApiClient.Controllers
         public async Task<IActionResult> UserNutrientsFood(UserNutrientsFoodViewModel model,
             string function)
         {
+            ModelState.Clear();
             if (model.UserProfile != null)
             {
                 _modelUserNutrientsFood.UserProfile = model.UserProfile;
@@ -125,6 +126,7 @@ namespace FoodApiClient.Controllers
                     {
                         _modelUserNutrientsFood.Nutrients =
                             await FoodApi.ApiInterface.CalcNutrients(_modelUserNutrientsFood.UserProfile);
+                        _modelUserNutrientsFood.FoodList = null;
                     }
                     catch (Exception ex)
                     {
@@ -214,6 +216,26 @@ namespace FoodApiClient.Controllers
                     {
                         _modelNutrientsFood.FoodList =
                         _modelUserNutrientsFood.FoodList.Select(x => new Food(x)).ToList();
+                    }
+                }
+                else 
+                {
+                    string strUri = new string(function);
+                    if (!Uri.IsWellFormedUriString(strUri, UriKind.Absolute))
+                    {
+                        strUri = $"http://{strUri}/";
+                    }
+
+                    if (Uri.IsWellFormedUriString(strUri, UriKind.Absolute))
+                    {
+                        try
+                        {
+                            await FoodApi.ApiInterface.ReadApiRoot(strUri);
+                        }
+                        catch (Exception ex)
+                        {
+                            ModelState.AddModelError(nameof(_modelUserNutrientsFood), ex.Message);
+                        }
                     }
                 }
             }

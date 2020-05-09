@@ -16,22 +16,28 @@ namespace FoodApiClient.FoodApi
     internal class ApiInterface
     {
         #region Constants
-        private const string API_ROOT_URI = "http://127.0.0.1:8000/";
+        private const string DEFAULT_API_ROOT_URI = "http://127.0.0.1:8000/";
         #endregion
 
         #region Fields
         private static readonly HttpClient _client = new HttpClient();
+        private static string _strApiRootUri = "";// DEFAULT_API_ROOT_URI;
         private static ApiRoot _apiRoot;
         private static readonly List<int> _listFoodHistory = new List<int>();
         private static KeepChangeIndex _keepChangeIndex = new KeepChangeIndex();
         #endregion
 
         #region Public Methods
-        public static async Task<ApiRoot> ReadApiRoot()
+        public static async Task<ApiRoot> ReadApiRoot(string strUri = "")
         {
+            if (!string.IsNullOrEmpty(strUri))
+            {
+                _strApiRootUri = strUri;
+            }
+
             try
             {
-                Task<System.IO.Stream> streamTask = _client.GetStreamAsync(API_ROOT_URI);
+                Task<System.IO.Stream> streamTask = _client.GetStreamAsync(_strApiRootUri);
                 ApiRoot apiRoot = await JsonSerializer.DeserializeAsync<ApiRoot>(await streamTask);
                 _apiRoot = new ApiRoot(apiRoot);
 
@@ -278,6 +284,11 @@ namespace FoodApiClient.FoodApi
                         if (!_listFoodHistory.Contains(food.Index))
                         {
                             _listFoodHistory.Add(food.Index);
+                        }
+
+                        if ((_keepChangeIndex != null) && (_keepChangeIndex.Keep != null))
+                        {
+                            food.CheckKeep = _keepChangeIndex.Keep.Contains(food.Index);
                         }
                     }
                 }
