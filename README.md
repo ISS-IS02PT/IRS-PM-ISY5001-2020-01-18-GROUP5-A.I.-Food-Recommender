@@ -33,10 +33,7 @@ The above is the background why our team chose this area as our project. Simply 
 
 ## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
 
-Video Link here
-
-Note: It is not mandatory for every project member to appear in video presentation; Presentation by one project member is acceptable. 
-More reference video presentations [here](https://telescopeuser.wordpress.com/2018/03/31/master-of-technology-solution-know-how-video-index-2/ "video presentations")
+Video Link here: https://xxx.yyy/ada
 
 ---
 
