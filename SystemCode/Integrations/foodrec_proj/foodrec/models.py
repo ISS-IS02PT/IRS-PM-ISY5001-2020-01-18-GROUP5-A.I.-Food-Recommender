@@ -55,8 +55,6 @@ class Food(models.Model):
     IsVegan = models.BooleanField()
     IsVegetarian = models.BooleanField()
     IsHalal = models.BooleanField()
-    ContainsBeef = models.BooleanField()
-    IsAlcohol = models.BooleanField()
     
     FoodMealRanking = models.CharField(max_length=100, choices=MEALS)
 

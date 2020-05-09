@@ -44,8 +44,6 @@ $ http http://localhost:8000/calculate-nutrient-needs-from-profile/ age==32 heig
     + 'isVegan'
     + 'isVegetarian'
     + 'isHalal'
-    + 'containsBeef'
-    + 'isAlcohol'
 * Adhoc session variables:
     + 'food_keep_index': List of 'FoodIndex' that we want to keep in the optimization result
     + 'food_change_index': List of 'FoodIndex' that we don't want to keep in the optimization result. These won't be considered at all.
@@ -69,18 +67,16 @@ $ http http://localhost:8000/calculate-nutrient-needs-from-profile/ age==32 heig
 
 $ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount_kcal==2936.8125 ProteinAmount_g==220.26 TotalFatAmount_g==97.89 CarbohydrateAmount_g==2
 93.68 diet==standard food_keep_index== food_change_index== isVegetarian=
-=false isVegan==false isHalal==False containsBeef==False isAlcohol==False
+=false isVegan==false isHalal==False
 
 [
     {
         "CarbohydrateAmount_g": 0.0,
-        "ContainsBeef": false,
         "EnergyAmount_kcal": 2714.63,
         "FoodGroup": "MEAT AND MEAT PRODUCTS",
         "FoodIndex": 464,
         "FoodMealRanking": "LUNCH",
         "FoodName": "Chicken, broiler or fryer, unspecified cut, raw, meat and skin",
-        "IsAlcohol": false,
         "IsHalal": false,
         "IsVegan": false,
         "IsVegetarian": false,
@@ -89,13 +85,11 @@ $ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmou
     },
     {
         "CarbohydrateAmount_g": 0.0,
-        "ContainsBeef": false,
         "EnergyAmount_kcal": 141.53,
         "FoodGroup": "MEAT AND MEAT PRODUCTS",
         "FoodIndex": 1654,
         "FoodMealRanking": "DINNER",
         "FoodName": "Pork, spare rib, boiled, lean and fat",
-        "IsAlcohol": false,
         "IsHalal": false,
         "IsVegan": false,
         "IsVegetarian": false,
@@ -104,13 +98,11 @@ $ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmou
     },
     {
         "CarbohydrateAmount_g": 23.5,
-        "ContainsBeef": false,
         "EnergyAmount_kcal": 106.0,
         "FoodGroup": "BREAKFAST FOODS",
         "FoodIndex": 2318,
         "FoodMealRanking": "BREAKFAST",
         "FoodName": "Buckwheat Banana Pancakes",
-        "IsAlcohol": false,
         "IsHalal": true,
         "IsVegan": true,
         "IsVegetarian": true,
@@ -131,18 +123,16 @@ $ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmou
 # - food_keep_index=464,1654 <-- This is the FoodIndex of each food returned above
 # - food_change_index=2318
 
-$ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount_kcal==2936.8125 ProteinAmount_g==220.26 TotalFatAmount_g==97.89 CarbohydrateAmount_g==293.68 diet==standard food_keep_index==464,1654 food_change_index==2318 isVegetarian==false isVegan==false isHalal==False containsBeef==False isAlcohol==False
+$ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount_kcal==2936.8125 ProteinAmount_g==220.26 TotalFatAmount_g==97.89 CarbohydrateAmount_g==293.68 diet==standard food_keep_index==464,1654 food_change_index==2318 isVegetarian==false isVegan==false isHalal==False
 
 [
     {
         "CarbohydrateAmount_g": 0.0,
-        "ContainsBeef": false,
         "EnergyAmount_kcal": 2714.63,
         "FoodGroup": "MEAT AND MEAT PRODUCTS",
         "FoodIndex": 464,
         "FoodMealRanking": "LUNCH",
         "FoodName": "Chicken, broiler or fryer, unspecified cut, raw, meat and skin",
-        "IsAlcohol": false,
         "IsHalal": false,
         "IsVegan": false,
         "IsVegetarian": false,
@@ -151,13 +141,11 @@ $ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmou
     },
     {
         "CarbohydrateAmount_g": 0.0,
-        "ContainsBeef": false,
         "EnergyAmount_kcal": 141.53,
         "FoodGroup": "MEAT AND MEAT PRODUCTS",
         "FoodIndex": 1654,
         "FoodMealRanking": "DINNER",
         "FoodName": "Pork, spare rib, boiled, lean and fat",
-        "IsAlcohol": false,
         "IsHalal": false,
         "IsVegan": false,
         "IsVegetarian": false,
@@ -166,13 +154,11 @@ $ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmou
     },
     {
         "CarbohydrateAmount_g": 35.1,
-        "ContainsBeef": false,
         "EnergyAmount_kcal": 165.0,
         "FoodGroup": "BREAKFAST FOODS",
         "FoodIndex": 2314,
         "FoodMealRanking": "BREAKFAST",
         "FoodName": "Cinnamon Yogurt with Sliced Apple",
-        "IsAlcohol": false,
         "IsHalal": true,
         "IsVegan": true,
         "IsVegetarian": true,
@@ -193,18 +179,16 @@ $ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmou
 # - food_keep_index=464,1654
 # - food_change_index=2318,2314 <-- including both so that it won't give back the same breakfast result as Run 1>
 
-http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount_kcal==2936.8125 ProteinAmount_g==220.26 TotalFatAmount_g==97.89 CarbohydrateAmount_g==293.68 diet==standard food_keep_index==464,1654 food_change_index==2318,2314 isVegetarian==false isVegan==false isHalal==False containsBeef==False isAlcohol==False
+http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount_kcal==2936.8125 ProteinAmount_g==220.26 TotalFatAmount_g==97.89 CarbohydrateAmount_g==293.68 diet==standard food_keep_index==464,1654 food_change_index==2318,2314 isVegetarian==false isVegan==false isHalal==False
 
 [
     {
         "CarbohydrateAmount_g": 0.0,
-        "ContainsBeef": false,
         "EnergyAmount_kcal": 2714.63,
         "FoodGroup": "MEAT AND MEAT PRODUCTS",
         "FoodIndex": 464,
         "FoodMealRanking": "LUNCH",
         "FoodName": "Chicken, broiler or fryer, unspecified cut, raw, meat and skin",
-        "IsAlcohol": false,
         "IsHalal": false,
         "IsVegan": false,
         "IsVegetarian": false,
@@ -213,13 +197,11 @@ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount
     },
     {
         "CarbohydrateAmount_g": 0.0,
-        "ContainsBeef": false,
         "EnergyAmount_kcal": 141.53,
         "FoodGroup": "MEAT AND MEAT PRODUCTS",
         "FoodIndex": 1654,
         "FoodMealRanking": "DINNER",
         "FoodName": "Pork, spare rib, boiled, lean and fat",
-        "IsAlcohol": false,
         "IsHalal": false,
         "IsVegan": false,
         "IsVegetarian": false,
@@ -228,13 +210,11 @@ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount
     },
     {
         "CarbohydrateAmount_g": 30.2,
-        "ContainsBeef": false,
         "EnergyAmount_kcal": 150.0,
         "FoodGroup": "BREAKFAST FOODS",
         "FoodIndex": 2365,
         "FoodMealRanking": "BREAKFAST",
         "FoodName": "Cinnamon Porridge with Blueberries and Coconut Yogurt",
-        "IsAlcohol": false,
         "IsHalal": true,
         "IsVegan": true,
         "IsVegetarian": true,
@@ -255,18 +235,16 @@ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount
 # Let's refresh the history
 # - Just pass in empty string for parameter {food_keep_index} and parameter {food_change_index}
 
-http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount_kcal==2936.8125 ProteinAmount_g==220.26 TotalFatAmount_g==97.89 CarbohydrateAmount_g==293.68 diet==standard food_keep_index== food_change_index== isVegetarian==true isVegan==false isHalal==false containsBeef==false isAlcohol==false
+http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount_kcal==2936.8125 ProteinAmount_g==220.26 TotalFatAmount_g==97.89 CarbohydrateAmount_g==293.68 diet==standard food_keep_index== food_change_index== isVegetarian==true isVegan==false isHalal==false
 
 [
     {
-        "CarbohydrateAmount_g": 2.32,
-        "ContainsBeef": false,
+        "CarbohydrateAmount_g": 2.32
         "EnergyAmount_kcal": 140.2,
         "FoodGroup": "MILK AND MILK PRODUCTS",
         "FoodIndex": 597,
         "FoodMealRanking": "DINNER",
         "FoodName": "Cream cheese powder",
-        "IsAlcohol": false,
         "IsHalal": true,
         "IsVegan": false,
         "IsVegetarian": true,
@@ -275,13 +253,11 @@ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount
     },
     {
         "CarbohydrateAmount_g": 59.08,
-        "ContainsBeef": false,
         "EnergyAmount_kcal": 2304.12,
         "FoodGroup": "MIXED ETHNIC DISHES, ANALYZED IN SINGAPORE",
         "FoodIndex": 733,
         "FoodMealRanking": "LUNCH",
         "FoodName": "Egg yolk, powder",
-        "IsAlcohol": false,
         "IsHalal": true,
         "IsVegan": false,
         "IsVegetarian": true,
@@ -290,13 +266,11 @@ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount
     },
     {
         "CarbohydrateAmount_g": 60.1,
-        "ContainsBeef": false,
         "EnergyAmount_kcal": 496.0,
         "FoodGroup": "BREAKFAST FOODS",
         "FoodIndex": 2361,
         "FoodMealRanking": "BREAKFAST",
         "FoodName": "Vega One Blackberry, Strawberry, and Acai Smoothie",
-        "IsAlcohol": false,
         "IsHalal": true,
         "IsVegan": true,
         "IsVegetarian": true,
@@ -319,18 +293,16 @@ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount
 # - food_keep_index=
 # - food_change_index=597,733,2361
 
-http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount_kcal==2936.8125 ProteinAmount_g==220.26 TotalFatAmount_g==97.89 CarbohydrateAmount_g==293.68 diet==standard food_keep_index== food_change_index==597,733,2361 isVegetarian==true isVegan==false isHalal==false containsBeef==false isAlcohol==false
+http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount_kcal==2936.8125 ProteinAmount_g==220.26 TotalFatAmount_g==97.89 CarbohydrateAmount_g==293.68 diet==standard food_keep_index== food_change_index==597,733,2361 isVegetarian==true isVegan==false isHalal==false
 
 [
     {
         "CarbohydrateAmount_g": 9.08,
-        "ContainsBeef": false,
         "EnergyAmount_kcal": 870.44,
         "FoodGroup": "MIXED ETHNIC DISHES, ANALYZED IN SINGAPORE",
         "FoodIndex": 1145,
         "FoodMealRanking": "DINNER",
         "FoodName": "Long beans with tempeh, stir fried",
-        "IsAlcohol": false,
         "IsHalal": true,
         "IsVegan": true,
         "IsVegetarian": true,
@@ -339,13 +311,11 @@ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount
     },
     {
         "CarbohydrateAmount_g": 287.7,
-        "ContainsBeef": false,
         "EnergyAmount_kcal": 1786.81,
         "FoodGroup": "MILK AND MILK PRODUCTS",
         "FoodIndex": 1232,
         "FoodMealRanking": "LUNCH",
         "FoodName": "Milk, filled",
-        "IsAlcohol": false,
         "IsHalal": true,
         "IsVegan": false,
         "IsVegetarian": true,
@@ -354,13 +324,11 @@ http http://localhost:8000/food-recommendation-from-nutrient-needs/ EnergyAmount
     },
     {
         "CarbohydrateAmount_g": 17.9,
-        "ContainsBeef": false,
         "EnergyAmount_kcal": 356.0,
         "FoodGroup": "BREAKFAST FOODS",
         "FoodIndex": 2307,
         "FoodMealRanking": "BREAKFAST",
         "FoodName": "Italian Baked Eggs",
-        "IsAlcohol": false,
         "IsHalal": true,
         "IsVegan": true,
         "IsVegetarian": true,
