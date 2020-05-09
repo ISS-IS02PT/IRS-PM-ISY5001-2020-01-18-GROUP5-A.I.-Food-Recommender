@@ -46,12 +46,20 @@ namespace FoodApiClient
 
             app.UseAuthorization();
 
+            string  strUri = Configuration.GetValue<string>("ApiUri");
+            string strPattern = "{controller=FoodRecommend}/{action=UserNutrientsFood}/{id?}";
+            if (!string.IsNullOrEmpty(strUri))
+            {
+                strPattern = string.Format("{{controller=FoodRecommend}}/{{action=UserNutrientsFood}}/{{function={0}}}", strUri);
+            }
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     //pattern: "{controller=Home}/{action=Index}/{id?}");
-                    pattern: "{controller=FoodRecommend}/{action=UserNutrientsFood}/{id?}");
+                    //pattern: "{controller=FoodRecommend}/{action=UserNutrientsFood}/{id?}");
+                    pattern: strPattern);
             });
         }
     }
