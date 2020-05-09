@@ -2,6 +2,10 @@ from __future__ import print_function
 from ortools.linear_solver import pywraplp
 
 import pandas as pd
+import numpy as np
+from numpy.random import seed
+from numpy.random import rand, randint, random
+import time
 
 
 # Constants and Global variables
@@ -12,25 +16,40 @@ DATA_EnergyAmount_kcal_INDEX = -1
 DATA_ProteinAmount_g_INDEX = -1
 DATA_TotalFatAmount_g_INDEX = -1
 DATA_IsMainDish_INDEX = -1
+DATA_IsFastFood_INDEX = -1
 DATA_IsBreakfast_INDEX = -1
-DATA_IsOthers_INDEX = -1
+DATA_Vegan_INDEX = -1
+DATA_Vegetarian_INDEX = -1
+DATA_Halal_INDEX = -1
+
 
 
 food_data = None
 #csv_file = 'Dataset/FoodDatabase.csv'
-csv_file = 'Dataset/foodDataBase_PleaseUseThis_DC2.csv'
-#NUM_FOOD = 1000
-NUM_FOOD = 3920
+csv_file = 'Dataset/foodDataBase_Final.csv'
+NUM_FOOD = 100
+# NUM_FOOD = 3920
 
 
 def readFoodData(csv_file):
-    # Reading only the 1st 'NUM_FOOD' rows for now, for the selected columns
-    df = pd.read_csv(csv_file)[['FoodName','FoodGroup','CarbohydrateAmount_g','EnergyAmount_kcal','ProteinAmount_g','TotalFatAmount_g' ,'IsMainDish', 'IsBreakfast','IsOthers']]
+    df = pd.read_csv(csv_file)[['FoodName',
+                                'FoodGroup',
+                                'CarbohydrateAmount_g',
+                                'EnergyAmount_kcal',
+                                'ProteinAmount_g',
+                                'TotalFatAmount_g',
+                                'IsMainDish',
+                                'IsFastFood',
+                                'IsBreakfast',
+                                'Vegan',
+                                'Vegetarian',
+                                'Halal']]
     
     # Update the index here for the data arrays to point to different nutrients
     global DATA_FoodName_INDEX, DATA_FoodGroup_INDEX, DATA_CarbohydrateAmount_g_INDEX, \
         DATA_EnergyAmount_kcal_INDEX, DATA_ProteinAmount_g_INDEX, DATA_TotalFatAmount_g_INDEX, \
-        DATA_IsMainDish_INDEX, DATA_IsBreakfast_INDEX,DATA_IsOthers_INDEX
+        DATA_IsMainDish_INDEX, DATA_IsFastFood_INDEX, DATA_IsBreakfast_INDEX, DATA_Vegan_INDEX, \
+        DATA_Vegetarian_INDEX, DATA_Halal_INDEX
       
     DATA_FoodName_INDEX = 0
     DATA_FoodGroup_INDEX = 1
@@ -39,254 +58,182 @@ def readFoodData(csv_file):
     DATA_ProteinAmount_g_INDEX = 4
     DATA_TotalFatAmount_g_INDEX = 5
     DATA_IsMainDish_INDEX = 6
-    DATA_IsBreakfast_INDEX = 7
-    DATA_IsOthers_INDEX = 8
+    DATA_IsFastFood_INDEX = 7
+    DATA_IsBreakfast_INDEX = 8
+    DATA_Vegan_INDEX = 9
+    DATA_Vegetarian_INDEX = 10
+    DATA_Halal_INDEX = 11
+
+    # Filter food with Energy > 100kcal
+    df = df.loc[df['EnergyAmount_kcal'] > 100]
 
     global food_data
-    food_data = df.head(NUM_FOOD).to_numpy()
+    # food_data = df.head(NUM_FOOD).to_numpy()
+    food_data = df.to_numpy()
 
-
-# This optimizer only takes input parameter as 'EnergyAmount_kcal'
-def optimizer1(EnergyAmount_kcal):
+def optimizer1(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFatAmount_g, food_keep_index, food_change_index, num_meals, isVegan, isVegetarian, isHalal):
     # Create the mip solver with the CBC backend
-    solver = pywraplp.Solver('optimizer1',
+    solver = pywraplp.Solver('optimizer_refresh1',
                              pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
 
-    # Declare the objective function
-    objective = solver.Objective()
-
+    print("Total food reading in from database: {}".format(len(food_data)))
+    #### Variables ####
     # Declare an array to hold the variable value whether the food is selected, which is 0 or 1 for each food
-    food = [[]] * len(food_data)
-    # The coeficient for the objective function is the amount of calories for the corresponding food
-    for i in range(0, len(food_data)):
-        food[i] = solver.IntVar(0.0, 1.0, food_data[i][DATA_FoodName_INDEX])
-        objective.SetCoefficient(food[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
+    foodVar = [[]] * len(food_data)
 
-    # Minimize the calories
-    objective.SetMinimization()
-
-    # Additional contrainst -> within the 90% - 110% of recommended calories
-    constraint = solver.Constraint(EnergyAmount_kcal * 0.9, EnergyAmount_kcal * 1.1)
-    for i in range(0, len(food_data)):
-        constraint.SetCoefficient(food[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
-
-    # Solve!
-    status = solver.Solve()
-
-    foodIndex_result = []
-
-    if status == solver.OPTIMAL:
-        print('An optimal solution was found.')
-        print('Objective value =', solver.Objective().Value())
-        for i in range(0, len(food_data)):
-            if food[i].solution_value() > 0:
-                foodIndex_result.append(i)
-                # print('%s = %f' % (data[i][0], food[i].solution_value()))
-
-    else:  # No optimal solution was found.
-        if status == solver.FEASIBLE:
-            print('A potentially suboptimal solution was found.')
+    def returnBoundValue(bool):
+        if bool:
+            return 1.0
         else:
-            print('The solver could not solve the problem.')
+            return 0.0
 
-    return foodIndex_result
-
-# Harry: This optimizer takes input parameter as 'EnergyAmount_kcal' and 'BodyWeight_kg'
-def optimizer_HC_2(EnergyAmount_kcal,BodyWeight_kg):
-    # Create the mip solver with the CBC backend
-    solver = pywraplp.Solver('optimizer_HC_2',
-                             pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
-
-    # Declare the objective function
-    objective = solver.Objective()
-
-    # Declare an array to hold the variable value whether the food is selected, which is 0 or 1 for each food
-    food = [[]] * len(food_data)
-    # The coeficient for the objective function is the amount of calories for the corresponding food
-    for i in range(0, len(food_data)):
-        food[i] = solver.IntVar(0.0, 1.0, food_data[i][DATA_FoodName_INDEX])
-        objective.SetCoefficient(food[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
-
-    # Minimize the calories
-    objective.SetMinimization()
-
-    # Additional constraint0 -> within the 90% - 110% of recommended calories
-    constraint0 = solver.Constraint(EnergyAmount_kcal * 0.9, EnergyAmount_kcal * 1.1)
-    # Additional constraint1 -> protein consumption must be more than (0.8 * body weight in kg) grams
-    constraint1 = solver.Constraint(BodyWeight_kg * 0.8, solver.infinity())   
-    for i in range(0, len(food_data)):
-        constraint0.SetCoefficient(food[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
-        constraint1.SetCoefficient(food[i], food_data[i][DATA_ProteinAmount_g_INDEX])
-
-    # Solve!
-    status = solver.Solve()
-
-    foodIndex_result = []
-
-    if status == solver.OPTIMAL:
-        print('An optimal solution was found.')
-        print('Objective value =', solver.Objective().Value())
-        for i in range(0, len(food_data)):
-            if food[i].solution_value() > 0:
-                foodIndex_result.append(i)
-                # print('%s = %f' % (data[i][0], food[i].solution_value()))
-
-    else:  # No optimal solution was found.
-        if status == solver.FEASIBLE:
-            print('A potentially suboptimal solution was found.')
+    def determineLowerBound(index, food_keep_index):
+        if index in food_keep_index:
+            return 1.0
         else:
-            print('The solver could not solve the problem.')
+            return 0.0
 
-    return foodIndex_result
+    def determineUpperBound(index, food_change_index, isVegan, isVegetarian, isHalal):
+        upperBound = 1.0
+
+        if index in food_change_index:
+            upperBound = 0.0
+
+        if isVegan and not food_data[index][DATA_Vegan_INDEX]:
+            upperBound = 0.0
+        if isVegetarian and not food_data[index][DATA_Vegetarian_INDEX]:
+            upperBound = 0.0
+        if isHalal and not food_data[index][DATA_Halal_INDEX]:
+            upperBound = 0.0
+
+        return upperBound
 
 
-# Harry: This optimizer takes input parameter as 'EnergyAmount_kcal' and 'BodyWeight_kg', this is for Keto Diet
-def optimizer_HC_3(EnergyAmount_kcal,BodyWeight_kg):
-    # Create the mip solver with the CBC backend
-    solver = pywraplp.Solver('optimizer_HC_3',
-                             pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
-
+    #### Objective ####
     # Declare the objective function
     objective = solver.Objective()
-
-    # Declare an array to hold the variable value whether the food is selected, which is 0 or 1 for each food
-    food = [[]] * len(food_data)
-    # The coeficient for the objective function is the amount of calories for the corresponding food
     for i in range(0, len(food_data)):
-        food[i] = solver.IntVar(0.0, 1.0, food_data[i][DATA_FoodName_INDEX])
-        objective.SetCoefficient(food[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
+        foodVar[i] = solver.IntVar(determineLowerBound(i, food_keep_index), determineUpperBound(i, food_change_index, isVegan, isVegetarian, isHalal), food_data[i][DATA_FoodName_INDEX])
+
+        # The coeficient for the objective function is the amount of calories for the corresponding food
+        objective.SetCoefficient(foodVar[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
 
     # Minimize the calories
     objective.SetMinimization()
 
-    # Additional constraint0 -> within the 90% - 110% of recommended calories
-    constraint0 = solver.Constraint(EnergyAmount_kcal * 0.9, EnergyAmount_kcal * 1.1)
-    # Additional constraint1 -> protein consumption must be more than (0.8 * body weight in kg) grams
-    constraint1 = solver.Constraint(BodyWeight_kg * 0.8, solver.infinity())   
-    # Additional constraint2 -> carb consumption must be less than 50 grams
-    constraint2 = solver.Constraint(-solver.infinity(),50)
-    # Additional constraint3 -> calorie from fat must be about 75% of total calorie, within 90%-110% of this goal
-    constraint3 = solver.Constraint(EnergyAmount_kcal * 0.75 * 0.9 / 9, EnergyAmount_kcal * 0.75 * 1.1 / 9)
-    # Additional constraint4 -> calorie from protein must be about 20% of total calorie, within 90%-110% of this goal
-    constraint4 = solver.Constraint(EnergyAmount_kcal * 0.20 * 0.9 / 4, EnergyAmount_kcal * 0.20 * 1.1 / 4)
+    #### Contraints ####
+    # Energy, Carbohydrate, Protein, Fat
+    min = 0
+    max = 0.03
+    # 100-103% <= Energy <= 110%
+    constraint_total_energy = solver.Constraint(EnergyAmount_kcal * (1 + (min + (random() * (max - min)))), EnergyAmount_kcal * 1.1)
+    constraint_total_carbohydrate = solver.Constraint(CarbohydrateAmount_g * 0.95, CarbohydrateAmount_g * 1.05)
+    constraint_total_protein = solver.Constraint(ProteinAmount_g * 0.9, ProteinAmount_g * 1.1)
+    constraint_total_fat = solver.Constraint(TotalFatAmount_g * 0.8, TotalFatAmount_g * 1.2)
+    for i in range(0, len(food_data)):
+        constraint_total_energy.SetCoefficient(foodVar[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
+        constraint_total_carbohydrate.SetCoefficient(foodVar[i], food_data[i][DATA_CarbohydrateAmount_g_INDEX])
+        constraint_total_protein.SetCoefficient(foodVar[i], food_data[i][DATA_ProteinAmount_g_INDEX])
+        constraint_total_fat.SetCoefficient(foodVar[i], food_data[i][DATA_TotalFatAmount_g_INDEX])
+
+    # number of meals
+    constraint_count_meals = solver.Constraint(num_meals, num_meals)
+    for i in range(0, len(food_data)):
+        constraint_count_meals.SetCoefficient(foodVar[i], 1)
+
+    # 1 x Breakfast
+    constraint_count_breakfast = solver.Constraint(1, 1)
+    for i in range(0, len(food_data)):
+        constraint_count_breakfast.SetCoefficient(foodVar[i], food_data[i][DATA_IsBreakfast_INDEX])
+
+    # # [0,1] x FastFood
+    # constraint_fastfood = solver.Constraint(0, 1)
+    # for i in range(0, len(food_data)):
+    #     constraint_fastfood.SetCoefficient(foodVar[i], food_data[i][DATA_IsFastFood_INDEX])
     
+    # # [1,2] x Main
+    # constraint_main = solver.Constraint(1, 2)
+    # for i in range(0, len(food_data)):
+    #     constraint_main.SetCoefficient(foodVar[i], food_data[i][DATA_IsMainDish_INDEX])
     
+    # Main should be having more calories compared to Breakfast
+    constraint_main_energy_1 = solver.Constraint(0, solver.infinity())
     for i in range(0, len(food_data)):
-        constraint0.SetCoefficient(food[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
-        constraint1.SetCoefficient(food[i], food_data[i][DATA_ProteinAmount_g_INDEX])
-        constraint2.SetCoefficient(food[i], food_data[i][DATA_CarbohydrateAmount_g_INDEX])
-        constraint3.SetCoefficient(food[i], food_data[i][DATA_TotalFatAmount_g_INDEX])
-        constraint4.SetCoefficient(food[i], food_data[i][DATA_ProteinAmount_g_INDEX])
+        constraint_main_energy_1.SetCoefficient(foodVar[i], food_data[i][DATA_EnergyAmount_kcal_INDEX] * (food_data[i][DATA_IsMainDish_INDEX] - food_data[i][DATA_IsBreakfast_INDEX]))
+                                                
+    # # Main should be having more calories compared to FastFood
+    # constraint_main_energy_2 = solver.Constraint(0, solver.infinity())
+    # for i in range(0, len(food_data)):
+    #     constraint_main_energy_2.SetCoefficient(foodVar[i], food_data[i][DATA_EnergyAmount_kcal_INDEX] * (food_data[i][DATA_IsMainDish_INDEX] - food_data[i][DATA_IsFastFood_INDEX]))
+
+    # # Meals with range
+    # # Breakfast with calories within [0% - 10%]
+    # constraint_breakfast_energy = solver.Constraint(0, EnergyAmount_kcal * 1.1 * 0.1)
+    # for i in range(0, len(food_data)):
+    #     constraint_breakfast_energy.SetCoefficient(foodVar[i], food_data[i][DATA_EnergyAmount_kcal_INDEX] * food_data[i][DATA_IsBreakfast_INDEX])
+
 
     # Solve!
     status = solver.Solve()
-
     foodIndex_result = []
 
     if status == solver.OPTIMAL:
-        print('An optimal solution was found.')
+        solver.NextSolution()
+        print('\nAn optimal solution was found.')
         print('Objective value =', solver.Objective().Value())
         for i in range(0, len(food_data)):
-            if food[i].solution_value() > 0:
+            if foodVar[i].solution_value() > 0:
                 foodIndex_result.append(i)
                 # print('%s = %f' % (data[i][0], food[i].solution_value()))
 
     else:  # No optimal solution was found.
         if status == solver.FEASIBLE:
-            print('A potentially suboptimal solution was found.')
+            print('\nA potentially suboptimal solution was found.')
         else:
-            print('The solver could not solve the problem.')
+            print('\nThe solver could not solve the problem.')
 
     return foodIndex_result
 
-
-
-# Generic Optimizer for various nutrients requirements ( Input parameters from pyke)
-def optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g,IsMainDish,IsBreakfast,IsOthers ):
-    # Create the mip solver with the CBC backend
-    solver = pywraplp.Solver('optimizer_DC_1',
-                             pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
-
-    # Declare the objective function
-    objective = solver.Objective()
-
-    # Declare an array to hold the variable value whether the food is selected, which is 0 or 1 for each food
-    food = [[]] * len(food_data)
-    # The coeficient for the objective function is the amount of calories for the corresponding food
-    for i in range(0, len(food_data)):
-        food[i] = solver.IntVar(0.0, 1.0, food_data[i][DATA_FoodName_INDEX])
-        objective.SetCoefficient(food[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
-
-    # Minimize the calories
-    objective.SetMinimization()
-
-    # Constraints for various nutrients -> within the 90% - 110% of recommended 
-    constraint0 = solver.Constraint(EnergyAmount_kcal * 0.9, EnergyAmount_kcal * 1.1)
-    constraint1 = solver.Constraint(CarbohydrateAmount_g * 1 , CarbohydrateAmount_g * 100  )
-    constraint2 = solver.Constraint(ProteinAmount_g * 1 , ProteinAmount_g * 100 )
-    constraint3 = solver.Constraint(TotalFatAmount_g * 1 , TotalFatAmount_g * 100 )
-    constraint4 = solver.Constraint(IsMainDish *1 ,IsMainDish *1  )
-    constraint5 = solver.Constraint(IsBreakfast *1 , IsBreakfast *1 )
-    constraint6 = solver.Constraint(IsOthers *1 , IsOthers *1 )
- 
-    for i in range(0, len(food_data)):
-        constraint0.SetCoefficient(food[i], food_data[i][DATA_EnergyAmount_kcal_INDEX])
-        constraint1.SetCoefficient(food[i], food_data[i][DATA_CarbohydrateAmount_g_INDEX])
-        constraint2.SetCoefficient(food[i], food_data[i][DATA_ProteinAmount_g_INDEX])
-        constraint3.SetCoefficient(food[i], food_data[i][DATA_TotalFatAmount_g_INDEX])
-        constraint4.SetCoefficient(food[i], food_data[i][DATA_IsMainDish_INDEX])
-        constraint5.SetCoefficient(food[i], food_data[i][DATA_IsBreakfast_INDEX])
-        constraint6.SetCoefficient(food[i], food_data[i][DATA_IsOthers_INDEX])
-
-    # Solve!
-    status = solver.Solve()
-
-    foodIndex_result = []
-
-    if status == solver.OPTIMAL:
-        print('An optimal solution was found.')
-        print('Objective value =', solver.Objective().Value())
-        for i in range(0, len(food_data)):
-            if food[i].solution_value() > 0:
-                foodIndex_result.append(i)
-                # print('%s = %f' % (data[i][0], food[i].solution_value()))
-
-    else:  # No optimal solution was found.
-        if status == solver.FEASIBLE:
-            print('A potentially suboptimal solution was found.')
-        else:
-            print('The solver could not solve the problem.')
-
-    return foodIndex_result
-
-def run_optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g,IsMainDish,IsBreakfast,IsOthers):
-    return optimizer_DC_1(EnergyAmount_kcal,CarbohydrateAmount_g,ProteinAmount_g,TotalFatAmount_g,IsMainDish,IsBreakfast,IsOthers )
-
-def run_optimizer(EnergyAmount_kcal):
-    return optimizer1(EnergyAmount_kcal)
-
-def run_optimizer_HC_2(EnergyAmount_kcal, BodyWeight_kg):
-    return optimizer_HC_2(EnergyAmount_kcal, BodyWeight_kg)
-
-def run_optimizer_HC_3(EnergyAmount_kcal, BodyWeight_kg):
-    return optimizer_HC_3(EnergyAmount_kcal, BodyWeight_kg)
-
+def run_optimizer(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFatAmount_g, food_keep_index=[], food_change_index=[], num_meals=3, isVegan=False, isVegetarian=False, isHalal=False):
+    return optimizer1(EnergyAmount_kcal, CarbohydrateAmount_g, ProteinAmount_g, TotalFatAmount_g, food_keep_index, food_change_index, num_meals, isVegan, isVegetarian, isHalal)
 
 # For quick testing without Django
 def main():
     readFoodData(csv_file)
-    #foodIndex_result = run_optimizer(EnergyAmount_kcal=2500)
-    #foodIndex_result = run_optimizer_HC_2(EnergyAmount_kcal=2500, BodyWeight_kg=70)
-    #foodIndex_result = run_optimizer_HC_3(EnergyAmount_kcal=1200, BodyWeight_kg=70)
-    foodIndex_result = run_optimizer_DC_1(EnergyAmount_kcal = 2500,CarbohydrateAmount_g = 50,ProteinAmount_g =50,TotalFatAmount_g =50,IsMainDish =2,IsBreakfast =1,IsOthers =0)
+    foodIndex_result = run_optimizer(EnergyAmount_kcal=2000, CarbohydrateAmount_g=293.68, ProteinAmount_g=220.26, TotalFatAmount_g=97.89, food_keep_index=[], food_change_index=[], num_meals=3, isHalal=False, isVegan=False)
+
+    total_calories = 0
+    total_carbo = 0
+    total_protein = 0
+    total_fat = 0
+
     for i in foodIndex_result:
+        total_calories += food_data[i][DATA_EnergyAmount_kcal_INDEX]
+        total_carbo += food_data[i][DATA_CarbohydrateAmount_g_INDEX]
+        total_protein += food_data[i][DATA_ProteinAmount_g_INDEX]
+        total_fat += food_data[i][DATA_TotalFatAmount_g_INDEX]
+
         print('%s' % food_data[i][DATA_FoodName_INDEX], end ='' )
+        print(' (Index=%s)' % i, end ='' )
         print(' (Calories=%skcal)' % food_data[i][DATA_EnergyAmount_kcal_INDEX], end ='' )
         print(' (Carbo=%sg)' % food_data[i][DATA_CarbohydrateAmount_g_INDEX],end ='')
         print(' (Protein=%sg)' % food_data[i][DATA_ProteinAmount_g_INDEX],end ='')
         print(' (Fat=%sg)' % food_data[i][DATA_TotalFatAmount_g_INDEX],end ='')
+        print(' (IsBreakfast=%s)' % food_data[i][DATA_IsBreakfast_INDEX], end='')
         print(' (IsMainDish=%s)' % food_data[i][DATA_IsMainDish_INDEX],end ='')
-        print(' (IsBreakfast=%s)' % food_data[i][DATA_IsBreakfast_INDEX])
+        print(' (IsFastFood=%s)' % food_data[i][DATA_IsFastFood_INDEX],end ='')
+        print(' (IsVegan=%s)' % food_data[i][DATA_Vegan_INDEX],end ='')
+        print(' (IsVegetarian=%s)' % food_data[i][DATA_Vegetarian_INDEX],end ='')
+        print(' (IsHalal=%s)' % food_data[i][DATA_Halal_INDEX],end ='')
+        
+    if len(foodIndex_result) > 0:
+        # Final sum and ratio of nutrients
+        print("\nTotal nutrients:\n - Calories: {0:.2f} kcal\n - Carbo: {1:.2f}g ({4:.2%})\n - Protein: {2:.2f}g ({5:.2%})\n - Fat: {3:.2f}g ({6:.2%})".format(total_calories, total_carbo, total_protein, total_fat, total_carbo*4/total_calories, total_protein*4/total_calories, total_fat*9/total_calories))
+
 
 if __name__ == '__main__':
+    start = time.time()
     main()
+    end = time.time()
+    print("\nTotal time: {}".format(end - start))
+
