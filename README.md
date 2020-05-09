@@ -1,4 +1,4 @@
-## SECTION 1 : ISR-MR-2020-01-18-IS02PT-GROUP5-FoodRec
+## SECTION 1 : IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender
 ## Food Recommendation
 
 <img src="SystemCode/static/food-image.jpg"
