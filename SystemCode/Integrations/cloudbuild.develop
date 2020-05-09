@@ -19,4 +19,4 @@ steps:
     - --context=.
     - --destination=asia.gcr.io/my-spark-gke-test-272407/foodrec_proj:develop-1.0
     - --cache=true
-    - --build-arg=DYNAMIC_DJANGO_SECRET_KEY=_nyk@rswjr#@*jt($!fwdxa7-sn7utu^l2*4migwac#*4gwj1988
+#    - --build-arg=DYNAMIC_DJANGO_SECRET_KEY=_nyk@rswjr#@*jt($!fwdxa7-sn7utu^l2*4migwac#*4gwj1988

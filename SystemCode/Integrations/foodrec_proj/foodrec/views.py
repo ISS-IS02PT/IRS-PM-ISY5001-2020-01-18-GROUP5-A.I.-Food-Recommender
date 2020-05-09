@@ -82,24 +82,30 @@ class FoodRecommendationFromNutrientNeeds(APIView):
     
     def get(self, request, format=None):
         nn_keys = ['CarbohydrateAmount_g', 'EnergyAmount_kcal', 'ProteinAmount_g', 'TotalFatAmount_g', 'diet']
-        nns = NutrientNeedsSerializer(data={key:request.query_params[key] for key in nn_keys})
-        
-        # Food change - use to keep sessions
-        food_keep_index = convert_string_to_array(request.query_params['food_keep_index'])
-        food_change_index = convert_string_to_array(request.query_params['food_change_index'])
+        nns = None
+        try:
+            nns = NutrientNeedsSerializer(data={key:request.query_params[key] for key in nn_keys})
+            # Food change - use to keep sessions
+            food_keep_index = convert_string_to_array(request.query_params['food_keep_index'])
+            food_change_index = convert_string_to_array(request.query_params['food_change_index'])
 
-        # Restrictions
-        isVegan = convert_string_to_bool(request.query_params['isVegan'])
-        isVegetarian = convert_string_to_bool(request.query_params['isVegetarian'])
-        isHalal = convert_string_to_bool(request.query_params['isHalal'])
-        containsBeef = convert_string_to_bool(request.query_params['containsBeef'])
-        isAlcohol = convert_string_to_bool(request.query_params['isAlcohol'])
+            # Restrictions
+            isVegan = convert_string_to_bool(request.query_params['isVegan'])
+            isVegetarian = convert_string_to_bool(request.query_params['isVegetarian'])
+            isHalal = convert_string_to_bool(request.query_params['isHalal'])
+        except:
+            return Response(
+                data="Missing parameters. This endpoint requires the following parameters: CarbohydrateAmount_g, EnergyAmount_kcal, ProteinAmount_g, TotalFatAmount_g, diet, food_keep_index, food_change_index, isVegan, isVegetarian, isHalal",
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         if not nns.is_valid():
             return Response(
                 data=nns.errors,
                 status=status.HTTP_400_BAD_REQUEST
             )
+        
+        
 
         nn = NutrientNeeds()
         nn.CarbohydrateAmount_g = nns.validated_data['CarbohydrateAmount_g']
