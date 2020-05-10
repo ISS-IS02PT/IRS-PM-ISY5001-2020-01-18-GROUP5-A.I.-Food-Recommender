@@ -33,7 +33,7 @@ The above is the background why our team chose this area as our project. Simply 
 ## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
 Video can be downloaded from the following URL:
 
-`<Video Link here>` : <https://xxx.yyy/ada>
+`<Video Link here>` : <https://github.com/ISS-IS02PT/IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender/blob/master/Video/main.mp4>
 
 ---
 
