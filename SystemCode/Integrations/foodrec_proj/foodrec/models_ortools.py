@@ -205,13 +205,13 @@ def main():
     # foodIndex_result = run_optimizer(EnergyAmount_kcal=2516.25, CarbohydrateAmount_g=251.62, ProteinAmount_g=188.72, TotalFatAmount_g=83.88, food_keep_index=[], food_change_index=[], num_meals=3, isVegan=False, isVegetarian=False, isHalal=False)
 
     # Run 2
-    foodIndex_result = run_optimizer(EnergyAmount_kcal=2524.97, CarbohydrateAmount_g=31.56, ProteinAmount_g=126.25, TotalFatAmount_g=210.41, food_keep_index=[], food_change_index=[], num_meals=3, isVegan=True, isVegetarian=False, isHalal=False)
+    # foodIndex_result = run_optimizer(EnergyAmount_kcal=2524.97, CarbohydrateAmount_g=31.56, ProteinAmount_g=126.25, TotalFatAmount_g=210.41, food_keep_index=[], food_change_index=[], num_meals=3, isVegan=True, isVegetarian=False, isHalal=False)
 
     # Run 3
     # foodIndex_result = run_optimizer(EnergyAmount_kcal=1939.09, CarbohydrateAmount_g=24.24, ProteinAmount_g=96.95, TotalFatAmount_g=161.59, food_keep_index=[], food_change_index=[], num_meals=3, isVegan=False, isVegetarian=True, isHalal=False)
 
     # Run 4
-    # foodIndex_result = run_optimizer(EnergyAmount_kcal=1218.3, CarbohydrateAmount_g=121.83, ProteinAmount_g=91.37, TotalFatAmount_g=40.61, food_keep_index=[], food_change_index=[], num_meals=3, isVegan=False, isVegetarian=False, isHalal=True)
+    foodIndex_result = run_optimizer(EnergyAmount_kcal=1218.3, CarbohydrateAmount_g=121.83, ProteinAmount_g=91.37, TotalFatAmount_g=40.61, food_keep_index=[], food_change_index=[], num_meals=3, isVegan=False, isVegetarian=False, isHalal=True)
 
     total_calories = 0
     total_carbo = 0
