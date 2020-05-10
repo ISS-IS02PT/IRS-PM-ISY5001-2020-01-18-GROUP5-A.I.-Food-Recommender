@@ -171,6 +171,11 @@ namespace FoodApiClient.Controllers
                         }
                     }
 
+                    if (_modelUserNutrientsFood.UserProfile != null)
+                    {
+                        _modelUserNutrientsFood.Nutrients.Diet = _modelUserNutrientsFood.UserProfile.Diet;
+                    }
+
                     List<Food> foodList = null;
                     try
                     {

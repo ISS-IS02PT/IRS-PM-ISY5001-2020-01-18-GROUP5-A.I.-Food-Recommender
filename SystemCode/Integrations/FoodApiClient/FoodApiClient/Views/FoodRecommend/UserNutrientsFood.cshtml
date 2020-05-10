@@ -95,17 +95,17 @@
                             <input asp-for="Nutrients.TotalFats" class="form-control" />
                             <span asp-validation-for="Nutrients.TotalFats" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="Nutrients.Diet" class="control-label"></label>
-                            <select asp-for="Nutrients.Diet" class="form-control" asp-items="Html.GetEnumSelectList<FoodApiClient.CustomTypes.Diet>()">
-                                <option value=""></option>
-                            </select>
-                            <span asp-validation-for="Nutrients.Diet" class="text-danger"></span>
-                        </div>
                         <!--<div class="form-group">
-                            <input type="checkbox" asp-for="UseCalcNutrients" checked="checked">
-                            <label asp-for="UseCalcNutrients" class="control-label"></label>
-                        </div>-->
+            <label asp-for="Nutrients.Diet" class="control-label"></label>
+            <select asp-for="Nutrients.Diet" class="form-control" asp-items="Html.GetEnumSelectList<FoodApiClient.CustomTypes.Diet>()">
+                <option value=""></option>
+            </select>
+            <span asp-validation-for="Nutrients.Diet" class="text-danger"></span>
+        </div>-->
+                        <!--<div class="form-group">
+            <input type="checkbox" asp-for="UseCalcNutrients" checked="checked">
+            <label asp-for="UseCalcNutrients" class="control-label"></label>
+        </div>-->
                         <div class="form-group">
                             <input type="submit" value="Get Food Recommendation" class="btn btn-primary" asp-route-function="Get Food Recommendation" />
                             <br />
