@@ -33,7 +33,7 @@ The above is the background why our team chose this area as our project. Simply 
 ## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
 `Please refer to the video at Github Folder: Video`
 
-`<Video Folder Link>` : <https://github.com/ISS-IS02PT/IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender/tree/master/Video>
+`<Folder Link>` : <https://github.com/ISS-IS02PT/IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender/tree/master/Video>
 
 ---
 
@@ -43,20 +43,20 @@ The above is the background why our team chose this area as our project. Simply 
 - Steps on Backend and Frontend deployment
 - Steps on running of the system demo
 
-`<UserGuide Folder Link>` : <https://github.com/ISS-IS02PT/IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender/tree/master/UserGuide>
+`<Folder Link>` : <https://github.com/ISS-IS02PT/IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender/tree/master/UserGuide>
 
 ---
 ## SECTION 6 : PROJECT REPORT / PAPER
 `Please refer to Project report at Github Folder: ProjectReport`
 
-`<Github File Link>` : <https://github.com/ISS-IS02PT/IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender/tree/master/ProjectReport>
+`<File Link>` : <https://github.com/ISS-IS02PT/IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender/tree/master/ProjectReport>
 
 ---
 ## SECTION 7 : MISCELLANEOUS
 `Please refer to the Jupyter Notebook 'Food_Data_EDA.ipynb' for data analysis at Github Folder: Miscellaneous`
 
 
-`<Github File Link>` : <https://github.com/ISS-IS02PT/IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender/tree/master/Miscellaneous>
+`<File Link>` : <https://github.com/ISS-IS02PT/IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender/tree/master/Miscellaneous>
 
 ---
 
