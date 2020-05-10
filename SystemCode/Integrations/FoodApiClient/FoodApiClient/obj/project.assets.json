@@ -6010,24 +6010,33 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Dennis\\.nuget\\packages\\": {}
+    "C:\\Users\\mokky\\.nuget\\packages\\": {},
+    "D:\\Microsoft\\Xamarin\\NuGet\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dennis\\Documents\\GitHub\\IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender\\SystemCode\\Integrations\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj",
+      "projectUniqueName": "D:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj",
       "projectName": "FoodApiClient",
-      "projectPath": "C:\\Users\\Dennis\\Documents\\GitHub\\IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender\\SystemCode\\Integrations\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj",
-      "packagesPath": "C:\\Users\\Dennis\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dennis\\Documents\\GitHub\\IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender\\SystemCode\\Integrations\\FoodApiClient\\FoodApiClient\\obj\\",
+      "projectPath": "D:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\FoodApiClient.csproj",
+      "packagesPath": "C:\\Users\\mokky\\.nuget\\packages\\",
+      "outputPath": "D:\\Documents\\source\\repos\\FoodApiClient\\FoodApiClient\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "D:\\Microsoft\\Xamarin\\NuGet\\",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Dennis\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\mokky\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
