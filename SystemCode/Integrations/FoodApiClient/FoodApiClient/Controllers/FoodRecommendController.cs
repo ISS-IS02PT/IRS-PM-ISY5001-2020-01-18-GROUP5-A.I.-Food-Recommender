@@ -208,14 +208,18 @@ namespace FoodApiClient.Controllers
                         {
                             _modelUserNutrientsFood.FoodList.Clear();
                         }
-
-                        ModelState.AddModelError(strName, "No food found");
                     }
 
                     if (_modelUserNutrientsFood.FoodList != null)
                     {
                         _modelNutrientsFood.FoodList =
                         _modelUserNutrientsFood.FoodList.Select(x => new Food(x)).ToList();
+                    }
+
+                    if ((_modelUserNutrientsFood.FoodList == null) || (_modelUserNutrientsFood.FoodList.Count <= 0))
+                    {
+                        ModelState.AddModelError(strName,
+                            "Insufficient food data to fulfill the nutrients requirement now, please come back later.");
                     }
                 }
                 else 
