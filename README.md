@@ -23,37 +23,40 @@ The above is the background why our team chose this area as our project. Simply 
 
 | Official Full Name  | Student ID (MTech Applicable)  | Work Items (Who Did What) | Email (Optional) |
 | :------------ |:---------------:| :-----| :-----|
-| Mok Kay Yong | A0214617J | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| e0529481@u.nus.edu |
-| Chong Keng Han | A0213547H | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| e0508648@u.nus.edu |
-| Ly Duy Khang (Ken) | A0032571N | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| k.ly@u.nus.edu |
-| Harry| A0213530X | xxxxxxxxxx yyyyyyyyyy zzzzzzzzzz| e0508631@u.nus.edu |
+| Mok Kay Yong | A0214617J | Second technical lead + Developing the front end user interface + data mining and food classifications. | e0529481@u.nus.edu |
+| Chong Keng Han | A0213547H | Acquires the food database data + prototype development + the creator of the project video animation| e0508648@u.nus.edu |
+| Ly Duy Khang (Ken) | A0032571N | Project and technical lead + Setup and plan the technology components | k.ly@u.nus.edu |
+| Harry| A0213530X | Research on the diet topic + Prototype development + Main writer for project documentation| e0508631@u.nus.edu |
 
 ---
 
 ## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
-Video can be downloaded from the following URL:
+`Please refer to the video at Github Folder: Video`
 
-`<Video Link here>` : <https://github.com/ISS-IS02PT/IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender/blob/master/Video/main.mp4>
+`<Video Folder Link>` : <https://github.com/ISS-IS02PT/IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender/tree/master/Video>
 
 ---
 
 ## SECTION 5 : USER GUIDE
-`Please refer to user guide at Github Folder: UserGuide`
+`Please refer to the User guide at Github Folder: UserGuide`
 - System Requirements and Dependencies
 - Steps on Backend and Frontend deployment
 - Steps on running of the system demo
 
-`<Github File Link>` : <https://github.com/ISS-IS02PT/ISR-MR-2020-01-18-IS02PT-GROUP5-FoodRec/UserGuide>
+`<UserGuide Folder Link>` : <https://github.com/ISS-IS02PT/IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender/tree/master/UserGuide>
 
 ---
 ## SECTION 6 : PROJECT REPORT / PAPER
-`Please refer to project report at Github Folder: ProjectReport`
+`Please refer to Project report at Github Folder: ProjectReport`
 
-`<Github File Link>` : <https://github.com/ISS-IS02PT/ISR-MR-2020-01-18-IS02PT-GROUP5-FoodRec/ProjectReport>
+`<Github File Link>` : <https://github.com/ISS-IS02PT/IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender/tree/master/ProjectReport>
 
 ---
 ## SECTION 7 : MISCELLANEOUS
-`Please refer to the Jupyter Notebook for data analysis at Github Folder: DataAnalysis`
+`Please refer to the Jupyter Notebook 'Food_Data_EDA.ipynb' for data analysis at Github Folder: Miscellaneous`
+
+
+`<Github File Link>` : <https://github.com/ISS-IS02PT/IRS-PM-ISY5001-2020-01-18-GROUP5-A.I.-Food-Recommender/tree/master/Miscellaneous>
 
 ---
 

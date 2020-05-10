@@ -111,3 +111,4 @@ D:\Documents\source\repos\FoodApiClient\FoodApiClient\obj\Debug\netcoreapp3.1\Fo
 D:\Documents\source\repos\FoodApiClient\FoodApiClient\obj\Debug\netcoreapp3.1\Razor\Views\FoodRecommend\NutrientsFood.cshtml.g.cs
 D:\Documents\source\repos\FoodApiClient\FoodApiClient\obj\Debug\netcoreapp3.1\Razor\Views\FoodRecommend\UserNutrients.cshtml.g.cs
 D:\Documents\source\repos\FoodApiClient\FoodApiClient\obj\Debug\netcoreapp3.1\Razor\Views\FoodRecommend\UserNutrientsFood.cshtml.g.cs
+D:\Documents\source\repos\FoodApiClient\FoodApiClient\bin\Debug\netcoreapp3.1\libman.json
