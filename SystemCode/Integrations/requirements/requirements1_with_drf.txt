@@ -1,6 +1,6 @@
 asgiref==3.2.5
 Django==3.0.4
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 pip-autoremove==0.9.1
 pyke==1.1.1
 pytz==2019.3
